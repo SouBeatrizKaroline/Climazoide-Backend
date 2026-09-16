@@ -61,6 +61,8 @@ Localidades: `recife`, `sao-paulo`, `manaus`, `brasilia`, `porto-alegre`.
 |---|---|---|---|
 | Open-Meteo | internacional | condições atuais, previsão, solo e ET₀ | ativo, sem chave |
 | CAMS/Copernicus | internacional | qualidade do ar e UV | ativo, sem chave |
+| NOAA CPC | internacional | ONI e fase do ENSO | ativo, sem chave |
+| US Naval Observatory | internacional | fase lunar, nascer e pôr do Sol | ativo, sem chave |
 | CPTEC/INPE | nacional | previsão brasileira independente | integrado, sujeito à disponibilidade |
 | NASA POWER | internacional | séries mensais agroclimáticas | ativo, sem chave |
 | Kaggle/WORCAP | competição | treino, teste e submissão | exige conta e aceite |
@@ -113,6 +115,8 @@ Os cartões de impacto usam um motor determinístico e explicável:
 - saúde ambiental = AQI atual do CAMS.
 
 Isso é análise automática, não texto inventado por um modelo generativo. Uma IA pública só deve ser adicionada se possuir modelo, licença, versão, dados de entrada e saída documentados, além de não substituir alertas oficiais ou a avaliação científica.
+
+Endpoints citados pela comunidade são testados antes de entrar no produto. Nesta validação, NOAA CPC e USNO responderam; o exemplo `apiclima.inmet.gov.br` não respondeu de forma estável e o WFS TerraBrasilis informado devolveu uma exceção de camada. Por isso, ambos permanecem documentados, mas não são anunciados como ativos.
 
 ## Modelo do hackathon
 

@@ -17,6 +17,8 @@ LOCATIONS = {
 WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
 AIR_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 CPTEC_URL = "https://servicos.cptec.inpe.br/XML/cidade/7dias/{lat}/{lon}/previsaoLatLon.xml"
+NOAA_ONI_URL = "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
+USNO_URL = "https://aa.usno.navy.mil/api/rstt/oneday"
 
 
 def _value(payload: dict, group: str, key: str, default=None):
@@ -67,6 +69,39 @@ async def _fetch_cptec(client: httpx.AsyncClient, latitude: float, longitude: fl
     }
 
 
+async def _fetch_oni(client: httpx.AsyncClient) -> dict:
+    response = await client.get(NOAA_ONI_URL)
+    response.raise_for_status()
+    values = response.text.strip().splitlines()[-1].split()
+    anomaly = float(values[3])
+    phase = "El Niño" if anomaly >= 0.5 else "La Niña" if anomaly <= -0.5 else "Neutro"
+    return {
+        "available": True,
+        "season": values[0],
+        "year": int(values[1]),
+        "value": anomaly,
+        "phase": phase,
+    }
+
+
+async def _fetch_astronomy(client: httpx.AsyncClient, latitude: float, longitude: float) -> dict:
+    response = await client.get(
+        USNO_URL,
+        params={"date": datetime.now(UTC).date().isoformat(), "coords": f"{latitude},{longitude}"},
+    )
+    response.raise_for_status()
+    data = response.json()["properties"]["data"]
+    events = {item["phen"]: item["time"] for item in data.get("sundata", [])}
+    return {
+        "available": True,
+        "moon_phase": data.get("curphase"),
+        "moon_illumination": data.get("fracillum"),
+        "sunrise_utc": events.get("Rise"),
+        "sunset_utc": events.get("Set"),
+        "date": f"{data.get('year')}-{data.get('month'):02d}-{data.get('day'):02d}",
+    }
+
+
 async def fetch_live_overview(location_id: str, timeout: float) -> dict:
     if location_id not in LOCATIONS:
         raise ValueError("Localidade não reconhecida.")
@@ -97,8 +132,10 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         weather_task = _fetch_json(client, WEATHER_URL, weather_params)
         air_task = _fetch_json(client, AIR_URL, air_params)
         cptec_task = _fetch_cptec(client, location["latitude"], location["longitude"])
-        weather, air, cptec = await asyncio.gather(
-            weather_task, air_task, cptec_task, return_exceptions=True
+        oni_task = _fetch_oni(client)
+        astronomy_task = _fetch_astronomy(client, location["latitude"], location["longitude"])
+        weather, air, cptec, oni, astronomy = await asyncio.gather(
+            weather_task, air_task, cptec_task, oni_task, astronomy_task, return_exceptions=True
         )
 
     if isinstance(weather, Exception):
@@ -107,6 +144,10 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         air = {}
     if isinstance(cptec, Exception):
         cptec = {"available": False, "provider": "CPTEC/INPE", "forecast": []}
+    if isinstance(oni, Exception):
+        oni = {"available": False}
+    if isinstance(astronomy, Exception):
+        astronomy = {"available": False}
 
     current = weather.get("current", {})
     hourly = weather.get("hourly", {})
@@ -151,6 +192,8 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         },
         "daily": _daily(weather),
         "cptec": cptec,
+        "climate_context": {"oni": oni},
+        "astronomy": astronomy,
         "impacts": _impact_indicators(weather, air),
         "sources": [
             {
@@ -173,6 +216,20 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
                 "available": cptec["available"],
                 "updated_at": cptec.get("updated_at"),
                 "url": "https://servicos.cptec.inpe.br/XML/",
+            },
+            {
+                "name": "NOAA CPC",
+                "scope": "índice oceânico ONI e fase do ENSO",
+                "available": oni["available"],
+                "updated_at": f"{oni.get('season', '')} {oni.get('year', '')}".strip() or None,
+                "url": NOAA_ONI_URL,
+            },
+            {
+                "name": "US Naval Observatory",
+                "scope": "fase lunar e eventos solares",
+                "available": astronomy["available"],
+                "updated_at": astronomy.get("date"),
+                "url": "https://aa.usno.navy.mil/data/api",
             },
         ],
     }
