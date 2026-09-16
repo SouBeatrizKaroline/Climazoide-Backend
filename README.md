@@ -13,6 +13,7 @@ O backend conecta o frontend a dados públicos recentes, preserva o contrato cie
 - análises automáticas de água, agricultura, calor e saúde ambiental;
 - consulta mensal à NASA POWER;
 - manifesto auditável do PCA/EOF + LSTM, atualmente marcado para retreino;
+- catálogo rastreável de PCA, PLS concorrente, PLS defasado e ConvLSTM;
 - download verificável do Kaggle e validação do CSV de submissão.
 
 ## Arquitetura
@@ -133,6 +134,8 @@ Endpoints citados pela comunidade são testados antes de entrar no produto. Nest
 A auditoria identificou que a execução histórica do `pca_lstm_run1` alinhava as variáveis atmosféricas ao mês-alvo. O contrato correto é usar o estado do mês anterior para prever `M+1`. O código científico foi corrigido e agora exige **retreino**.
 
 As métricas anteriores foram removidas do manifesto ativo e da interface. Elas não são pontuação do leaderboard e não devem ser usadas para comparar modelos. Como pesos e objetos PCA não estão versionados, a API também não afirma executar inferência Kaggle em produção.
+
+A branch `vermelho` foi revisada no commit `9492b93`. PLS, checkpoints por época e execução de múltiplas variações foram registrados como propostas de pesquisa, não como resultados. O endpoint `/v1/model/manifest` expõe as fontes revisadas, os quatro candidatos e cada bloqueio de prontidão para o frontend.
 
 ## Qualidade, segurança e commits
 

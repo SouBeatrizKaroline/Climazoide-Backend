@@ -13,7 +13,7 @@ from app.services.nasa_power import fetch_monthly
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.1.0",
+    version="0.2.0",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -27,7 +27,12 @@ app.add_middleware(
 
 @app.get("/health", tags=["system"])
 def health() -> dict[str, str]:
-    return {"status": "ok", "environment": settings.app_env}
+    return {
+        "status": "ok",
+        "environment": settings.app_env,
+        "api_version": "0.2.0",
+        "model_contract_version": "1.1",
+    }
 
 
 @app.get("/v1/dashboard/summary", tags=["dashboard"], deprecated=True)

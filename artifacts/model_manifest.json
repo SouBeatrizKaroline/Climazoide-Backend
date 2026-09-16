@@ -1,16 +1,72 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "model_id": "pca-lstm-run1",
   "model_name": "PCA/EOF + LSTM",
   "status": "requires_retraining",
   "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
   "source_branch": "Beatriz",
-  "source_artifact_commit": "6498fb9",
+  "source_artifact_commit": "f0a17ef",
   "training_period": "1940-01/2018-12",
   "validation_period": "2019-01/2022-12",
   "evaluation_scope": "retreino obrigatório após correção do alinhamento temporal M→M+1",
   "metric_unit": "mm/dia",
   "metrics": null,
+  "reviewed_sources": [
+    {
+      "ref": "Beatriz",
+      "commit": "f0a17ef",
+      "decision": "contrato temporal e submissão oficial corrigidos",
+      "promoted": true
+    },
+    {
+      "ref": "vermelho",
+      "commit": "9492b93",
+      "decision": "PLS, checkpoints por época e orquestração catalogados para nova rodada",
+      "promoted": false,
+      "reason": "a implementação deriva da execução anterior à correção M→M+1 e requer revisão antes do treino"
+    },
+    {
+      "ref": "fork SouBeatrizKaroline/main",
+      "commit": "e5ab7d1",
+      "decision": "sem código adicional em relação à base auditada",
+      "promoted": false
+    }
+  ],
+  "candidate_models": [
+    {
+      "id": "pca-lstm",
+      "label": "PCA/EOF + LSTM",
+      "status": "ready_for_retraining",
+      "purpose": "baseline neural corrigido para M→M+1"
+    },
+    {
+      "id": "pls-concurrent-lstm",
+      "label": "PLS concorrente + LSTM",
+      "status": "research_only",
+      "purpose": "redução supervisionada com precipitação do mesmo mês no treino"
+    },
+    {
+      "id": "pls-lagged-lstm",
+      "label": "PLS defasado + LSTM",
+      "status": "research_only",
+      "purpose": "redução supervisionada com alvo futuro, sob validação temporal estrita"
+    },
+    {
+      "id": "convlstm",
+      "label": "ConvLSTM",
+      "status": "not_implemented",
+      "purpose": "preservar estrutura espacial da grade"
+    }
+  ],
+  "readiness": [
+    {"id": "temporal_contract", "label": "Contrato M→M+1", "status": "passed"},
+    {"id": "official_ids", "label": "IDs oficiais sem reconstrução", "status": "passed"},
+    {"id": "full_grid", "label": "Grade 301 × 261", "status": "passed"},
+    {"id": "official_dataset", "label": "13 arquivos Kaggle", "status": "blocked_by_auth"},
+    {"id": "retraining", "label": "Retreino corrigido", "status": "pending"},
+    {"id": "submission", "label": "CSV com 1.885.464 linhas", "status": "pending"},
+    {"id": "leaderboard", "label": "Score Kaggle", "status": "pending"}
+  ],
   "artifacts": {
     "metrics": "experiments/pca_lstm_run1/metrics.json",
     "history": "experiments/pca_lstm_run1/history.csv",

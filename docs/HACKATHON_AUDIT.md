@@ -77,3 +77,13 @@ python scripts/audit_readiness.py CAMINHO_DOS_DADOS --submission submission.csv
 - **Extra:** painel recente, AQI, ENSO, astronomia e indicadores derivados.
 
 Essa distinção deve permanecer no README, na interface e em qualquer apresentação do projeto.
+
+## Revisão de branches e forks
+
+Foram comparadas `main`, `Beatriz`, `vermelho` e o fork público `SouBeatrizKaroline/WORCAP-2026`.
+
+- `Beatriz`: mantém o contrato temporal corrigido, testes de contrato e IDs oficiais.
+- `vermelho`: acrescenta PLS concorrente/defasado, checkpoints por época e orquestração de experimentos. As ideias são úteis, mas o código deriva da versão anterior à correção temporal e não foi promovido como resultado.
+- fork `SouBeatrizKaroline/main`: aponta para a base anterior e não contém ganho adicional sobre a versão auditada.
+
+O manifesto registra essa proveniência e impede que um candidato de pesquisa apareça como modelo validado.
