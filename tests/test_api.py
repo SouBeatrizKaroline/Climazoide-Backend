@@ -16,7 +16,9 @@ def test_dashboard_does_not_claim_unverified_metrics() -> None:
     assert response.status_code == 200
     payload = response.json()
     assert payload["precipitation"]["status"] == "demo"
-    assert all(metric["status"] == "unavailable" for metric in payload["metrics"])
+    assert payload["model"]["status"] == "calculated"
+    assert payload["model"]["rmse"] == 1.5638223886489868
+    assert payload["metrics"][0]["status"] == "calculated"
     assert payload["context"]["grid_points"] == 78561
     assert payload["context"]["submission_rows"] == 1885464
 
@@ -42,3 +44,12 @@ def test_catalog_separates_required_and_extra_sources() -> None:
     catalog = response.json()
     assert any(item["requirement"] == "required" for item in catalog)
     assert any(item["region"] == "national" for item in catalog)
+
+
+def test_manifest_keeps_validation_separate_from_kaggle_score() -> None:
+    response = client.get("/v1/model/manifest")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["status"] == "validated"
+    assert "validação temporal interna" in payload["evaluation_scope"]
+    assert payload["artifacts"]["submission_available"] is False

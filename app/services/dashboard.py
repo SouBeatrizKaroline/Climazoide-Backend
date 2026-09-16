@@ -2,6 +2,7 @@ from datetime import UTC, date, datetime
 from math import cos
 
 from app.models import DashboardOptions, DashboardSummary
+from app.services.model_manifest import load_model_manifest
 
 MONTHS = [f"{year}-{month:02d}" for year in (2023, 2024) for month in range(1, 13)]
 REGIONS = {
@@ -51,6 +52,8 @@ def get_demo_summary(
 
     year, month = (int(part) for part in target_month.split("-"))
     predicted = _demo_precipitation(target_month, region)
+    manifest = load_model_manifest()
+    model_metrics = manifest["metrics"]
     series = []
     for offset in range(5, -1, -1):
         index = (year * 12 + month - 1) - offset
@@ -79,12 +82,17 @@ def get_demo_summary(
             "oni": {"label": "Índice ONI", "value": -0.4, "unit": "°C", "status": "demo"},
             "model": {
                 "name": "PCA/EOF + LSTM",
-                "status": "demo",
+                "status": "calculated",
                 "scope": f"{REGIONS[region]} · grade 0,25°",
-                "rmse": None,
+                "rmse": model_metrics["model"]["rmse"],
             },
             "metrics": [
-                {"label": "Skill Score", "value": None, "unit": "%", "status": "unavailable"},
+                {
+                    "label": "Skill vs. climatologia",
+                    "value": round(model_metrics["skill_score_vs_climatology"] * 100, 2),
+                    "unit": "%",
+                    "status": "calculated",
+                },
                 {"label": "R²", "value": None, "unit": "", "status": "unavailable"},
                 {"label": "Erro < 1 mm/dia", "value": None, "unit": "%", "status": "unavailable"},
                 {"label": "Erro < 2 mm/dia", "value": None, "unit": "%", "status": "unavailable"},

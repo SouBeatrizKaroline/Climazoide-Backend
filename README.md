@@ -35,6 +35,7 @@ uvicorn app.main:app --reload
 | GET | `/v1/dashboard/summary?target_month=2024-12&region=america-do-sul` | painel filtrado |
 | GET | `/v1/integrations/catalog` | fontes, exigência, acesso e documentação |
 | POST | `/v1/integrations/nasa-power/monthly` | consulta mensal pontual à NASA POWER |
+| GET | `/v1/model/manifest` | versão, proveniência, métricas e limitações do modelo |
 
 Exemplo NASA POWER:
 
@@ -54,6 +55,18 @@ Exemplo NASA POWER:
 - **Extra:** INMET, INPE/CPTEC, ECMWF CDS, NASA POWER e NOAA ONI. Extras só entram no modelo após validação temporal e documentação da transformação.
 
 O guia completo, com canais oficiais e cuidados, está em [docs/API_SOURCES.md](docs/API_SOURCES.md).
+
+## Validar uma submissão
+
+O validador percorre os dois CSVs em streaming, preserva a ordem original dos IDs e rejeita NaN, infinito, negativos, linhas extras ou ausentes:
+
+```bash
+python scripts/validate_submission.py caminho/sample_submission.csv caminho/submission.csv
+```
+
+## Métricas disponíveis
+
+O manifesto registra resultados reais da validação temporal interna do artefato `pca_lstm_run1`: RMSE `1,564` do modelo, `1,891` da climatologia e `4,004` da persistência. Isso equivale a um Skill Score de aproximadamente `17,29%` contra climatologia. Esses números não são pontuação pública ou privada do Kaggle.
 
 ## Estrutura
 

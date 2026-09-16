@@ -6,6 +6,7 @@ from app.config import get_settings
 from app.models import CatalogItem, DashboardOptions, DashboardSummary, PowerMonthlyQuery
 from app.services.catalog import CATALOG
 from app.services.dashboard import get_demo_summary, get_options
+from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
 
 settings = get_settings()
@@ -47,6 +48,11 @@ def dashboard_options() -> DashboardOptions:
 @app.get("/v1/integrations/catalog", response_model=list[CatalogItem], tags=["integrations"])
 def integrations_catalog() -> list[CatalogItem]:
     return CATALOG
+
+
+@app.get("/v1/model/manifest", tags=["model"])
+def model_manifest() -> dict:
+    return load_model_manifest()
 
 
 @app.post("/v1/integrations/nasa-power/monthly", tags=["integrations"])
