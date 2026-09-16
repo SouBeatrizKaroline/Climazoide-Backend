@@ -1,0 +1,22 @@
+name: Proposta
+description: Proponha uma fonte, análise ou melhoria
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Necessidade
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Fonte pública e documentação
+      description: Inclua URL oficial, cobertura, licença, autenticação e atualização.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução sugerida

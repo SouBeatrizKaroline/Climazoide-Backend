@@ -1,8 +1,14 @@
 # Climazoide API
 
+[![CI](https://github.com/SouBeatrizKaroline/Climazoide-Backend/actions/workflows/ci.yml/badge.svg)](https://github.com/SouBeatrizKaroline/Climazoide-Backend/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0b7a75.svg)](LICENSE)
+[![OpenAPI](https://img.shields.io/badge/contract-OpenAPI-6ba539.svg)](http://localhost:8000/docs)
+
 API de inteligência climática operacional e suporte ao desafio **WORCAP 2026 — Previsão Climática de Precipitação sobre a América do Sul**.
 
 O backend conecta o frontend a dados públicos recentes, preserva o contrato científico da competição e nunca substitui uma falha externa por números inventados.
+
+Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [governança](GOVERNANCE.md), [segurança](SECURITY.md) e [histórico de versões](CHANGELOG.md).
 
 ## Funcionalidades
 

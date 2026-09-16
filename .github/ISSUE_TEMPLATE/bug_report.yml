@@ -1,0 +1,28 @@
+name: Bug
+description: Relate um comportamento incorreto e reproduzível
+title: "bug: "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Problema
+      description: O que aconteceu e qual era o resultado esperado?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Como reproduzir
+      description: Inclua rota, parâmetros e resposta sem dados sensíveis.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão ou commit
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidências
+      description: Logs sanitizados, fonte afetada e horário UTC.
