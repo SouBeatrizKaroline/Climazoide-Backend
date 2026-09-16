@@ -6,13 +6,13 @@ O backend conecta o frontend a dados públicos recentes, preserva o contrato cie
 
 ## Funcionalidades
 
-- condições atuais e previsão de sete dias em cinco capitais brasileiras;
+- condições atuais e previsão de sete dias em 13 pontos sul-americanos;
 - chuva, temperatura, vento, pressão, solo e evapotranspiração;
 - qualidade do ar, PM2.5, PM10, ozônio e UV via CAMS/Copernicus;
 - consulta ao CPTEC/INPE, com disponibilidade informada no payload;
 - análises automáticas de água, agricultura, calor e saúde ambiental;
 - consulta mensal à NASA POWER;
-- manifesto auditável do PCA/EOF + LSTM;
+- manifesto auditável do PCA/EOF + LSTM, atualmente marcado para retreino;
 - download verificável do Kaggle e validação do CSV de submissão.
 
 ## Arquitetura
@@ -48,12 +48,14 @@ uvicorn app.main:app --reload
 |---|---|---|
 | GET | `/health` | saúde da aplicação |
 | GET | `/v1/live/locations` | localidades disponíveis |
-| GET | `/v1/live/overview?location=recife` | agregação recente completa |
+| GET | `/v1/live/overview?location=brasilia` | agregação recente completa |
 | GET | `/v1/integrations/catalog` | fontes, acesso e documentação |
 | POST | `/v1/integrations/nasa-power/monthly` | série mensal NASA POWER |
 | GET | `/v1/model/manifest` | proveniência e métricas do modelo |
 
-Localidades: `recife`, `sao-paulo`, `manaus`, `brasilia`, `porto-alegre`.
+Pontos operacionais: `buenos-aires`, `la-paz`, `brasilia`, `santiago`, `bogota`, `quito`, `georgetown`, `asuncion`, `lima`, `paramaribo`, `montevideu`, `caracas` e `caiena`.
+
+Esses pontos dão contexto recente aos 13 países e territórios continentais. A competição continua sendo atendida pela grade científica completa de **78.561 pontos mensais**; uma capital nunca é tratada como substituta da grade.
 
 ## Fontes públicas
 
@@ -105,6 +107,14 @@ O script executa `kagglehub.competition_download('previsao-climatica-de-precipit
 python scripts/validate_submission.py data/sample_submission.csv submission.csv
 ```
 
+Auditoria conjunta do dataset e da submissão:
+
+```bash
+python scripts/audit_readiness.py data --submission submission.csv
+```
+
+O parecer completo, com pendências e evidências, está em [`docs/HACKATHON_AUDIT.md`](docs/HACKATHON_AUDIT.md).
+
 ## Análise automática e IA responsável
 
 Os cartões de impacto usam um motor determinístico e explicável:
@@ -120,15 +130,9 @@ Endpoints citados pela comunidade são testados antes de entrar no produto. Nest
 
 ## Modelo do hackathon
 
-Validação temporal interna do `pca_lstm_run1`:
+A auditoria identificou que a execução histórica do `pca_lstm_run1` alinhava as variáveis atmosféricas ao mês-alvo. O contrato correto é usar o estado do mês anterior para prever `M+1`. O código científico foi corrigido e agora exige **retreino**.
 
-| Método | RMSE | MAE |
-|---|---:|---:|
-| PCA/EOF + LSTM | 1,564 | 0,949 |
-| Climatologia | 1,891 | 1,137 |
-| Persistência | 4,004 | 2,372 |
-
-Skill contra climatologia: **17,29%**. Não é pontuação do leaderboard. Como pesos e objetos PCA não estão versionados, a API não afirma executar inferência Kaggle em produção.
+As métricas anteriores foram removidas do manifesto ativo e da interface. Elas não são pontuação do leaderboard e não devem ser usadas para comparar modelos. Como pesos e objetos PCA não estão versionados, a API também não afirma executar inferência Kaggle em produção.
 
 ## Qualidade, segurança e commits
 

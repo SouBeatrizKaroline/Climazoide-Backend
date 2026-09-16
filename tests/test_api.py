@@ -11,32 +11,10 @@ def test_health() -> None:
     assert response.json()["status"] == "ok"
 
 
-def test_dashboard_does_not_claim_unverified_metrics() -> None:
+def test_dashboard_does_not_serve_simulated_predictions() -> None:
     response = client.get("/v1/dashboard/summary")
-    assert response.status_code == 200
-    payload = response.json()
-    assert payload["precipitation"]["status"] == "demo"
-    assert payload["model"]["status"] == "calculated"
-    assert payload["model"]["rmse"] == 1.5638223886489868
-    assert payload["metrics"][0]["status"] == "calculated"
-    assert payload["context"]["grid_points"] == 78561
-    assert payload["context"]["submission_rows"] == 1885464
-
-
-def test_dashboard_filters_month_and_region() -> None:
-    response = client.get(
-        "/v1/dashboard/summary", params={"target_month": "2023-07", "region": "amazonia"}
-    )
-    assert response.status_code == 200
-    payload = response.json()
-    assert payload["target_month"] == "Julho de 2023"
-    assert payload["region"] == "amazonia"
-    assert payload["context"]["origin_month"] == "2023-06"
-
-
-def test_dashboard_rejects_month_outside_competition() -> None:
-    response = client.get("/v1/dashboard/summary", params={"target_month": "2025-01"})
-    assert response.status_code == 422
+    assert response.status_code == 503
+    assert "retreino" in response.json()["detail"]
 
 
 def test_catalog_separates_required_and_extra_sources() -> None:
@@ -46,12 +24,13 @@ def test_catalog_separates_required_and_extra_sources() -> None:
     assert any(item["region"] == "national" for item in catalog)
 
 
-def test_manifest_keeps_validation_separate_from_kaggle_score() -> None:
+def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
     response = client.get("/v1/model/manifest")
     assert response.status_code == 200
     payload = response.json()
-    assert payload["status"] == "validated"
-    assert "validação temporal interna" in payload["evaluation_scope"]
+    assert payload["status"] == "requires_retraining"
+    assert "retreino obrigatório" in payload["evaluation_scope"]
+    assert payload["metrics"] is None
     assert payload["artifacts"]["submission_available"] is False
 
 
@@ -59,5 +38,6 @@ def test_live_locations_are_real_coordinates() -> None:
     response = client.get("/v1/live/locations")
     assert response.status_code == 200
     locations = response.json()
-    assert len(locations) == 5
-    assert any(item["id"] == "recife" and item["latitude"] < 0 for item in locations)
+    assert len(locations) == 13
+    assert len({item["code"] for item in locations}) == 13
+    assert any(item["id"] == "brasilia" and item["latitude"] < 0 for item in locations)

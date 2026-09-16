@@ -3,9 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from httpx import HTTPError
 
 from app.config import get_settings
-from app.models import CatalogItem, DashboardOptions, DashboardSummary, PowerMonthlyQuery
+from app.models import CatalogItem, DashboardOptions, PowerMonthlyQuery
 from app.services.catalog import CATALOG
-from app.services.dashboard import get_demo_summary, get_options
+from app.services.dashboard import get_options
 from app.services.live_data import LOCATIONS, fetch_live_overview
 from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
@@ -30,15 +30,19 @@ def health() -> dict[str, str]:
     return {"status": "ok", "environment": settings.app_env}
 
 
-@app.get("/v1/dashboard/summary", response_model=DashboardSummary, tags=["dashboard"])
+@app.get("/v1/dashboard/summary", tags=["dashboard"], deprecated=True)
 def dashboard_summary(
     target_month: str = Query(default="2024-12", pattern=r"^\d{4}-(0[1-9]|1[0-2])$"),
     region: str = Query(default="america-do-sul"),
-) -> DashboardSummary:
-    try:
-        return get_demo_summary(target_month=target_month, region=region)
-    except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
+) -> None:
+    del target_month, region
+    raise HTTPException(
+        status_code=503,
+        detail=(
+            "Inferência mensal indisponível até o retreino com alinhamento M→M+1 "
+            "e a publicação de um artefato versionado."
+        ),
+    )
 
 
 @app.get("/v1/dashboard/options", response_model=DashboardOptions, tags=["dashboard"])
@@ -62,7 +66,7 @@ def live_locations() -> list[dict]:
 
 
 @app.get("/v1/live/overview", tags=["live"])
-async def live_overview(location: str = Query(default="recife")) -> dict:
+async def live_overview(location: str = Query(default="brasilia")) -> dict:
     try:
         return await fetch_live_overview(location, settings.http_timeout_seconds)
     except ValueError as exc:

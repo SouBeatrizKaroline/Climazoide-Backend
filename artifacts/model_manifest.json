@@ -2,20 +2,15 @@
   "schema_version": "1.0",
   "model_id": "pca-lstm-run1",
   "model_name": "PCA/EOF + LSTM",
-  "status": "validated",
+  "status": "requires_retraining",
   "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
   "source_branch": "Beatriz",
   "source_artifact_commit": "6498fb9",
   "training_period": "1940-01/2018-12",
   "validation_period": "2019-01/2022-12",
-  "evaluation_scope": "validação temporal interna reconstruída na grade espacial",
+  "evaluation_scope": "retreino obrigatório após correção do alinhamento temporal M→M+1",
   "metric_unit": "mm/dia",
-  "metrics": {
-    "model": { "rmse": 1.5638223886489868, "mae": 0.9494065642356873 },
-    "climatology": { "rmse": 1.890729993385969, "mae": 1.1373992329249627 },
-    "persistence": { "rmse": 4.003540515899658, "mae": 2.372296094894409 },
-    "skill_score_vs_climatology": 0.17290019702726422
-  },
+  "metrics": null,
   "artifacts": {
     "metrics": "experiments/pca_lstm_run1/metrics.json",
     "history": "experiments/pca_lstm_run1/history.csv",
@@ -25,6 +20,8 @@
     "submission_available": false
   },
   "limitations": [
+    "A execução anterior usou a atmosfera do mês-alvo na validação; o desafio fornece a atmosfera do mês anterior.",
+    "As métricas antigas foram retiradas da interface e não devem embasar comparação.",
     "Não representa pontuação do leaderboard público ou privado do Kaggle.",
     "Pesos finais e objetos PCA não estão versionados no repositório consultado.",
     "A API ainda não executa inferência espacial real."

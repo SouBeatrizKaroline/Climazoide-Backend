@@ -5,12 +5,57 @@ from xml.etree import ElementTree
 import httpx
 
 LOCATIONS = {
-    "recife": {"name": "Recife", "state": "PE", "latitude": -8.0476, "longitude": -34.8770},
-    "sao-paulo": {"name": "São Paulo", "state": "SP", "latitude": -23.5505, "longitude": -46.6333},
-    "manaus": {"name": "Manaus", "state": "AM", "latitude": -3.1190, "longitude": -60.0217},
-    "brasilia": {"name": "Brasília", "state": "DF", "latitude": -15.7939, "longitude": -47.8828},
-    "porto-alegre": {
-        "name": "Porto Alegre", "state": "RS", "latitude": -30.0346, "longitude": -51.2177
+    "buenos-aires": {
+        "name": "Buenos Aires", "country": "Argentina", "code": "AR",
+        "latitude": -34.6037, "longitude": -58.3816,
+    },
+    "la-paz": {
+        "name": "La Paz", "country": "Bolívia", "code": "BO",
+        "latitude": -16.4897, "longitude": -68.1193,
+    },
+    "brasilia": {
+        "name": "Brasília", "country": "Brasil", "code": "BR", "state": "DF",
+        "latitude": -15.7939, "longitude": -47.8828,
+    },
+    "santiago": {
+        "name": "Santiago", "country": "Chile", "code": "CL",
+        "latitude": -33.4489, "longitude": -70.6693,
+    },
+    "bogota": {
+        "name": "Bogotá", "country": "Colômbia", "code": "CO",
+        "latitude": 4.7110, "longitude": -74.0721,
+    },
+    "quito": {
+        "name": "Quito", "country": "Equador", "code": "EC",
+        "latitude": -0.1807, "longitude": -78.4678,
+    },
+    "georgetown": {
+        "name": "Georgetown", "country": "Guiana", "code": "GY",
+        "latitude": 6.8013, "longitude": -58.1551,
+    },
+    "asuncion": {
+        "name": "Assunção", "country": "Paraguai", "code": "PY",
+        "latitude": -25.2637, "longitude": -57.5759,
+    },
+    "lima": {
+        "name": "Lima", "country": "Peru", "code": "PE",
+        "latitude": -12.0464, "longitude": -77.0428,
+    },
+    "paramaribo": {
+        "name": "Paramaribo", "country": "Suriname", "code": "SR",
+        "latitude": 5.8520, "longitude": -55.2038,
+    },
+    "montevideu": {
+        "name": "Montevidéu", "country": "Uruguai", "code": "UY",
+        "latitude": -34.9011, "longitude": -56.1645,
+    },
+    "caracas": {
+        "name": "Caracas", "country": "Venezuela", "code": "VE",
+        "latitude": 10.4806, "longitude": -66.9036,
+    },
+    "caiena": {
+        "name": "Caiena", "country": "Guiana Francesa", "code": "GF",
+        "latitude": 4.9224, "longitude": -52.3135,
     },
 }
 
@@ -45,7 +90,9 @@ async def _fetch_json(client: httpx.AsyncClient, url: str, params: dict) -> dict
     return response.json()
 
 
-async def _fetch_cptec(client: httpx.AsyncClient, latitude: float, longitude: float) -> dict:
+async def _fetch_cptec(
+    client: httpx.AsyncClient, latitude: float, longitude: float
+) -> dict:
     url = CPTEC_URL.format(lat=latitude, lon=longitude)
     response = await client.get(url)
     response.raise_for_status()
@@ -84,7 +131,9 @@ async def _fetch_oni(client: httpx.AsyncClient) -> dict:
     }
 
 
-async def _fetch_astronomy(client: httpx.AsyncClient, latitude: float, longitude: float) -> dict:
+async def _fetch_astronomy(
+    client: httpx.AsyncClient, latitude: float, longitude: float
+) -> dict:
     response = await client.get(
         USNO_URL,
         params={"date": datetime.now(UTC).date().isoformat(), "coords": f"{latitude},{longitude}"},
@@ -131,7 +180,19 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
     async with httpx.AsyncClient(timeout=timeout, follow_redirects=True) as client:
         weather_task = _fetch_json(client, WEATHER_URL, weather_params)
         air_task = _fetch_json(client, AIR_URL, air_params)
-        cptec_task = _fetch_cptec(client, location["latitude"], location["longitude"])
+        cptec_task = (
+            _fetch_cptec(client, location["latitude"], location["longitude"])
+            if location["code"] == "BR"
+            else asyncio.sleep(
+                0,
+                result={
+                    "available": False,
+                    "applicable": False,
+                    "provider": "CPTEC/INPE",
+                    "forecast": [],
+                },
+            )
+        )
         oni_task = _fetch_oni(client)
         astronomy_task = _fetch_astronomy(client, location["latitude"], location["longitude"])
         weather, air, cptec, oni, astronomy = await asyncio.gather(
@@ -161,6 +222,13 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         "project": "Climazoide",
         "location_id": location_id,
         "location": location,
+        "coverage": {
+            "scientific_domain": "América do Sul · 60°S–15°N · 90°O–25°O",
+            "grid_resolution": "0,25°",
+            "grid_points_per_month": 78561,
+            "operational_points": len(LOCATIONS),
+            "note": "O ponto operacional não substitui a previsão científica em grade.",
+        },
         "generated_at": datetime.now(UTC).isoformat(),
         "timezone": weather.get("timezone"),
         "current": {
@@ -214,6 +282,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
                 "name": "CPTEC/INPE",
                 "scope": "previsão nacional independente",
                 "available": cptec["available"],
+                "applicable": cptec.get("applicable", True),
                 "updated_at": cptec.get("updated_at"),
                 "url": "https://servicos.cptec.inpe.br/XML/",
             },
