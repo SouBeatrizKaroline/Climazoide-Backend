@@ -1,86 +1,132 @@
 # Climazoide API
 
-Backend leve para servir o dashboard do Climazoide e receber integrações climáticas nacionais e internacionais sem acoplar a interface ao pipeline científico.
+API de inteligência climática operacional e suporte ao desafio **WORCAP 2026 — Previsão Climática de Precipitação sobre a América do Sul**.
 
-> Estado atual: MVP. A rota do dashboard devolve valores demonstrativos explicitamente marcados. O endpoint NASA POWER é o primeiro conector funcional. O modelo PCA/EOF + LSTM existe no repositório científico; o ConvLSTM ainda está em desenvolvimento.
+O backend conecta o frontend a dados públicos recentes, preserva o contrato científico da competição e nunca substitui uma falha externa por números inventados.
 
-## Responsabilidades
+## Funcionalidades
 
-- entregar um contrato estável ao frontend;
-- catalogar fontes obrigatórias e extras;
-- isolar conectores externos;
-- impedir que uma falha externa derrube o painel;
-- carregar, futuramente, artefatos versionados de inferência e métricas.
+- condições atuais e previsão de sete dias em cinco capitais brasileiras;
+- chuva, temperatura, vento, pressão, solo e evapotranspiração;
+- qualidade do ar, PM2.5, PM10, ozônio e UV via CAMS/Copernicus;
+- consulta ao CPTEC/INPE, com disponibilidade informada no payload;
+- análises automáticas de água, agricultura, calor e saúde ambiental;
+- consulta mensal à NASA POWER;
+- manifesto auditável do PCA/EOF + LSTM;
+- download verificável do Kaggle e validação do CSV de submissão.
 
-## Rodar localmente
+## Arquitetura
+
+```text
+React → FastAPI
+          ├── Open-Meteo: tempo + chuva + solo + ET₀
+          ├── CAMS/Copernicus: composição atmosférica
+          ├── CPTEC/INPE: referência nacional
+          ├── NASA POWER: séries mensais agroclimáticas
+          └── ERA5/WORCAP: treino e avaliação M→M+1
+```
+
+Se a fonte meteorológica principal falhar, a API responde `502`. Se CAMS ou CPTEC falharem, os outros dados reais permanecem disponíveis e a fonte afetada aparece como indisponível.
+
+## Executar
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+# Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
-cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
 - API: `http://localhost:8000`
 - OpenAPI: `http://localhost:8000/docs`
-- Saúde: `GET /health`
+- saúde: `http://localhost:8000/health`
 
 ## Rotas
 
 | Método | Rota | Função |
 |---|---|---|
-| GET | `/health` | disponibilidade da aplicação |
-| GET | `/v1/dashboard/options` | meses e regiões disponíveis |
-| GET | `/v1/dashboard/summary?target_month=2024-12&region=america-do-sul` | painel filtrado |
-| GET | `/v1/integrations/catalog` | fontes, exigência, acesso e documentação |
-| POST | `/v1/integrations/nasa-power/monthly` | consulta mensal pontual à NASA POWER |
-| GET | `/v1/model/manifest` | versão, proveniência, métricas e limitações do modelo |
+| GET | `/health` | saúde da aplicação |
+| GET | `/v1/live/locations` | localidades disponíveis |
+| GET | `/v1/live/overview?location=recife` | agregação recente completa |
+| GET | `/v1/integrations/catalog` | fontes, acesso e documentação |
+| POST | `/v1/integrations/nasa-power/monthly` | série mensal NASA POWER |
+| GET | `/v1/model/manifest` | proveniência e métricas do modelo |
 
-Exemplo NASA POWER:
+Localidades: `recife`, `sao-paulo`, `manaus`, `brasilia`, `porto-alegre`.
 
-```json
-{
-  "latitude": -8.05,
-  "longitude": -34.9,
-  "start": 2023,
-  "end": 2024,
-  "parameters": ["PRECTOTCORR", "T2M"]
-}
-```
+## Fontes públicas
 
-## Exigido × extra
+| Fonte | Escopo | Uso | Estado |
+|---|---|---|---|
+| Open-Meteo | internacional | condições atuais, previsão, solo e ET₀ | ativo, sem chave |
+| CAMS/Copernicus | internacional | qualidade do ar e UV | ativo, sem chave |
+| CPTEC/INPE | nacional | previsão brasileira independente | integrado, sujeito à disponibilidade |
+| NASA POWER | internacional | séries mensais agroclimáticas | ativo, sem chave |
+| Kaggle/WORCAP | competição | treino, teste e submissão | exige conta e aceite |
+| ERA5/CDS | internacional | reanálise e reprodução | exige cadastro e termos |
+| INMET | nacional | observações de estações | acesso conforme canal oficial |
 
-- **Exigido:** arquivos oficiais da competição via Kaggle, submissão no contrato fornecido, RMSE, reprodutibilidade, código e documentação públicos.
-- **Extra:** INMET, INPE/CPTEC, ECMWF CDS, NASA POWER e NOAA ONI. Extras só entram no modelo após validação temporal e documentação da transformação.
+Detalhes e atribuições: [`docs/API_SOURCES.md`](docs/API_SOURCES.md).
 
-O guia completo, com canais oficiais e cuidados, está em [docs/API_SOURCES.md](docs/API_SOURCES.md).
+## Dataset oficial do Kaggle
 
-## Validar uma submissão
+São **13 arquivos**, aproximadamente **2,06 GB**, grade ERA5 de `0,25°`, `301 × 261` e **78.561 pontos por mês**. O treino cobre 1940–2022. O estado atmosférico de `M` alimenta a estimativa de precipitação de `M+1`. A avaliação cobre 2023–2024.
 
-O validador percorre os dois CSVs em streaming, preserva a ordem original dos IDs e rejeita NaN, infinito, negativos, linhas extras ou ausentes:
+Após autenticar a conta Kaggle e aceitar as regras:
 
 ```bash
-python scripts/validate_submission.py caminho/sample_submission.csv caminho/submission.csv
+pip install kagglehub
+python scripts/download_competition.py
 ```
 
-## Métricas disponíveis
+O script executa `kagglehub.competition_download('previsao-climatica-de-precipitacao-sobre-a-america-do-sul')` e confirma os 13 nomes esperados. A tentativa sem autenticação termina de forma explícita; os NetCDF não são versionados.
 
-O manifesto registra resultados reais da validação temporal interna do artefato `pca_lstm_run1`: RMSE `1,564` do modelo, `1,891` da climatologia e `4,004` da persistência. Isso equivale a um Skill Score de aproximadamente `17,29%` contra climatologia. Esses números não são pontuação pública ou privada do Kaggle.
+### Arquivos
 
-## Estrutura
+- `treino_tp.nc`: precipitação observada em mm/dia;
+- `treino_tp_alvo.nc`: precipitação de M+1;
+- nove `treino_*.nc`: temperatura, nuvens, pressão, umidades, geopotencial e vento em 850 hPa;
+- `teste_features.nc`: meses-alvo, `time_origem`, `tp_ultima_obs` e `lag_meses`;
+- `sample_submission.csv`: IDs oficiais em ordem obrigatória.
 
-```text
-app/
-├── main.py              rotas e configuração HTTP
-├── config.py            ambiente e CORS
-├── models.py            contratos Pydantic
-└── services/            catálogo, dashboard e conectores
-tests/                   testes sem dependência de rede
-docs/API_SOURCES.md      fontes obrigatórias e extras
+### Regras invariantes
+
+- não reconstruir o ID;
+- manter `id,tp_mm_day` e **1.885.464 linhas**;
+- rejeitar NaN, infinito e precipitação negativa;
+- avaliar com RMSE global;
+- tratar `tp_alvo` do teste como desconhecido;
+- respeitar a licença **Subject to Competition Rules**.
+
+```bash
+python scripts/validate_submission.py data/sample_submission.csv submission.csv
 ```
 
-## Qualidade e commits
+## Análise automática e IA responsável
+
+Os cartões de impacto usam um motor determinístico e explicável:
+
+- balanço hídrico = chuva prevista − evapotranspiração de referência;
+- demanda evaporativa = soma de ET₀ em sete dias;
+- calor = maior temperatura prevista;
+- saúde ambiental = AQI atual do CAMS.
+
+Isso é análise automática, não texto inventado por um modelo generativo. Uma IA pública só deve ser adicionada se possuir modelo, licença, versão, dados de entrada e saída documentados, além de não substituir alertas oficiais ou a avaliação científica.
+
+## Modelo do hackathon
+
+Validação temporal interna do `pca_lstm_run1`:
+
+| Método | RMSE | MAE |
+|---|---:|---:|
+| PCA/EOF + LSTM | 1,564 | 0,949 |
+| Climatologia | 1,891 | 1,137 |
+| Persistência | 4,004 | 2,372 |
+
+Skill contra climatologia: **17,29%**. Não é pontuação do leaderboard. Como pesos e objetos PCA não estão versionados, a API não afirma executar inferência Kaggle em produção.
+
+## Qualidade, segurança e commits
 
 ```bash
 ruff check .
@@ -88,19 +134,13 @@ pytest
 powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 ```
 
-Os commits seguem Conventional Commits em português. Consulte [CONTRIBUTING.md](CONTRIBUTING.md). A CI roda na branch `main`.
+- CI em Linux para cada push e pull request em `main`;
+- Conventional Commits em português;
+- nenhuma credencial no código;
+- timeout e falha parcial nas integrações;
+- CORS por `ALLOWED_ORIGINS`;
+- dados críticos devem ser confirmados em alertas oficiais.
 
-## Próximos passos objetivos
+## Atribuição
 
-1. Publicar do pipeline científico um `manifest.json` com versão, modelo, período, RMSE e caminhos dos artefatos.
-2. Trocar o fallback de demonstração por leitura do manifesto e previsões reais.
-3. Implementar cache e rate limit nos conectores.
-4. Acrescentar autenticação somente se surgirem rotas privadas ou custos de API.
-
-## Contrato do desafio preservado
-
-O resumo informa explicitamente origem M, alvo M+1, grade de 301 × 261 pontos, 78.561 previsões por mês, 1.885.464 linhas na submissão completa e RMSE global em mm/dia. Esses metadados são verificáveis; a previsão do MVP continua marcada como `demo` até o pipeline científico publicar um artefato versionado.
-
-## Licença e dados
-
-A licença do código deve ser confirmada com a equipe. Dados externos mantêm seus próprios termos; não redistribua ERA5/Kaggle ou artefatos derivados sem revisar as regras aplicáveis.
+*Contains modified Copernicus Climate Change Service information 2026. Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains.*

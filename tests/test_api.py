@@ -53,3 +53,11 @@ def test_manifest_keeps_validation_separate_from_kaggle_score() -> None:
     assert payload["status"] == "validated"
     assert "validação temporal interna" in payload["evaluation_scope"]
     assert payload["artifacts"]["submission_available"] is False
+
+
+def test_live_locations_are_real_coordinates() -> None:
+    response = client.get("/v1/live/locations")
+    assert response.status_code == 200
+    locations = response.json()
+    assert len(locations) == 5
+    assert any(item["id"] == "recife" and item["latitude"] < 0 for item in locations)

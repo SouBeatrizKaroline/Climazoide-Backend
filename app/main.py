@@ -6,6 +6,7 @@ from app.config import get_settings
 from app.models import CatalogItem, DashboardOptions, DashboardSummary, PowerMonthlyQuery
 from app.services.catalog import CATALOG
 from app.services.dashboard import get_demo_summary, get_options
+from app.services.live_data import LOCATIONS, fetch_live_overview
 from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
 
@@ -53,6 +54,23 @@ def integrations_catalog() -> list[CatalogItem]:
 @app.get("/v1/model/manifest", tags=["model"])
 def model_manifest() -> dict:
     return load_model_manifest()
+
+
+@app.get("/v1/live/locations", tags=["live"])
+def live_locations() -> list[dict]:
+    return [{"id": key, **value} for key, value in LOCATIONS.items()]
+
+
+@app.get("/v1/live/overview", tags=["live"])
+async def live_overview(location: str = Query(default="recife")) -> dict:
+    try:
+        return await fetch_live_overview(location, settings.http_timeout_seconds)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except HTTPError as exc:
+        raise HTTPException(
+            status_code=502, detail="As fontes meteorológicas não responderam."
+        ) from exc
 
 
 @app.post("/v1/integrations/nasa-power/monthly", tags=["integrations"])

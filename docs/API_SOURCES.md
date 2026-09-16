@@ -21,11 +21,25 @@
 
 ### INPE / CPTEC
 
-- **Uso sugerido:** produtos nacionais de previsão e monitoramento para comparação visual, não como verdade do alvo.
-- **Portal:** https://www.cptec.inpe.br/
-- **Antes de integrar:** confirmar produto, endpoint, termos, frequência e estabilidade diretamente na documentação do produto escolhido.
+- **Uso implementado:** previsão nacional de sete dias por coordenadas, como comparação independente.
+- **Documentação:** https://servicos.cptec.inpe.br/XML/
+- **Comportamento:** o adaptador não bloqueia o painel quando o serviço recusa ou interrompe a consulta; retorna `available: false` e preserva as demais fontes reais.
 
 ## Extras internacionais
+
+### Open-Meteo
+
+- **Uso implementado:** condição atual, previsão de sete dias, chuva, vento, solo e evapotranspiração.
+- **Documentação:** https://open-meteo.com/en/docs
+- **Origem:** combinação de modelos de serviços nacionais, incluindo ECMWF, NOAA e DWD.
+- **Acesso:** sem chave para o cenário não comercial do projeto; atribuição obrigatória.
+
+### CAMS / Copernicus
+
+- **Uso implementado:** AQI, PM2.5, PM10, CO, NO₂, ozônio e UV.
+- **Documentação:** https://open-meteo.com/en/docs/air-quality-api
+- **Origem:** CAMS European/Global, disponibilizado pelo endpoint do Open-Meteo.
+- **Cuidado:** composição atmosférica modelada não equivale a sensor local nem orientação médica.
 
 ### ECMWF / Copernicus CDS · ERA5
 

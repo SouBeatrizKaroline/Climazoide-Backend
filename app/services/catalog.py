@@ -2,6 +2,26 @@ from app.models import CatalogItem
 
 CATALOG = [
     CatalogItem(
+        id="open-meteo",
+        institution="Open-Meteo",
+        region="international",
+        role="Condições atuais e previsão de sete dias com modelos globais recentes.",
+        requirement="extra",
+        access="API pública sem chave para uso não comercial, com atribuição.",
+        documentation_url="https://open-meteo.com/en/docs",
+        enabled=True,
+    ),
+    CatalogItem(
+        id="cams",
+        institution="Copernicus Atmosphere Monitoring Service (CAMS)",
+        region="international",
+        role="Qualidade do ar, material particulado, gases e índice UV.",
+        requirement="extra",
+        access="Disponibilizado pelo endpoint Air Quality do Open-Meteo, com atribuição.",
+        documentation_url="https://open-meteo.com/en/docs/air-quality-api",
+        enabled=True,
+    ),
+    CatalogItem(
         id="kaggle-worcap",
         institution="Kaggle / WORCAP 2026",
         region="international",
@@ -53,7 +73,8 @@ CATALOG = [
         region="national",
         role="Produtos meteorológicos nacionais para contexto e comparação.",
         requirement="extra",
-        access="Definir produto e política de acesso antes de implementar adaptador.",
-        documentation_url="https://www.cptec.inpe.br/",
+        access="Serviço XML público; a disponibilidade é reportada em cada consulta.",
+        documentation_url="https://servicos.cptec.inpe.br/XML/",
+        enabled=True,
     ),
 ]
