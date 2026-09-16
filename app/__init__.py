@@ -1,0 +1,1 @@
+"""Climazoide API."""
