@@ -5,7 +5,7 @@
   "status": "requires_retraining",
   "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
   "source_branch": "Beatriz",
-  "source_artifact_commit": "e07dffb",
+  "source_artifact_commit": "cf9ea4b",
   "training_period": "1940-01/2018-12",
   "validation_period": "2019-01/2022-12",
   "evaluation_scope": "retreino obrigatório após correção do alinhamento temporal M→M+1",
@@ -74,6 +74,15 @@
     "model_weights_available": false,
     "pca_objects_available": false,
     "submission_available": false
+  },
+  "execution": {
+    "kaggle_notebook_ready": true,
+    "entrypoint": "python kaggle_notebook.py",
+    "gcp_artifact_export_optional": true,
+    "expected_outputs": [
+      "submission_pca_lstm.csv",
+      "submission_manifest.json"
+    ]
   },
   "limitations": [
     "A execução anterior usou a atmosfera do mês-alvo na validação; o desafio fornece a atmosfera do mês anterior.",

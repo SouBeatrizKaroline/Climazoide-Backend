@@ -34,6 +34,9 @@ def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
     assert "retreino obrigatório" in payload["evaluation_scope"]
     assert payload["metrics"] is None
     assert payload["artifacts"]["submission_available"] is False
+    assert payload["execution"]["kaggle_notebook_ready"] is True
+    assert payload["execution"]["gcp_artifact_export_optional"] is True
+    assert payload["execution"]["entrypoint"] == "python kaggle_notebook.py"
     assert len(payload["candidate_models"]) == 4
     assert any(
         item["id"] == "convlstm" and item["status"] == "ready_for_training"

@@ -139,6 +139,10 @@ A branch `vermelho` foi revisada no commit `9492b93`. PLS, checkpoints por époc
 
 O ConvLSTM possui arquitetura funcional desde o commit científico `e07dffb`, com células empilhadas, preservação espacial e saída não negativa. Seu estado é **pronto para treinamento**, não validado: métricas só serão publicadas após o dataset oficial e uma rodada temporal reproduzível.
 
+O commit científico `bcfc011` adiciona execução própria para Kaggle Notebook. Com a competição anexada em `/kaggle/input`, `python kaggle_notebook.py` valida os 13 arquivos, treina, confere 1.885.464 linhas e grava o CSV acompanhado de manifesto SHA-256.
+
+A partir de `cf9ea4b`, a mesma execução pode publicar opcionalmente esses artefatos no Cloud Storage e registrar a proveniência no BigQuery usando a conta Google Cloud vinculada pelo Kaggle Secrets. Nenhuma credencial é armazenada no código ou no manifesto.
+
 ## Qualidade, segurança e commits
 
 ```bash
