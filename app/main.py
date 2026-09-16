@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from httpx import HTTPError
 
 from app.config import get_settings
-from app.models import CatalogItem, DashboardSummary, PowerMonthlyQuery
+from app.models import CatalogItem, DashboardOptions, DashboardSummary, PowerMonthlyQuery
 from app.services.catalog import CATALOG
-from app.services.dashboard import get_demo_summary
+from app.services.dashboard import get_demo_summary, get_options
 from app.services.nasa_power import fetch_monthly
 
 settings = get_settings()
@@ -29,8 +29,19 @@ def health() -> dict[str, str]:
 
 
 @app.get("/v1/dashboard/summary", response_model=DashboardSummary, tags=["dashboard"])
-def dashboard_summary() -> DashboardSummary:
-    return get_demo_summary()
+def dashboard_summary(
+    target_month: str = Query(default="2024-12", pattern=r"^\d{4}-(0[1-9]|1[0-2])$"),
+    region: str = Query(default="america-do-sul"),
+) -> DashboardSummary:
+    try:
+        return get_demo_summary(target_month=target_month, region=region)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/v1/dashboard/options", response_model=DashboardOptions, tags=["dashboard"])
+def dashboard_options() -> DashboardOptions:
+    return get_options()
 
 
 @app.get("/v1/integrations/catalog", response_model=list[CatalogItem], tags=["integrations"])

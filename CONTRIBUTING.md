@@ -1,6 +1,6 @@
 # Como contribuir
 
-A branch de integração deste projeto é `Beatriz`.
+A branch de integração deste projeto é `main`.
 
 Antes de abrir PR, rode:
 

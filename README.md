@@ -31,7 +31,8 @@ uvicorn app.main:app --reload
 | Método | Rota | Função |
 |---|---|---|
 | GET | `/health` | disponibilidade da aplicação |
-| GET | `/v1/dashboard/summary` | contrato completo do painel |
+| GET | `/v1/dashboard/options` | meses e regiões disponíveis |
+| GET | `/v1/dashboard/summary?target_month=2024-12&region=america-do-sul` | painel filtrado |
 | GET | `/v1/integrations/catalog` | fontes, exigência, acesso e documentação |
 | POST | `/v1/integrations/nasa-power/monthly` | consulta mensal pontual à NASA POWER |
 
@@ -74,7 +75,7 @@ pytest
 powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 ```
 
-Os commits seguem Conventional Commits em português. Consulte [CONTRIBUTING.md](CONTRIBUTING.md). A CI roda na branch `Beatriz`.
+Os commits seguem Conventional Commits em português. Consulte [CONTRIBUTING.md](CONTRIBUTING.md). A CI roda na branch `main`.
 
 ## Próximos passos objetivos
 
@@ -82,6 +83,10 @@ Os commits seguem Conventional Commits em português. Consulte [CONTRIBUTING.md]
 2. Trocar o fallback de demonstração por leitura do manifesto e previsões reais.
 3. Implementar cache e rate limit nos conectores.
 4. Acrescentar autenticação somente se surgirem rotas privadas ou custos de API.
+
+## Contrato do desafio preservado
+
+O resumo informa explicitamente origem M, alvo M+1, grade de 301 × 261 pontos, 78.561 previsões por mês, 1.885.464 linhas na submissão completa e RMSE global em mm/dia. Esses metadados são verificáveis; a previsão do MVP continua marcada como `demo` até o pipeline científico publicar um artefato versionado.
 
 ## Licença e dados
 

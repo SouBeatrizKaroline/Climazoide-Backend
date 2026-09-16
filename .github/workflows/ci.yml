@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [Beatriz]
+    branches: [main]
   pull_request:
-    branches: [Beatriz]
+    branches: [main]
 jobs:
   validate:
     runs-on: ubuntu-latest

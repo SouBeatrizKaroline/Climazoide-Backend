@@ -43,6 +43,25 @@ class DashboardSummary(BaseModel):
     series: list[SeriesPoint]
     dataset_period: str
     updated_at: datetime
+    region: str
+    context: "ForecastContext"
+
+
+class ForecastContext(BaseModel):
+    origin_month: str
+    target_month: str
+    horizon_months: int = Field(ge=1, le=24)
+    grid_resolution: str
+    grid_points: int
+    evaluation_metric: str
+    submission_rows: int
+
+
+class DashboardOptions(BaseModel):
+    months: list[str]
+    regions: list[str]
+    default_month: str
+    default_region: str
 
 
 class CatalogItem(BaseModel):
