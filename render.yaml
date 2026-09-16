@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: climazoide-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: https://soubeatrizkaroline.github.io
+      - key: HTTP_TIMEOUT_SECONDS
+        value: "20"

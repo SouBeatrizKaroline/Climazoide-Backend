@@ -35,6 +35,10 @@ def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
     assert payload["metrics"] is None
     assert payload["artifacts"]["submission_available"] is False
     assert len(payload["candidate_models"]) == 4
+    assert any(
+        item["id"] == "convlstm" and item["status"] == "ready_for_training"
+        for item in payload["candidate_models"]
+    )
     assert any(item["ref"] == "vermelho" for item in payload["reviewed_sources"])
     assert any(
         item["id"] == "temporal_contract" and item["status"] == "passed"

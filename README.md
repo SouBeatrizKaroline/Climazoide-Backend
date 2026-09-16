@@ -137,6 +137,8 @@ As métricas anteriores foram removidas do manifesto ativo e da interface. Elas 
 
 A branch `vermelho` foi revisada no commit `9492b93`. PLS, checkpoints por época e execução de múltiplas variações foram registrados como propostas de pesquisa, não como resultados. O endpoint `/v1/model/manifest` expõe as fontes revisadas, os quatro candidatos e cada bloqueio de prontidão para o frontend.
 
+O ConvLSTM possui arquitetura funcional desde o commit científico `e07dffb`, com células empilhadas, preservação espacial e saída não negativa. Seu estado é **pronto para treinamento**, não validado: métricas só serão publicadas após o dataset oficial e uma rodada temporal reproduzível.
+
 ## Qualidade, segurança e commits
 
 ```bash
@@ -151,6 +153,18 @@ powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 - timeout e falha parcial nas integrações;
 - CORS por `ALLOWED_ORIGINS`;
 - dados críticos devem ser confirmados em alertas oficiais.
+
+## Publicação HTTPS
+
+O `render.yaml` e o `Dockerfile` deixam a API pronta para implantação como Web Service no Render. Após conectar este repositório à conta:
+
+1. criar um Blueprint a partir de `render.yaml`;
+2. confirmar que `/health` retorna `api_version=0.2.0` e `model_contract_version=1.1`;
+3. copiar a URL HTTPS criada;
+4. cadastrar essa URL como variável `VITE_API_URL` no repositório do frontend;
+5. executar novamente o workflow **Deploy Pages**.
+
+O CORS de produção já permite `https://soubeatrizkaroline.github.io`.
 
 ## Atribuição
 
