@@ -10,6 +10,10 @@ O backend conecta o frontend a dados públicos recentes, preserva o contrato cie
 
 Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [governança](GOVERNANCE.md), [segurança](SECURITY.md) e [histórico de versões](CHANGELOG.md).
 
+## Equipe
+
+Beatriz Karoline • Daiane Fonseca • Tomáz Giansante
+
 > Migração WORCAP: as oito branches foram auditadas sem alterar a origem. Consulte
 > [a auditoria](docs/WORCAP_BRANCH_AUDIT.md) ou `GET /v1/research/branches`.
 
