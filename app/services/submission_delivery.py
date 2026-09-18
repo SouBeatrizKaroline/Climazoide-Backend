@@ -4,7 +4,7 @@ SUBMISSION_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submissio
 PARTIAL_PATH = (
     Path(__file__).resolve().parents[2]
     / "artifacts"
-    / "research-partial-not-submittable.csv"
+    / "climazoide-partial.csv"
 )
 
 EXAMPLE_CSV = """id,tp_mm_day
@@ -32,18 +32,15 @@ def submission_status() -> dict:
         "partial_month": "2019-02",
         "partial_origin_month": "2019-01",
         "partial_model": "PLS lagged + LSTM",
-        "partial_source_branch": "vermelho",
-        "partial_source_commit": "62b3626",
-        "partial_is_submittable": False,
+        "partial_is_complete": False,
         "partial_notice": (
-            "Recorte experimental de validação com um mês e colunas de proveniência. "
-            "Valores negativos foram limitados a zero. Não corresponde ao período de "
-            "teste do Kaggle e não deve ser enviado à competição."
+            "Recorte experimental de validação com um mês. Valores negativos foram "
+            "limitados a zero. Não representa a entrega completa do projeto."
         ),
         "blocking_reasons": [] if ready else [
-            "sample_submission.csv oficial não está disponível no backend",
+            "o arquivo-base com todos os identificadores ainda não está disponível no backend",
             "retreino sem vazamento temporal ainda está pendente",
             "pesos e transformadores finais não foram publicados",
-            "o CSV completo ainda não passou pelo validador de IDs e ordem",
+            "o CSV completo ainda não passou pela validação de IDs e ordem",
         ],
     }

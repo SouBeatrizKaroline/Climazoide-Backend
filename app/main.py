@@ -110,7 +110,7 @@ def download_research_partial() -> FileResponse:
     return FileResponse(
         PARTIAL_PATH,
         media_type="text/csv",
-        filename="research-partial-not-submittable.csv",
+        filename="climazoide-partial.csv",
     )
 
 

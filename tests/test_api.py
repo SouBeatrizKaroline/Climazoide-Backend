@@ -82,7 +82,7 @@ def test_submission_download_is_blocked_until_a_validated_artifact_exists() -> N
     assert status.json()["ready"] is False
     assert status.json()["example_is_submittable"] is False
     assert status.json()["partial_available"] is True
-    assert status.json()["partial_is_submittable"] is False
+    assert status.json()["partial_is_complete"] is False
     assert status.json()["partial_rows"] == 78_561
     assert status.json()["expected_rows"] == 1_885_464
     assert client.get("/v1/submission/download").status_code == 409
@@ -95,10 +95,10 @@ def test_submission_example_is_clearly_named_as_not_valid() -> None:
     assert response.text.startswith("id,tp_mm_day\n")
 
 
-def test_research_partial_is_downloadable_and_clearly_not_submittable() -> None:
+def test_research_partial_is_downloadable_in_the_public_format() -> None:
     response = client.get("/v1/submission/partial.csv")
     assert response.status_code == 200
-    assert "not-submittable" in response.headers["content-disposition"]
+    assert "climazoide-partial.csv" in response.headers["content-disposition"]
     header, first_row, *_ = response.text.splitlines()
-    assert header.startswith("id,tp_mm_day,status,source_branch")
-    assert "research_only_not_submittable" in first_row
+    assert header == "id,tp_mm_day"
+    assert len(first_row.split(",")) == 2

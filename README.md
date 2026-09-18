@@ -167,8 +167,9 @@ não negativas, ordem preservada e retreino compatível com M→M+1.
 - **Completo oficial:** terá as 1.885.464 previsões e só será liberado após validação;
 - **Parcial de pesquisa:** contém 78.561 pontos de fevereiro de 2019, previstos com
   dados até janeiro de 2019 pelo experimento PLS lagged + LSTM de
-  `vermelho@62b3626`. Valores negativos foram limitados a zero e as colunas extras
-  registram a proveniência. É um recorte científico real, mas **não pode ser enviado ao Kaggle**;
+  `vermelho@62b3626`. Valores negativos foram limitados a zero. O CSV público contém
+  somente `id,tp_mm_day`; esta proveniência permanece documentada apenas aqui. É um
+  recorte científico real, mas não representa a entrega completa;
 - **Exemplo de formato:** contém apenas três linhas fictícias para visualizar
   `id,tp_mm_day` e também não pode ser enviado.
 

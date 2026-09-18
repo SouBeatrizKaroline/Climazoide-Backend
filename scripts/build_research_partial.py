@@ -35,34 +35,17 @@ def main() -> None:
     )
     archive = np.load(io.BytesIO(blob))
     target = str(archive["target_date"][args.grid_index])[:7].replace("-", "_")
-    origin = str(archive["origin_date"][args.grid_index])[:7]
     prediction = archive["pred"][args.grid_index]
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", encoding="utf-8", newline="") as output_file:
         writer = csv.writer(output_file)
-        writer.writerow(
-            [
-                "id",
-                "tp_mm_day",
-                "status",
-                "source_branch",
-                "source_commit",
-                "origin_month",
-            ]
-        )
+        writer.writerow(["id", "tp_mm_day"])
         for lat_index, latitude in enumerate(archive["lat"]):
             for lon_index, longitude in enumerate(archive["lon"]):
                 value = max(0.0, float(prediction[lat_index, lon_index]))
                 writer.writerow(
-                    [
-                        f"{target}_{latitude:.2f}_{longitude:.2f}",
-                        f"{value:.6f}",
-                        "research_only_not_submittable",
-                        "vermelho",
-                        "62b3626",
-                        origin,
-                    ]
+                    [f"{target}_{latitude:.2f}_{longitude:.2f}", f"{value:.6f}"]
                 )
 
 
