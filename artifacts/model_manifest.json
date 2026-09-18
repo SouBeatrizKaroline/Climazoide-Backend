@@ -1,11 +1,11 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "model_id": "pca-lstm-run1",
   "model_name": "PCA/EOF + LSTM",
   "status": "requires_retraining",
   "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
-  "source_branch": "Beatriz",
-  "source_artifact_commit": "cf9ea4b",
+  "source_branch": "feature/melhorar-pls-lstm-daiane",
+  "source_artifact_commit": "54ab930",
   "training_period": "1940-01/2018-12",
   "validation_period": "2019-01/2022-12",
   "evaluation_scope": "retreino obrigatório após correção do alinhamento temporal M→M+1",
@@ -20,16 +20,17 @@
     },
     {
       "ref": "vermelho",
-      "commit": "9492b93",
-      "decision": "PLS, checkpoints por época e orquestração catalogados para nova rodada",
+      "commit": "62b3626",
+      "decision": "correção de vazamento, PLS ajustado, sweep e pós-processamento ENSO catalogados",
       "promoted": false,
-      "reason": "a implementação deriva da execução anterior à correção M→M+1 e requer revisão antes do treino"
+      "reason": "resultado experimental ainda não integrado à branch principal nem publicado como release"
     },
     {
-      "ref": "fork SouBeatrizKaroline/main",
-      "commit": "e5ab7d1",
-      "decision": "sem código adicional em relação à base auditada",
-      "promoted": false
+      "ref": "feature/melhorar-pls-lstm-daiane",
+      "commit": "54ab930",
+      "decision": "EDA, XGBoost v3 e experimento ONI consolidados como pesquisa",
+      "promoted": false,
+      "reason": "faltam integração científica, release e artefato de inferência reproduzível"
     }
   ],
   "candidate_models": [
@@ -56,6 +57,18 @@
       "label": "ConvLSTM",
       "status": "ready_for_training",
       "purpose": "arquitetura implementada para preservar a estrutura espacial da grade; aguarda treino oficial"
+    },
+    {
+      "id": "xgboost-v3",
+      "label": "XGBoost v3",
+      "status": "research_only",
+      "purpose": "modelo retreinado sem vazamento e comparado com persistência e climatologia"
+    },
+    {
+      "id": "xgboost-oni",
+      "label": "XGBoost + ONI",
+      "status": "research_only",
+      "purpose": "experimento de inclusão do ONI como feature, sem promoção para produção"
     }
   ],
   "readiness": [
@@ -89,6 +102,7 @@
     "As métricas antigas foram retiradas da interface e não devem embasar comparação.",
     "Não representa pontuação do leaderboard público ou privado do Kaggle.",
     "Pesos finais e objetos PCA não estão versionados no repositório consultado.",
-    "A API ainda não executa inferência espacial real."
+    "A API ainda não executa inferência espacial real.",
+    "Resultados de vermelho e feature/melhorar-pls-lstm-daiane permanecem experimentais até integração e release."
   ]
 }

@@ -9,11 +9,12 @@ from app.services.dashboard import get_options
 from app.services.live_data import LOCATIONS, fetch_live_overview
 from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
+from app.services.research_catalog import load_research_catalog
 
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.2.0",
+    version="0.3.0",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -30,8 +31,8 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "environment": settings.app_env,
-        "api_version": "0.2.0",
-        "model_contract_version": "1.1",
+        "api_version": "0.3.0",
+        "model_contract_version": "1.2",
     }
 
 
@@ -63,6 +64,12 @@ def integrations_catalog() -> list[CatalogItem]:
 @app.get("/v1/model/manifest", tags=["model"])
 def model_manifest() -> dict:
     return load_model_manifest()
+
+
+@app.get("/v1/research/branches", tags=["research"])
+def research_branches() -> dict:
+    """Expose the audited WORCAP branch map without coupling the API to its Git history."""
+    return load_research_catalog()
 
 
 @app.get("/v1/live/locations", tags=["live"])

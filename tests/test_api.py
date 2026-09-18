@@ -9,8 +9,8 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.2.0"
-    assert response.json()["model_contract_version"] == "1.1"
+    assert response.json()["api_version"] == "0.3.0"
+    assert response.json()["model_contract_version"] == "1.2"
 
 
 def test_dashboard_does_not_serve_simulated_predictions() -> None:
@@ -37,7 +37,7 @@ def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
     assert payload["execution"]["kaggle_notebook_ready"] is True
     assert payload["execution"]["gcp_artifact_export_optional"] is True
     assert payload["execution"]["entrypoint"] == "python kaggle_notebook.py"
-    assert len(payload["candidate_models"]) == 4
+    assert len(payload["candidate_models"]) == 6
     assert any(
         item["id"] == "convlstm" and item["status"] == "ready_for_training"
         for item in payload["candidate_models"]
@@ -60,3 +60,17 @@ def test_live_locations_are_real_coordinates() -> None:
     assert len(locations) == 13
     assert len({item["code"] for item in locations}) == 13
     assert any(item["id"] == "brasilia" and item["latitude"] < 0 for item in locations)
+
+
+def test_research_catalog_maps_every_remote_branch_without_promoting_metrics() -> None:
+    response = client.get("/v1/research/branches")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["source_repository_modified"] is False
+    assert payload["latest_branch"] == "feature/melhorar-pls-lstm-daiane"
+    assert len(payload["branches"]) == 8
+    assert payload["promotion_policy"]["production_metrics"] is False
+    assert any(
+        branch["name"] == "vermelho" and "correção de vazamento temporal" in branch["work"]
+        for branch in payload["branches"]
+    )

@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "audited_at": "2026-09-18",
+  "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
+  "source_repository_modified": false,
+  "default_branch": "main",
+  "latest_branch": "feature/melhorar-pls-lstm-daiane",
+  "branches": [
+    {
+      "name": "main",
+      "commit": "fac2fa7",
+      "updated_at": "2026-09-16T18:29:04-03:00",
+      "status": "integrated_base",
+      "work": ["PCA/PLS + LSTM", "execução comparativa", "artefatos de treino"]
+    },
+    {
+      "name": "Beatriz",
+      "commit": "a57e2ff",
+      "updated_at": "2026-09-16T10:09:17-03:00",
+      "status": "contract_reference",
+      "work": ["contrato M→M+1", "ConvLSTM", "automação Kaggle/GCP", "testes e governança"]
+    },
+    {
+      "name": "vermelho",
+      "commit": "62b3626",
+      "updated_at": "2026-09-17T10:26:15-03:00",
+      "status": "experimental_result",
+      "work": ["correção de vazamento temporal", "cache PCA/PLS", "sweep de hiperparâmetros", "correção de viés ENSO"]
+    },
+    {
+      "name": "feature/eda-outliers-daiane",
+      "commit": "de7d2c1",
+      "updated_at": "2026-09-16T11:16:39-03:00",
+      "status": "merged_into_latest",
+      "work": ["outliers por z-score", "médias anuais", "estatística descritiva", "gráficos por variável"]
+    },
+    {
+      "name": "feature/xgboost-ensemble-daiane",
+      "commit": "85cc942",
+      "updated_at": "2026-09-16T18:02:34-03:00",
+      "status": "superseded",
+      "work": ["primeira implementação do XGBoost após redução PCA"]
+    },
+    {
+      "name": "feature/xgboost-v3-daiane",
+      "commit": "d115a51",
+      "updated_at": "2026-09-17T13:07:38-03:00",
+      "status": "merged_into_latest",
+      "work": ["XGBoost retreinado sem vazamento", "comparação com persistência e climatologia"]
+    },
+    {
+      "name": "feature/oni-experimento-daiane",
+      "commit": "4b9aeff",
+      "updated_at": "2026-09-17T18:08:27-03:00",
+      "status": "merged_into_latest",
+      "work": ["ONI como feature do XGBoost", "comparação experimental com e sem ONI"]
+    },
+    {
+      "name": "feature/melhorar-pls-lstm-daiane",
+      "commit": "54ab930",
+      "updated_at": "2026-09-17T20:41:36-03:00",
+      "status": "latest",
+      "work": ["consolidação de EDA", "XGBoost v3", "experimento ONI", "resultados sem binários duplicados na API"]
+    }
+  ],
+  "promotion_policy": {
+    "production_metrics": false,
+    "reason": "Os resultados pertencem a branches experimentais e ainda não foram integrados e validados como release científica.",
+    "binary_artifacts_copied": false
+  }
+}
