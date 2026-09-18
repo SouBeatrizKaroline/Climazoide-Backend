@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from httpx import HTTPError
 
 from app.config import get_settings
@@ -10,6 +11,7 @@ from app.services.live_data import LOCATIONS, fetch_live_overview
 from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
 from app.services.research_catalog import load_research_catalog
+from app.services.submission_delivery import EXAMPLE_CSV, SUBMISSION_PATH, submission_status
 
 settings = get_settings()
 app = FastAPI(
@@ -70,6 +72,30 @@ def model_manifest() -> dict:
 def research_branches() -> dict:
     """Expose the audited WORCAP branch map without coupling the API to its Git history."""
     return load_research_catalog()
+
+
+@app.get("/v1/submission/status", tags=["submission"])
+def get_submission_status() -> dict:
+    return submission_status()
+
+
+@app.get("/v1/submission/example.csv", tags=["submission"])
+def download_submission_example() -> Response:
+    return Response(
+        EXAMPLE_CSV,
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="submission-example-not-valid.csv"'},
+    )
+
+
+@app.get("/v1/submission/download", tags=["submission"])
+def download_submission() -> FileResponse:
+    if not SUBMISSION_PATH.is_file():
+        raise HTTPException(
+            status_code=409,
+            detail="A submissão validada ainda não foi gerada. Consulte /v1/submission/status.",
+        )
+    return FileResponse(SUBMISSION_PATH, media_type="text/csv", filename="submission.csv")
 
 
 @app.get("/v1/live/locations", tags=["live"])

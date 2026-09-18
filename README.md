@@ -87,6 +87,9 @@ uvicorn app.main:app --reload
 | GET | `/v1/integrations/catalog` | fontes, acesso e documentação |
 | POST | `/v1/integrations/nasa-power/monthly` | série mensal NASA POWER |
 | GET | `/v1/model/manifest` | proveniência e métricas do modelo |
+| GET | `/v1/submission/status` | prontidão e bloqueios do CSV Kaggle |
+| GET | `/v1/submission/example.csv` | exemplo pequeno, explicitamente não enviável |
+| GET | `/v1/submission/download` | CSV completo somente quando validado e publicado |
 
 Pontos operacionais: `buenos-aires`, `la-paz`, `brasilia`, `santiago`, `bogota`, `quito`, `georgetown`, `asuncion`, `lima`, `paramaribo`, `montevideu`, `caracas` e `caiena`.
 
@@ -149,6 +152,10 @@ O script executa `kagglehub.competition_download('previsao-climatica-de-precipit
 ```bash
 python scripts/validate_submission.py data/sample_submission.csv submission.csv
 ```
+
+O produto nunca transforma o exemplo de três linhas em submissão. O download completo
+só responde quando existir um artefato validado com os IDs oficiais, previsões finitas e
+não negativas, ordem preservada e retreino compatível com M→M+1.
 
 Auditoria conjunta do dataset e da submissão:
 

@@ -74,3 +74,19 @@ def test_research_catalog_maps_every_remote_branch_without_promoting_metrics() -
         branch["name"] == "vermelho" and "correção de vazamento temporal" in branch["work"]
         for branch in payload["branches"]
     )
+
+
+def test_submission_download_is_blocked_until_a_validated_artifact_exists() -> None:
+    status = client.get("/v1/submission/status")
+    assert status.status_code == 200
+    assert status.json()["ready"] is False
+    assert status.json()["example_is_submittable"] is False
+    assert status.json()["expected_rows"] == 1_885_464
+    assert client.get("/v1/submission/download").status_code == 409
+
+
+def test_submission_example_is_clearly_named_as_not_valid() -> None:
+    response = client.get("/v1/submission/example.csv")
+    assert response.status_code == 200
+    assert "not-valid" in response.headers["content-disposition"]
+    assert response.text.startswith("id,tp_mm_day\n")
