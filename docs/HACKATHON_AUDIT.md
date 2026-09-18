@@ -1,5 +1,8 @@
 # Auditoria de aderência ao WORCAP 2026
 
+Auditoria publicada em **16 de setembro de 2026, às 08:37:06 (BRT, UTC−03:00)**.
+O horário corresponde ao commit que publicou esta auditoria no repositório.
+
 Data da auditoria: **16 de setembro de 2026**.
 
 ## Veredito

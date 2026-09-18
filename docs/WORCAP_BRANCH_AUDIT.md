@@ -1,6 +1,7 @@
 # Auditoria de branches WORCAP-2026
 
-Auditoria feita em 18 de setembro de 2026, somente por leitura do repositório
+Auditoria publicada em **18 de setembro de 2026, às 08:14:54 (BRT, UTC−03:00)**,
+somente por leitura do repositório
 `mazeeqe/WORCAP-2026`. Nenhum commit, push ou alteração foi realizado na origem.
 
 ## Decisão de arquitetura
