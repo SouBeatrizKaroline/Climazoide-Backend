@@ -31,6 +31,11 @@ As integrações recentes são uma camada operacional complementar. Elas não su
 
 No treino histórico, `alvo_atm` era obtido em `alvo_idx`. Isso permitia que a validação enxergasse as variáveis atmosféricas do próprio mês a prever. O dataset de teste informa, em cada posição de mês-alvo, campos do mês anterior em `time_origem`.
 
+Exemplo concreto: uma previsão para setembro usa dados disponíveis até agosto. Usar
+temperatura, pressão, umidade ou qualquer outro campo atmosférico de setembro para prever
+a chuva de setembro viola o contrato da competição e produz avaliação artificialmente
+otimista.
+
 O pipeline passou a usar `alvo_idx - 1` no treino. A inferência continua lendo diretamente os campos de `teste_features.nc`, pois ali o deslocamento já foi aplicado pela organização. As métricas antigas ficam preservadas apenas como histórico de execução, não como evidência válida.
 
 ## Cobertura geográfica

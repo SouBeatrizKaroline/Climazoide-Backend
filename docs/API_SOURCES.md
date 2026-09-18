@@ -14,6 +14,10 @@ Os pontos operacionais do painel não substituem a grade científica ERA5 de 301
 Dados atuais e previsão de sete dias também não são apresentados como a previsão mensal
 M→M+1 da competição.
 
+No contrato mensal, prever setembro significa usar no máximo dados de agosto. As APIs
+operacionais podem mostrar condições atuais ao usuário, mas esses valores não entram
+retroativamente na entrada do modelo científico para o mesmo mês.
+
 ## Exigido para a competição
 
 ### Kaggle / WORCAP 2026
@@ -84,3 +88,11 @@ M→M+1 da competição.
 4. Cache e limitação de requisições antes de produção.
 5. Metadados de origem no payload.
 6. Teste com resposta simulada; CI não deve depender de rede externa.
+
+## Política de indisponibilidade
+
+- cada fonte informa `available` e horário de atualização;
+- uma falha externa não derruba o restante do painel;
+- campos sem resposta usam `null`, nunca zero inventado;
+- a API tenta novamente falhas transitórias da fonte meteorológica principal;
+- o frontend traduz `null` como **Indisponível** e mantém visível a proveniência.

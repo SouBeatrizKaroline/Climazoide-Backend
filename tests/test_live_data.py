@@ -1,6 +1,6 @@
 import httpx
 
-from app.services.live_data import _fetch_json
+from app.services.live_data import _fetch_json, _impact_indicators
 
 
 async def test_public_json_source_retries_transient_status_errors() -> None:
@@ -18,3 +18,9 @@ async def test_public_json_source_retries_transient_status_errors() -> None:
 
     assert payload == {"status": "available"}
     assert attempts == 3
+
+
+def test_missing_weather_does_not_turn_unavailable_values_into_zeros() -> None:
+    impacts = _impact_indicators({}, {})
+
+    assert all(item["value"] is None for item in impacts)

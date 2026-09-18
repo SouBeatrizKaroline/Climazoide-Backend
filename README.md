@@ -34,7 +34,9 @@ Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [g
 | Kaggle/WORCAP + ERA5 | treino, teste e submissão científica | dados do desafio, fora da API operacional ao vivo |
 
 Detalhes, links oficiais e cuidados metodológicos estão em [Fontes e APIs](docs/API_SOURCES.md).
-Falhas em fontes complementares são isoladas; a fonte meteorológica principal usa tentativas curtas antes de declarar indisponibilidade, sem inventar valores.
+Falhas são isoladas por fonte. A fonte meteorológica principal usa tentativas curtas e,
+se continuar indisponível, a API mantém o painel aberto com valores `null` e estado
+`available: false`. Ausência nunca é convertida em zero nem em dado simulado.
 
 ## Funcionalidades
 
@@ -109,6 +111,14 @@ Detalhes e atribuições: [`docs/API_SOURCES.md`](docs/API_SOURCES.md).
 ## Dataset oficial do Kaggle
 
 São **13 arquivos**, aproximadamente **2,06 GB**, grade ERA5 de `0,25°`, `301 × 261` e **78.561 pontos por mês**. O treino cobre 1940–2022. O estado atmosférico de `M` alimenta a estimativa de precipitação de `M+1`. A avaliação cobre 2023–2024.
+
+### Regra temporal obrigatória
+
+A previsão só pode usar informação que já existia no momento da emissão. Portanto, para
+prever setembro, a entrada mais recente permitida é agosto. Variáveis atmosféricas de
+setembro não podem entrar no modelo que prevê setembro, pois isso caracteriza vazamento
+temporal. O pipeline científico deve preservar `time_origem = M` e `time_alvo = M+1` em
+treino, validação, teste e geração do CSV de submissão.
 
 Após autenticar a conta Kaggle e aceitar as regras:
 

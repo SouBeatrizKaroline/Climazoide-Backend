@@ -216,7 +216,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         )
 
     if isinstance(weather, Exception):
-        raise httpx.HTTPError("A fonte meteorológica principal não respondeu.") from weather
+        weather = {}
     if isinstance(air, Exception):
         air = {}
     if isinstance(cptec, Exception):
@@ -246,7 +246,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
             "note": "O ponto operacional não substitui a previsão científica em grade.",
         },
         "generated_at": datetime.now(UTC).isoformat(),
-        "timezone": weather.get("timezone"),
+        "timezone": weather.get("timezone") or "Indisponível",
         "current": {
             "observed_at": current.get("time"),
             "temperature": current.get("temperature_2m"),
@@ -283,7 +283,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
             {
                 "name": "Open-Meteo",
                 "scope": "modelos meteorológicos internacionais",
-                "available": True,
+                "available": bool(weather),
                 "updated_at": current.get("time"),
                 "url": "https://open-meteo.com/en/docs",
             },
@@ -322,29 +322,38 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
 
 def _impact_indicators(weather: dict, air: dict) -> list[dict]:
     daily = weather.get("daily", {})
-    precipitation = sum(value or 0 for value in daily.get("precipitation_sum", []))
-    et0 = sum(value or 0 for value in daily.get("et0_fao_evapotranspiration", []))
-    max_temperature = max(daily.get("temperature_2m_max", [0]) or [0])
+    precipitation_values = daily.get("precipitation_sum", [])
+    et0_values = daily.get("et0_fao_evapotranspiration", [])
+    temperature_values = daily.get("temperature_2m_max", [])
+    precipitation = (
+        sum(value or 0 for value in precipitation_values) if precipitation_values else None
+    )
+    et0 = sum(value or 0 for value in et0_values) if et0_values else None
+    max_temperature = max(temperature_values) if temperature_values else None
     aqi = _value(air, "current", "us_aqi")
     return [
         {
             "id": "water",
             "label": "Balanço hídrico em 7 dias",
-            "value": round(precipitation - et0, 1),
+            "value": (
+                round(precipitation - et0, 1)
+                if precipitation is not None and et0 is not None
+                else None
+            ),
             "unit": "mm",
             "detail": "Chuva prevista menos evapotranspiração de referência.",
         },
         {
             "id": "agriculture",
             "label": "Demanda evaporativa em 7 dias",
-            "value": round(et0, 1),
+            "value": round(et0, 1) if et0 is not None else None,
             "unit": "mm",
             "detail": "Indicador útil para irrigação; não substitui manejo agronômico.",
         },
         {
             "id": "heat",
             "label": "Maior temperatura em 7 dias",
-            "value": round(max_temperature, 1),
+            "value": round(max_temperature, 1) if max_temperature is not None else None,
             "unit": "°C",
             "detail": "Sinal de atenção para conforto térmico e demanda de energia.",
         },
