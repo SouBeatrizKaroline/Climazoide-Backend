@@ -11,8 +11,10 @@ data/
 artifacts/*
 !artifacts/model_manifest.json
 !artifacts/research_catalog.json
+!artifacts/research-partial-not-submittable.csv
 *.nc
 *.csv
+!artifacts/research-partial-not-submittable.csv
 *.pt
 *.pkl
 *.egg-info/

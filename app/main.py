@@ -11,7 +11,12 @@ from app.services.live_data import LOCATIONS, fetch_live_overview
 from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
 from app.services.research_catalog import load_research_catalog
-from app.services.submission_delivery import EXAMPLE_CSV, SUBMISSION_PATH, submission_status
+from app.services.submission_delivery import (
+    EXAMPLE_CSV,
+    PARTIAL_PATH,
+    SUBMISSION_PATH,
+    submission_status,
+)
 
 settings = get_settings()
 app = FastAPI(
@@ -96,6 +101,17 @@ def download_submission() -> FileResponse:
             detail="A submissão validada ainda não foi gerada. Consulte /v1/submission/status.",
         )
     return FileResponse(SUBMISSION_PATH, media_type="text/csv", filename="submission.csv")
+
+
+@app.get("/v1/submission/partial.csv", tags=["submission"])
+def download_research_partial() -> FileResponse:
+    if not PARTIAL_PATH.is_file():
+        raise HTTPException(status_code=404, detail="O recorte parcial não está disponível.")
+    return FileResponse(
+        PARTIAL_PATH,
+        media_type="text/csv",
+        filename="research-partial-not-submittable.csv",
+    )
 
 
 @app.get("/v1/live/locations", tags=["live"])

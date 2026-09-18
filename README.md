@@ -93,6 +93,7 @@ uvicorn app.main:app --reload
 | GET | `/v1/model/manifest` | proveniência e métricas do modelo |
 | GET | `/v1/submission/status` | prontidão e bloqueios do CSV Kaggle |
 | GET | `/v1/submission/example.csv` | exemplo pequeno, explicitamente não enviável |
+| GET | `/v1/submission/partial.csv` | grade experimental de um mês, não enviável |
 | GET | `/v1/submission/download` | CSV completo somente quando validado e publicado |
 
 Pontos operacionais: `buenos-aires`, `la-paz`, `brasilia`, `santiago`, `bogota`, `quito`, `georgetown`, `asuncion`, `lima`, `paramaribo`, `montevideu`, `caracas` e `caiena`.
@@ -160,6 +161,19 @@ python scripts/validate_submission.py data/sample_submission.csv submission.csv
 O produto nunca transforma o exemplo de três linhas em submissão. O download completo
 só responde quando existir um artefato validado com os IDs oficiais, previsões finitas e
 não negativas, ordem preservada e retreino compatível com M→M+1.
+
+### Três níveis de download
+
+- **Completo oficial:** terá as 1.885.464 previsões e só será liberado após validação;
+- **Parcial de pesquisa:** contém 78.561 pontos de fevereiro de 2019, previstos com
+  dados até janeiro de 2019 pelo experimento PLS lagged + LSTM de
+  `vermelho@62b3626`. Valores negativos foram limitados a zero e as colunas extras
+  registram a proveniência. É um recorte científico real, mas **não pode ser enviado ao Kaggle**;
+- **Exemplo de formato:** contém apenas três linhas fictícias para visualizar
+  `id,tp_mm_day` e também não pode ser enviado.
+
+O recorte parcial é reproduzível com `scripts/build_research_partial.py`, lendo o artefato
+versionado na cópia local do WORCAP sem alterar o repositório de origem.
 
 Auditoria conjunta do dataset e da submissão:
 
