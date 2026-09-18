@@ -13,6 +13,29 @@ Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [g
 > Migração WORCAP: as oito branches foram auditadas sem alterar a origem. Consulte
 > [a auditoria](docs/WORCAP_BRANCH_AUDIT.md) ou `GET /v1/research/branches`.
 
+## Ecossistema do projeto
+
+- **Backend operacional:** este repositório, responsável por integrações, proveniência e API.
+- **Frontend público:** [Climazoide-Frontend](https://github.com/SouBeatrizKaroline/Climazoide-Frontend).
+- **Pesquisa e experimentos:** [WORCAP-2026](https://github.com/mazeeqe/WORCAP-2026), usado como laboratório científico, histórico de branches e referência para PCA/PLS + LSTM, ConvLSTM, XGBoost, ONI e EDA. Ele não é modificado pelo Climazoide.
+- **Dashboard:** [soubeatrizkaroline.github.io/Climazoide-Frontend](https://soubeatrizkaroline.github.io/Climazoide-Frontend/).
+- **API publicada:** [climazoide-api.onrender.com](https://climazoide-api.onrender.com/docs).
+
+## Dados utilizados
+
+| Fonte | Uso atual | Natureza |
+| --- | --- | --- |
+| Open-Meteo | condição atual e previsão de 7 dias | dado meteorológico modelado, sem chave |
+| CAMS/Copernicus via Open-Meteo | AQI, partículas, gases e UV | composição atmosférica modelada |
+| CPTEC/INPE | comparação meteorológica no Brasil | XML público, disponibilidade variável |
+| NOAA CPC | ONI e fase observada do ENSO | contexto climático, não previsão local |
+| US Naval Observatory | Sol e Lua | efemérides astronômicas |
+| NASA POWER | séries mensais sob consulta | comparação climática complementar |
+| Kaggle/WORCAP + ERA5 | treino, teste e submissão científica | dados do desafio, fora da API operacional ao vivo |
+
+Detalhes, links oficiais e cuidados metodológicos estão em [Fontes e APIs](docs/API_SOURCES.md).
+Falhas em fontes complementares são isoladas; a fonte meteorológica principal usa tentativas curtas antes de declarar indisponibilidade, sem inventar valores.
+
 ## Funcionalidades
 
 - condições atuais e previsão de sete dias em 13 pontos sul-americanos;

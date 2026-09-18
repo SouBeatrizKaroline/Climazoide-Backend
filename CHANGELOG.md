@@ -2,6 +2,12 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.3.1] - 2026-09-18
+
+- adiciona retentativas e identificação do cliente nas fontes públicas;
+- amplia o timeout do serviço publicado sem ocultar indisponibilidades;
+- documenta APIs, dados e os papéis de frontend, backend e WORCAP-2026.
+
 ## [0.3.0] - 2026-09-18
 
 - auditoria das oito branches remotas do WORCAP-2026;

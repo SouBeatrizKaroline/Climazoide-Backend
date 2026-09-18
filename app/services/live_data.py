@@ -85,9 +85,18 @@ def _daily(weather: dict) -> list[dict]:
 
 
 async def _fetch_json(client: httpx.AsyncClient, url: str, params: dict) -> dict:
-    response = await client.get(url, params=params)
-    response.raise_for_status()
-    return response.json()
+    """Fetch a public JSON source with a short retry for transient network failures."""
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            response = await client.get(url, params=params)
+            response.raise_for_status()
+            return response.json()
+        except (httpx.TransportError, httpx.HTTPStatusError) as exc:
+            last_error = exc
+            if attempt < 2:
+                await asyncio.sleep(0.4 * (attempt + 1))
+    raise httpx.HTTPError(f"Fonte indisponível após 3 tentativas: {url}") from last_error
 
 
 async def _fetch_cptec(
@@ -177,7 +186,14 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         "timezone": "auto",
         "current": "us_aqi,pm2_5,pm10,carbon_monoxide,nitrogen_dioxide,ozone,uv_index",
     }
-    async with httpx.AsyncClient(timeout=timeout, follow_redirects=True) as client:
+    client_timeout = httpx.Timeout(timeout, connect=min(timeout, 15.0))
+    transport = httpx.AsyncHTTPTransport(retries=2)
+    async with httpx.AsyncClient(
+        timeout=client_timeout,
+        transport=transport,
+        follow_redirects=True,
+        headers={"User-Agent": "Climazoide/0.3 (+https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
+    ) as client:
         weather_task = _fetch_json(client, WEATHER_URL, weather_params)
         air_task = _fetch_json(client, AIR_URL, air_params)
         cptec_task = (

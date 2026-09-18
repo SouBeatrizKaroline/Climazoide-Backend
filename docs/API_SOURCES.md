@@ -1,5 +1,19 @@
 # Fontes de dados e integrações
 
+## Como as camadas se relacionam
+
+O [Climazoide-Backend](https://github.com/SouBeatrizKaroline/Climazoide-Backend)
+integra dados públicos e entrega respostas normalizadas. O
+[Climazoide-Frontend](https://github.com/SouBeatrizKaroline/Climazoide-Frontend)
+apenas apresenta essas respostas e não guarda credenciais. O
+[WORCAP-2026](https://github.com/mazeeqe/WORCAP-2026) é o repositório de pesquisa,
+testes de modelos e experimentos científicos. Código experimental e métricas ainda
+não promovidas permanecem nele e aparecem no produto somente como estado de pesquisa.
+
+Os pontos operacionais do painel não substituem a grade científica ERA5 de 301 × 261.
+Dados atuais e previsão de sete dias também não são apresentados como a previsão mensal
+M→M+1 da competição.
+
 ## Exigido para a competição
 
 ### Kaggle / WORCAP 2026

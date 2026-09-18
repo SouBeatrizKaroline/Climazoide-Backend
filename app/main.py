@@ -14,7 +14,7 @@ from app.services.research_catalog import load_research_catalog
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.3.0",
+    version="0.3.1",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -31,7 +31,7 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "environment": settings.app_env,
-        "api_version": "0.3.0",
+        "api_version": "0.3.1",
         "model_contract_version": "1.2",
     }
 
