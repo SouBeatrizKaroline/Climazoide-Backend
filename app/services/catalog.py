@@ -22,13 +22,13 @@ CATALOG = [
         enabled=True,
     ),
     CatalogItem(
-        id="kaggle-worcap",
-        institution="Kaggle / WORCAP 2026",
+        id="official-challenge-dataset",
+        institution="Dataset científico oficial",
         region="international",
-        role="Fonte oficial dos arquivos de treino, teste e submissão do desafio.",
+        role="Fonte oficial dos arquivos de treino, teste e exportação final.",
         requirement="required",
         access="Requer conta, aceite das regras e credencial individual.",
-        documentation_url="https://www.kaggle.com/docs/api",
+        documentation_url="https://github.com/SouBeatrizKaroline/Climazoide-Backend#dados-utilizados",
     ),
     CatalogItem(
         id="era5-cds",

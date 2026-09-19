@@ -231,7 +231,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 O `render.yaml` e o `Dockerfile` deixam a API pronta para implantação como Web Service no Render. Após conectar este repositório à conta:
 
 1. criar um Blueprint a partir de `render.yaml`;
-2. confirmar que `/health` retorna `api_version=0.2.0` e `model_contract_version=1.1`;
+2. confirmar que `/health` retorna `api_version=0.3.2` e `model_contract_version=1.3`;
 3. copiar a URL HTTPS criada;
 4. cadastrar essa URL como variável `VITE_API_URL` no repositório do frontend;
 5. executar novamente o workflow **Deploy Pages**.

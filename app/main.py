@@ -21,7 +21,7 @@ from app.services.submission_delivery import (
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.3.1",
+    version="0.3.2",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -38,8 +38,8 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "environment": settings.app_env,
-        "api_version": "0.3.1",
-        "model_contract_version": "1.2",
+        "api_version": "0.3.2",
+        "model_contract_version": "1.3",
     }
 
 
@@ -75,7 +75,7 @@ def model_manifest() -> dict:
 
 @app.get("/v1/research/branches", tags=["research"])
 def research_branches() -> dict:
-    """Expose the audited WORCAP branch map without coupling the API to its Git history."""
+    """Expose the audited research branch map without coupling the API to its Git history."""
     return load_research_catalog()
 
 

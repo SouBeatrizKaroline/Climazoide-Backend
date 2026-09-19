@@ -9,8 +9,8 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.3.1"
-    assert response.json()["model_contract_version"] == "1.2"
+    assert response.json()["api_version"] == "0.3.2"
+    assert response.json()["model_contract_version"] == "1.3"
 
 
 def test_dashboard_does_not_serve_simulated_predictions() -> None:
@@ -34,9 +34,9 @@ def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
     assert "retreino obrigatório" in payload["evaluation_scope"]
     assert payload["metrics"] is None
     assert payload["artifacts"]["submission_available"] is False
-    assert payload["execution"]["kaggle_notebook_ready"] is True
-    assert payload["execution"]["gcp_artifact_export_optional"] is True
-    assert payload["execution"]["entrypoint"] == "python kaggle_notebook.py"
+    assert payload["execution"]["notebook_execution_ready"] is True
+    assert payload["execution"]["cloud_artifact_export_optional"] is True
+    assert payload["execution"]["entrypoint"] == "documentado no README"
     assert len(payload["candidate_models"]) == 6
     assert any(
         item["id"] == "convlstm" and item["status"] == "ready_for_training"
@@ -49,7 +49,7 @@ def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
     )
     assert not any(
         item["status"] == "passed" for item in payload["readiness"]
-        if item["id"] in {"retraining", "submission", "leaderboard"}
+        if item["id"] in {"retraining", "submission", "official_score"}
     )
 
 

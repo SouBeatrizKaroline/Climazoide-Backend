@@ -2,6 +2,12 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.3.2] - 2026-09-19
+
+- atualiza o contrato público do modelo para `1.3`;
+- troca rótulos públicos de entrega externa por linguagem própria do Climazoide;
+- mantém a proveniência científica em documentação e auditoria, sem expor branch no CSV parcial.
+
 ## [0.3.1] - 2026-09-18
 
 - adiciona retentativas e identificação do cliente nas fontes públicas;

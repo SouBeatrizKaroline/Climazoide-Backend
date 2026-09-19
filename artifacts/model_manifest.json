@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "model_id": "pca-lstm-run1",
   "model_name": "PCA/EOF + LSTM",
   "status": "requires_retraining",
@@ -75,10 +75,10 @@
     {"id": "temporal_contract", "label": "Contrato M→M+1", "status": "passed"},
     {"id": "official_ids", "label": "IDs oficiais sem reconstrução", "status": "passed"},
     {"id": "full_grid", "label": "Grade 301 × 261", "status": "passed"},
-    {"id": "official_dataset", "label": "13 arquivos Kaggle", "status": "blocked_by_auth"},
+    {"id": "official_dataset", "label": "13 arquivos oficiais", "status": "blocked_by_auth"},
     {"id": "retraining", "label": "Retreino corrigido", "status": "pending"},
     {"id": "submission", "label": "CSV com 1.885.464 linhas", "status": "pending"},
-    {"id": "leaderboard", "label": "Score Kaggle", "status": "pending"}
+    {"id": "official_score", "label": "Pontuação oficial", "status": "pending"}
   ],
   "artifacts": {
     "metrics": "experiments/pca_lstm_run1/metrics.json",
@@ -89,9 +89,9 @@
     "submission_available": false
   },
   "execution": {
-    "kaggle_notebook_ready": true,
-    "entrypoint": "python kaggle_notebook.py",
-    "gcp_artifact_export_optional": true,
+    "notebook_execution_ready": true,
+    "entrypoint": "documentado no README",
+    "cloud_artifact_export_optional": true,
     "expected_outputs": [
       "submission_pca_lstm.csv",
       "submission_manifest.json"
@@ -100,7 +100,7 @@
   "limitations": [
     "A execução anterior usou a atmosfera do mês-alvo na validação; o desafio fornece a atmosfera do mês anterior.",
     "As métricas antigas foram retiradas da interface e não devem embasar comparação.",
-    "Não representa pontuação do leaderboard público ou privado do Kaggle.",
+    "Não representa pontuação pública ou privada da avaliação oficial.",
     "Pesos finais e objetos PCA não estão versionados no repositório consultado.",
     "A API ainda não executa inferência espacial real.",
     "Resultados de vermelho e feature/melhorar-pls-lstm-daiane permanecem experimentais até integração e release."
