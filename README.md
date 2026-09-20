@@ -50,6 +50,7 @@ na contingência permanecem `null`; ausência nunca é convertida em zero ou dad
 - qualidade do ar, PM2.5, PM10, ozônio e UV via CAMS/Copernicus;
 - consulta ao CPTEC/INPE, com disponibilidade informada no payload;
 - análises automáticas de água, agricultura, calor e saúde ambiental;
+- leitura cruzada da previsão curta: chuva acumulada, concentração, dias quentes e correlação chuva–temperatura;
 - consulta mensal à NASA POWER;
 - baseline completo de climatologia mensal, auditado e validado temporalmente;
 - catálogo rastreável de PCA, PLS concorrente, PLS defasado e ConvLSTM;
@@ -101,6 +102,22 @@ uvicorn app.main:app --reload
 Pontos operacionais: `buenos-aires`, `la-paz`, `brasilia`, `santiago`, `bogota`, `quito`, `georgetown`, `asuncion`, `lima`, `paramaribo`, `montevideu`, `caracas` e `caiena`.
 
 Esses pontos dão contexto recente aos 13 países e territórios continentais. A competição continua sendo atendida pela grade científica completa de **78.561 pontos mensais**; uma capital nunca é tratada como substituta da grade.
+
+### Leituras derivadas do contexto recente
+
+`GET /v1/live/overview` também retorna `short_range_analysis`, calculado somente
+com os dias efetivamente recebidos da fonte meteorológica identificada no mesmo
+payload. A seção informa início e fim da janela, número de dias e:
+
+- chuva acumulada, apenas quando todos os dias possuem precipitação;
+- dias com chuva prevista ≥ 0,1 mm;
+- dias com temperatura máxima ≥ 32 °C;
+- parcela da chuva concentrada no dia mais úmido;
+- correlação de Pearson entre chuva diária e temperatura máxima.
+
+A correlação é ocultada quando há menos de três pares ou ausência de variação. Ela
+descreve somente a pequena janela de sete dias, não demonstra causalidade e não é
+usada no CSV mensal nem no treinamento do baseline.
 
 ## Fontes públicas
 
@@ -181,6 +198,11 @@ O script executa `kagglehub.competition_download('previsao-climatica-de-precipit
 - `sample_submission.csv`: lista completa dos IDs para os 24 meses, na ordem exigida. Os zeros em `tp_mm_day` são apenas preenchimento do modelo de submissão, não previsões nem valores observados.
 
 O alinhamento exigido é variáveis atmosféricas do mês `M` → precipitação de `M+1`. Na avaliação, use as variáveis já defasadas em `teste_features.nc`; não desloque `time` uma segunda vez. A latitude está em ordem crescente. A chuva observada dos 24 meses de teste não é distribuída. O baseline publicado não lê `tp_alvo` do teste e confirma automaticamente que ele permanece inteiramente `NaN`.
+
+O manifesto `GET /v1/model/manifest` publica o contrato completo do dataset, incluindo
+as nove variáveis, seus níveis, períodos, grade, alvo, unidade e referência temporal.
+Isso permite ao frontend explicar a metodologia sem confundir essas variáveis com as
+fontes operacionais de sete dias.
 
 ### Regras invariantes
 
@@ -302,7 +324,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install_hooks.ps1
 O `render.yaml` e o `Dockerfile` deixam a API pronta para implantação como Web Service no Render. Após conectar este repositório à conta:
 
 1. criar um Blueprint a partir de `render.yaml`;
-2. confirmar que `/health` retorna `api_version=0.3.2` e `model_contract_version=1.3`;
+2. confirmar que `/health` retorna `api_version=0.4.0` e `model_contract_version=1.4`;
 3. copiar a URL HTTPS criada;
 4. cadastrar essa URL como variável `VITE_API_URL` no repositório do frontend;
 5. executar novamente o workflow **Deploy Pages**.

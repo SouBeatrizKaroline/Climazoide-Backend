@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import math
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
 from xml.etree import ElementTree
@@ -113,7 +114,7 @@ async def _fetch_met_no(client: httpx.AsyncClient, latitude: float, longitude: f
     response = await client.get(
         MET_NO_URL,
         params={"lat": latitude, "lon": longitude},
-        headers={"User-Agent": "Climazoide/0.3 (https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
+        headers={"User-Agent": "Climazoide/0.4 (https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
     )
     response.raise_for_status()
     payload = response.json()
@@ -331,7 +332,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         timeout=client_timeout,
         transport=transport,
         follow_redirects=True,
-        headers={"User-Agent": "Climazoide/0.3 (+https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
+        headers={"User-Agent": "Climazoide/0.4 (+https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
     ) as client:
         weather_task = _fetch_json(client, WEATHER_URL, weather_params)
         air_task = _fetch_json(client, AIR_URL, air_params)
@@ -443,6 +444,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         "climate_context": {"oni": oni},
         "astronomy": astronomy,
         "impacts": _impact_indicators(weather, air),
+        "short_range_analysis": _short_range_analysis(weather),
         "sources": [
             {
                 "name": "Open-Meteo",
@@ -548,6 +550,109 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
             "detail": "Índice dos EUA calculado pelo CAMS; maior significa pior.",
         },
     ]
+
+
+def _short_range_analysis(weather: dict) -> dict:
+    days = _daily(weather)
+    complete_rain = bool(days) and all(day["precipitation_sum"] is not None for day in days)
+    complete_temperature = bool(days) and all(
+        day["temperature_2m_max"] is not None for day in days
+    )
+    rain_values = [
+        float(day["precipitation_sum"])
+        for day in days
+        if day["precipitation_sum"] is not None
+    ]
+    temperature_values = [
+        float(day["temperature_2m_max"])
+        for day in days
+        if day["temperature_2m_max"] is not None
+    ]
+    total_rain = sum(rain_values) if complete_rain else None
+    wet_days = sum(value >= 0.1 for value in rain_values) if complete_rain else None
+    hot_days = sum(value >= 32 for value in temperature_values) if complete_temperature else None
+    concentration = (
+        max(rain_values) / total_rain * 100
+        if complete_rain and total_rain is not None and total_rain > 0
+        else None
+    )
+
+    pairs = [
+        (float(day["precipitation_sum"]), float(day["temperature_2m_max"]))
+        for day in days
+        if day["precipitation_sum"] is not None and day["temperature_2m_max"] is not None
+    ]
+    correlation = _pearson(pairs)
+    return {
+        "period_start": days[0]["time"] if days else None,
+        "period_end": days[-1]["time"] if days else None,
+        "days_received": len(days),
+        "metrics": [
+            {
+                "id": "rain_total",
+                "label": "Chuva acumulada na janela",
+                "value": round(total_rain, 1) if total_rain is not None else None,
+                "unit": "mm",
+                "detail": "Soma diária somente quando toda a janela possui valores.",
+            },
+            {
+                "id": "wet_days",
+                "label": "Dias com chuva prevista",
+                "value": wet_days,
+                "unit": "dias",
+                "detail": "Dias com precipitação prevista maior ou igual a 0,1 mm.",
+            },
+            {
+                "id": "hot_days",
+                "label": "Dias com máxima ≥ 32 °C",
+                "value": hot_days,
+                "unit": "dias",
+                "detail": "Contagem contextual; não constitui alerta oficial de calor.",
+            },
+            {
+                "id": "rain_concentration",
+                "label": "Chuva concentrada no dia mais úmido",
+                "value": round(concentration, 1) if concentration is not None else None,
+                "unit": "%",
+                "detail": "Parcela da chuva da janela prevista para o dia mais chuvoso.",
+            },
+        ],
+        "rain_temperature_correlation": {
+            "value": round(correlation, 3) if correlation is not None else None,
+            "paired_days": len(pairs),
+            "interpretation": _correlation_label(correlation),
+            "detail": (
+                "Correlação de Pearson entre chuva diária e temperatura máxima na janela. "
+                "Amostra curta: descreve associação, não causalidade nem previsão mensal."
+            ),
+        },
+    }
+
+
+def _pearson(pairs: list[tuple[float, float]]) -> float | None:
+    if len(pairs) < 3:
+        return None
+    x_values = [pair[0] for pair in pairs]
+    y_values = [pair[1] for pair in pairs]
+    x_mean = sum(x_values) / len(x_values)
+    y_mean = sum(y_values) / len(y_values)
+    x_variance = sum((value - x_mean) ** 2 for value in x_values)
+    y_variance = sum((value - y_mean) ** 2 for value in y_values)
+    if x_variance == 0 or y_variance == 0:
+        return None
+    covariance = sum(
+        (x_value - x_mean) * (y_value - y_mean)
+        for x_value, y_value in pairs
+    )
+    return covariance / math.sqrt(x_variance * y_variance)
+
+
+def _correlation_label(value: float | None) -> str:
+    if value is None:
+        return "Indisponível: faltam pares válidos ou variação suficiente."
+    strength = "forte" if abs(value) >= 0.7 else "moderada" if abs(value) >= 0.4 else "fraca"
+    direction = "positiva" if value > 0 else "negativa" if value < 0 else "nula"
+    return f"Associação linear {strength} e {direction} nesta janela."
 
 
 def _hour_value(hourly: dict, key: str, index: int):

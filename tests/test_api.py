@@ -13,8 +13,8 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.3.3"
-    assert response.json()["model_contract_version"] == "1.3"
+    assert response.json()["api_version"] == "0.4.0"
+    assert response.json()["model_contract_version"] == "1.4"
 
 
 def test_dashboard_does_not_serve_simulated_predictions() -> None:
@@ -39,6 +39,8 @@ def test_manifest_exposes_validated_baseline_without_claiming_official_score() -
     assert payload["metrics"]["name"] == "RMSE"
     assert payload["metrics"]["scope"] == "validação temporal interna; não é pontuação oficial"
     assert payload["official_score"] is None
+    assert len(payload["official_dataset"]["atmospheric_features"]) == 9
+    assert payload["official_dataset"]["submission_rows"] == 1_885_464
     assert payload["artifacts"]["submission_available"] is True
     assert payload["execution"]["raw_official_data_published"] is False
     assert payload["execution"]["entrypoint"] == (

@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-20
+
+- publica no manifesto as nove variáveis atmosféricas e o contrato completo do dataset oficial;
+- acrescenta leitura cruzada da previsão curta com período, cobertura e proveniência;
+- calcula chuva acumulada, dias chuvosos/quentes, concentração da chuva e correlação chuva–temperatura;
+- mantém essas análises separadas do modelo mensal e explicita que correlação não implica causalidade.
+
 ## [0.3.3] - 2026-09-19
 
 - gera um baseline completo de climatologia mensal com 1.885.464 previsões, usando apenas 1940–2022;
