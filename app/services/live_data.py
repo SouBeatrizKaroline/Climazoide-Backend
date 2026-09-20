@@ -1,5 +1,7 @@
 import asyncio
+import logging
 from datetime import UTC, datetime
+from email.utils import parsedate_to_datetime
 from xml.etree import ElementTree
 
 import httpx
@@ -64,6 +66,9 @@ AIR_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 CPTEC_URL = "https://servicos.cptec.inpe.br/XML/cidade/7dias/{lat}/{lon}/previsaoLatLon.xml"
 NOAA_ONI_URL = "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
 USNO_URL = "https://aa.usno.navy.mil/api/rstt/oneday"
+MET_NO_URL = "https://api.met.no/weatherapi/locationforecast/2.0/compact"
+logger = logging.getLogger(__name__)
+_MET_CACHE: dict[tuple[float, float], tuple[float, dict]] = {}
 
 
 def _value(payload: dict, group: str, key: str, default=None):
@@ -97,6 +102,140 @@ async def _fetch_json(client: httpx.AsyncClient, url: str, params: dict) -> dict
             if attempt < 2:
                 await asyncio.sleep(0.4 * (attempt + 1))
     raise httpx.HTTPError(f"Fonte indisponível após 3 tentativas: {url}") from last_error
+
+
+async def _fetch_met_no(client: httpx.AsyncClient, latitude: float, longitude: float) -> dict:
+    key = (latitude, longitude)
+    cached = _MET_CACHE.get(key)
+    now = datetime.now(UTC)
+    if cached and cached[0] > now.timestamp():
+        return cached[1]
+    response = await client.get(
+        MET_NO_URL,
+        params={"lat": latitude, "lon": longitude},
+        headers={"User-Agent": "Climazoide/0.3 (https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
+    )
+    response.raise_for_status()
+    payload = response.json()
+    cache_control = response.headers.get("cache-control", "")
+    try:
+        max_age = next(
+            (int(part.split("=", 1)[1]) for part in cache_control.split(",")
+             if part.strip().startswith("max-age=")),
+            None,
+        )
+    except ValueError:
+        max_age = None
+    expires = now.timestamp() + max_age if max_age is not None else None
+    expires_header = response.headers.get("expires")
+    if expires is None and expires_header:
+        try:
+            expires = parsedate_to_datetime(expires_header).timestamp()
+        except (TypeError, ValueError, OverflowError):
+            expires = None
+    # If the provider omits cache headers, avoid frequent repeat requests.
+    ttl = max(0, expires - now.timestamp()) if expires is not None else 60
+    _MET_CACHE[key] = (now.timestamp() + ttl, payload)
+    return payload
+
+
+def _met_no_weather(payload: dict, timezone: str) -> dict:
+    """Normalize MET Norway's timestamped forecast; omit unavailable quantities."""
+    properties = payload.get("properties", {})
+    series = properties.get("timeseries", [])
+    if not series:
+        return {}
+    current_entry = series[0]
+    current_data = current_entry.get("data", {})
+    current_details = current_data.get("instant", {}).get("details", {})
+    symbol = (
+        current_data.get("next_1_hours", {}).get("summary", {}).get("symbol_code")
+        or current_data.get("next_6_hours", {}).get("summary", {}).get("symbol_code")
+        or ""
+    )
+    condition = _met_no_condition(symbol)
+    current = {
+        "time": current_entry.get("time"),
+        "temperature_2m": current_details.get("air_temperature"),
+        "apparent_temperature": None,
+        "relative_humidity_2m": current_details.get("relative_humidity"),
+        "weather_code": None,
+        "condition": condition,
+        "cloud_cover": current_details.get("cloud_area_fraction"),
+        "surface_pressure": None,
+        "wind_speed_10m": (
+            round(current_details["wind_speed"] * 3.6, 1)
+            if current_details.get("wind_speed") is not None else None
+        ),
+        "wind_direction_10m": current_details.get("wind_from_direction"),
+        "wind_gusts_10m": (
+            round(current_details["wind_speed_of_gust"] * 3.6, 1)
+            if current_details.get("wind_speed_of_gust") is not None else None
+        ),
+    }
+    # MET Norway's symbols are descriptive but are not WMO codes. Do not
+    # translate them into a different code system or pretend they are equivalent.
+    grouped: dict[str, list[dict]] = {}
+    for entry in series:
+        local_date = entry.get("time", "")[:10]
+        if not local_date:
+            continue
+        data = entry.get("data", {})
+        details = data.get("instant", {}).get("details", {})
+        next_data = data.get("next_1_hours") or data.get("next_6_hours") or {}
+        precip = next_data.get("details", {}).get("precipitation_amount")
+        day = grouped.setdefault(local_date, {"time": local_date, "temps": [], "precip": []})
+        temperature = details.get("air_temperature")
+        if temperature is not None:
+            day["temps"].append(temperature)
+        if precip is not None:
+            day["precip"].append(precip)
+    daily = [
+        {
+            "time": date,
+            "weather_code": None,
+            "temperature_2m_max": max(item["temps"]) if item["temps"] else None,
+            "temperature_2m_min": min(item["temps"]) if item["temps"] else None,
+            "precipitation_sum": round(sum(item["precip"]), 1) if item["precip"] else None,
+            "precipitation_probability_max": None,
+            "uv_index_max": None,
+            "et0_fao_evapotranspiration": None,
+        }
+        for date, item in sorted(grouped.items())[:7]
+    ]
+    return {
+        "timezone": timezone,
+        "current": current,
+        "hourly": {"time": [], "soil_moisture_0_to_1cm": [], "vapour_pressure_deficit": []},
+        "daily": {key: [day[key] for day in daily] for key in daily[0]} if daily else {},
+        "provider": "MET Norway",
+        "model_updated_at": properties.get("meta", {}).get("updated_at"),
+        "valid_from": series[0].get("time"),
+        "valid_until": series[-1].get("time"),
+    }
+
+
+def _met_no_condition(symbol: str) -> str | None:
+    key = symbol.split("_")[0].lower()
+    if key.startswith("clearsky"):
+        return "Céu limpo"
+    if key.startswith("fair"):
+        return "Predomínio de sol"
+    if key.startswith("partlycloudy"):
+        return "Parcialmente nublado"
+    if key.startswith("cloudy"):
+        return "Nublado"
+    if key.startswith("fog"):
+        return "Névoa"
+    if "thunderstorm" in key:
+        return "Trovoadas"
+    if "sleet" in key:
+        return "Chuva e neve"
+    if "snow" in key:
+        return "Neve"
+    if "rain" in key:
+        return "Chuva"
+    return None
 
 
 async def _fetch_cptec(
@@ -215,6 +354,19 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
             weather_task, air_task, cptec_task, oni_task, astronomy_task, return_exceptions=True
         )
 
+        weather_provider = "Open-Meteo"
+        weather_failure = None
+        if isinstance(weather, Exception):
+            weather_failure = f"{type(weather).__name__}: {weather}"
+            logger.warning("Open-Meteo weather request failed: %s", weather_failure)
+            try:
+                weather = await _fetch_met_no(client, location["latitude"], location["longitude"])
+                weather = _met_no_weather(weather, "UTC")
+                weather_provider = "MET Norway"
+            except Exception as fallback_error:
+                logger.warning("MET Norway fallback failed: %s", fallback_error)
+                weather = {}
+
     if isinstance(weather, Exception):
         weather = {}
     if isinstance(air, Exception):
@@ -234,6 +386,12 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
     except ValueError:
         hour_index = 0
 
+    provider = weather.get("provider", weather_provider)
+    daily_times = weather.get("daily", {}).get("time", [])
+    valid_until = weather.get("valid_until") or (daily_times[-1] if daily_times else None)
+    timezone = weather.get("timezone")
+    if not timezone:
+        timezone = "UTC" if provider == "MET Norway" else "Indisponível"
     return {
         "project": "Climazoide",
         "location_id": location_id,
@@ -246,7 +404,15 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
             "note": "O ponto operacional não substitui a previsão científica em grade.",
         },
         "generated_at": datetime.now(UTC).isoformat(),
-        "timezone": weather.get("timezone") or "Indisponível",
+        "timezone": timezone,
+        "weather_metadata": {
+            "provider": provider,
+            "model_updated_at": weather.get("model_updated_at"),
+            "valid_from": weather.get("valid_from") or current.get("time"),
+            "valid_until": valid_until,
+            "fallback_used": provider != "Open-Meteo",
+            "primary_source_error": weather_failure,
+        },
         "current": {
             "observed_at": current.get("time"),
             "temperature": current.get("temperature_2m"),
@@ -259,10 +425,8 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
             "wind_speed": current.get("wind_speed_10m"),
             "wind_direction": current.get("wind_direction_10m"),
             "wind_gusts": current.get("wind_gusts_10m"),
-            "soil_moisture": (hourly.get("soil_moisture_0_to_1cm") or [None])[hour_index],
-            "vapour_pressure_deficit": (
-                hourly.get("vapour_pressure_deficit") or [None]
-            )[hour_index],
+            "soil_moisture": _hour_value(hourly, "soil_moisture_0_to_1cm", hour_index),
+            "vapour_pressure_deficit": _hour_value(hourly, "vapour_pressure_deficit", hour_index),
         },
         "air_quality": {
             "observed_at": _value(air, "current", "time"),
@@ -283,10 +447,20 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
             {
                 "name": "Open-Meteo",
                 "scope": "modelos meteorológicos internacionais",
-                "available": bool(weather),
-                "updated_at": current.get("time"),
+                "available": bool(weather) and provider == "Open-Meteo",
+                "updated_at": weather.get("model_updated_at") or current.get("time"),
+                "note": weather_failure if weather_failure and provider != "Open-Meteo" else None,
                 "url": "https://open-meteo.com/en/docs",
             },
+            *([{
+                "name": "MET Norway",
+                "scope": "previsão meteorológica global de contingência",
+                "available": bool(weather),
+                "updated_at": weather.get("model_updated_at"),
+                "valid_from": weather.get("valid_from"),
+                "valid_until": weather.get("valid_until"),
+                "url": "https://api.met.no/weatherapi/locationforecast/2.0/documentation",
+            }] if provider == "MET Norway" else []),
             {
                 "name": "CAMS/Copernicus",
                 "scope": "composição atmosférica e qualidade do ar",
@@ -325,11 +499,20 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
     precipitation_values = daily.get("precipitation_sum", [])
     et0_values = daily.get("et0_fao_evapotranspiration", [])
     temperature_values = daily.get("temperature_2m_max", [])
+    precipitation_available = [value for value in precipitation_values if value is not None]
+    et0_available = [value for value in et0_values if value is not None]
+    temperature_available = [value for value in temperature_values if value is not None]
     precipitation = (
-        sum(value or 0 for value in precipitation_values) if precipitation_values else None
+        sum(precipitation_available)
+        if precipitation_values and len(precipitation_available) == len(precipitation_values)
+        else None
     )
-    et0 = sum(value or 0 for value in et0_values) if et0_values else None
-    max_temperature = max(temperature_values) if temperature_values else None
+    et0 = sum(et0_available) if et0_values and len(et0_available) == len(et0_values) else None
+    max_temperature = (
+        max(temperature_available)
+        if temperature_values and len(temperature_available) == len(temperature_values)
+        else None
+    )
     aqi = _value(air, "current", "us_aqi")
     return [
         {
@@ -365,3 +548,8 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
             "detail": "Índice dos EUA calculado pelo CAMS; maior significa pior.",
         },
     ]
+
+
+def _hour_value(hourly: dict, key: str, index: int):
+    values = hourly.get(key) or []
+    return values[index] if 0 <= index < len(values) else None

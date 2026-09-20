@@ -52,6 +52,13 @@ retroativamente na entrada do modelo científico para o mesmo mês.
 - **Origem:** combinação de modelos de serviços nacionais, incluindo ECMWF, NOAA e DWD.
 - **Acesso:** sem chave para o cenário não comercial do projeto; atribuição obrigatória.
 
+### MET Norway · Locationforecast
+
+- **Uso implementado:** contingência gratuita para condição e previsão de curto prazo quando a consulta meteorológica principal falha.
+- **Documentação:** https://api.met.no/weatherapi/locationforecast/2.0/documentation
+- **Limites de interpretação:** valores são previsão modelada, não observação de estação; timestamp de atualização do modelo e janela de validade acompanham a resposta. Campos não fornecidos (como probabilidade de chuva, umidade do solo e ET₀) continuam indisponíveis.
+- **Atribuição e acesso:** requisição identifica o Climazoide por User-Agent; não requer chave.
+
 ### CAMS / Copernicus
 
 - **Uso implementado:** AQI, PM2.5, PM10, CO, NO₂, ozônio e UV.
@@ -96,3 +103,9 @@ retroativamente na entrada do modelo científico para o mesmo mês.
 - campos sem resposta usam `null`, nunca zero inventado;
 - a API tenta novamente falhas transitórias da fonte meteorológica principal;
 - o frontend traduz `null` como **Indisponível** e mantém visível a proveniência.
+
+## Catálogo Embrapa AgroAPI e PClima
+
+- **Embrapa AgroAPI:** APIs de cadastro agrícola/solo podem ser contexto complementar para decisões agropecuárias, mas não substituem observações, previsão meteorológica, ERA5 nem os IDs oficiais do arquivo de submissão. APIs freemium não são tratadas como gratuitas permanentes; nenhuma foi integrada por não acrescentar dado necessário ao objetivo científico atual.
+- **PClima/INPE:** disponibiliza projeções climáticas por modelos e cenários, com credenciais; não é fonte de tempo atual ou previsão operacional de sete dias. Não é usado para preencher lacunas do painel nem para gerar o CSV M→M+1.
+- **CSV completo:** serviços meteorológicos gratuitos não fornecem, por si, os IDs/grade/meses oficiais nem a previsão treinada exigida. O download só será liberado quando os identificadores oficiais, o modelo validado para o horizonte temporal e a validação de ordem/linhas estiverem disponíveis.

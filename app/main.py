@@ -95,7 +95,7 @@ def download_submission_example() -> Response:
 
 @app.get("/v1/submission/download", tags=["submission"])
 def download_submission() -> FileResponse:
-    if not SUBMISSION_PATH.is_file():
+    if not submission_status()["ready"]:
         raise HTTPException(
             status_code=409,
             detail="A submissão validada ainda não foi gerada. Consulte /v1/submission/status.",

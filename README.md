@@ -30,6 +30,7 @@ Beatriz Karoline • Daiane Fonseca • Tomáz Giansante
 | Fonte | Uso atual | Natureza |
 | --- | --- | --- |
 | Open-Meteo | condição atual e previsão de 7 dias | dado meteorológico modelado, sem chave |
+| MET Norway | contingência gratuita para tempo e previsão curta | ativada somente se Open-Meteo falhar |
 | CAMS/Copernicus via Open-Meteo | AQI, partículas, gases e UV | composição atmosférica modelada |
 | CPTEC/INPE | comparação meteorológica no Brasil | XML público, disponibilidade variável |
 | NOAA CPC | ONI e fase observada do ENSO | contexto climático, não previsão local |
@@ -38,9 +39,9 @@ Beatriz Karoline • Daiane Fonseca • Tomáz Giansante
 | Kaggle/WORCAP + ERA5 | treino, teste e submissão científica | dados do desafio, fora da API operacional ao vivo |
 
 Detalhes, links oficiais e cuidados metodológicos estão em [Fontes e APIs](docs/API_SOURCES.md).
-Falhas são isoladas por fonte. A fonte meteorológica principal usa tentativas curtas e,
-se continuar indisponível, a API mantém o painel aberto com valores `null` e estado
-`available: false`. Ausência nunca é convertida em zero nem em dado simulado.
+Falhas são isoladas por fonte. A fonte meteorológica principal usa tentativas curtas; se
+falhar, o backend tenta MET Norway e informa a fonte e o período válido. Campos ausentes
+na contingência permanecem `null`; ausência nunca é convertida em zero ou dado simulado.
 
 ## Funcionalidades
 
@@ -59,13 +60,14 @@ se continuar indisponível, a API mantém o painel aberto com valores `null` e e
 ```text
 React → FastAPI
           ├── Open-Meteo: tempo + chuva + solo + ET₀
+          ├── MET Norway: contingência meteorológica gratuita
           ├── CAMS/Copernicus: composição atmosférica
           ├── CPTEC/INPE: referência nacional
           ├── NASA POWER: séries mensais agroclimáticas
           └── ERA5/WORCAP: treino e avaliação M→M+1
 ```
 
-Se a fonte meteorológica principal falhar, a API responde `502`. Se CAMS ou CPTEC falharem, os outros dados reais permanecem disponíveis e a fonte afetada aparece como indisponível.
+Se Open-Meteo falhar, a API tenta MET Norway como contingência; se ambas falharem, os dados meteorológicos ficam indisponíveis sem bloquear as demais fontes. CAMS e CPTEC também são isolados e identificados individualmente.
 
 ## Executar
 

@@ -1,6 +1,10 @@
+import csv
+import math
+from itertools import zip_longest
 from pathlib import Path
 
 SUBMISSION_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission.csv"
+OFFICIAL_IDS_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "sample_submission.csv"
 PARTIAL_PATH = (
     Path(__file__).resolve().parents[2]
     / "artifacts"
@@ -15,14 +19,16 @@ EXAMPLE_CSV = """id,tp_mm_day
 
 
 def submission_status() -> dict:
-    ready = SUBMISSION_PATH.is_file()
+    ready, expected_rows, validation_reasons = _validate_submission()
     partial_available = PARTIAL_PATH.is_file()
     return {
         "ready": ready,
         "filename": "submission.csv" if ready else None,
         "columns": ["id", "tp_mm_day"],
-        "expected_rows": 1_885_464,
-        "id_contract": "ano_mês_lat_lon, preservado do sample_submission.csv oficial",
+        "expected_rows": expected_rows,
+        "id_contract": (
+            "IDs, meses, coordenadas e ordem devem ser preservados do arquivo oficial de teste"
+        ),
         "temporal_contract": "Para prever M+1, usar somente dados disponíveis até M.",
         "example_available": True,
         "example_is_submittable": False,
@@ -37,10 +43,72 @@ def submission_status() -> dict:
             "Recorte experimental de validação com um mês. Valores negativos foram "
             "limitados a zero. Não representa a entrega completa do projeto."
         ),
-        "blocking_reasons": [] if ready else [
-            "o arquivo-base com todos os identificadores ainda não está disponível no backend",
-            "retreino sem vazamento temporal ainda está pendente",
-            "pesos e transformadores finais não foram publicados",
-            "o CSV completo ainda não passou pela validação de IDs e ordem",
-        ],
+        "blocking_reasons": [] if ready else validation_reasons,
     }
+
+
+def _validate_submission() -> tuple[bool, int | None, list[str]]:
+    if not OFFICIAL_IDS_PATH.is_file():
+        return False, None, [
+            "o arquivo oficial de IDs do conjunto de teste ainda não foi disponibilizado",
+            "o CSV deve conter somente os IDs e meses pedidos, na ordem oficial",
+            "a validação de cobertura e valores ainda não foi concluída",
+        ]
+    if not SUBMISSION_PATH.is_file():
+        try:
+            with OFFICIAL_IDS_PATH.open(newline="", encoding="utf-8-sig") as source:
+                reader = csv.reader(source)
+                header = next(reader, [])
+                expected_rows = sum(1 for _ in reader)
+            if header != ["id", "tp_mm_day"]:
+                return False, expected_rows, [
+                    "o arquivo oficial de teste não tem as colunas esperadas"
+                ]
+        except (OSError, csv.Error):
+            return False, None, ["não foi possível ler o arquivo oficial de IDs do teste"]
+        return False, expected_rows, [
+            "o CSV de previsões para os IDs oficiais ainda não foi gerado"
+        ]
+
+    try:
+        with (
+            OFFICIAL_IDS_PATH.open(newline="", encoding="utf-8-sig") as source,
+            SUBMISSION_PATH.open(newline="", encoding="utf-8-sig") as output,
+        ):
+            source_reader = csv.reader(source)
+            output_reader = csv.reader(output)
+            if next(source_reader, []) != ["id", "tp_mm_day"]:
+                return False, None, ["o arquivo oficial de teste não tem as colunas esperadas"]
+            if next(output_reader, []) != ["id", "tp_mm_day"]:
+                return False, None, ["o CSV gerado não tem exatamente as colunas id,tp_mm_day"]
+            expected_rows = 0
+            first_issue = None
+            for row_number, (expected, actual) in enumerate(
+                zip_longest(source_reader, output_reader), start=1
+            ):
+                if expected is not None:
+                    expected_rows += 1
+                if expected is None or actual is None:
+                    first_issue = first_issue or (
+                        "o CSV gerado tem quantidade de linhas diferente do teste oficial"
+                    )
+                    continue
+                if len(expected) != 2 or len(actual) != 2 or actual[0] != expected[0]:
+                    first_issue = first_issue or f"ID ou ordem divergente na linha {row_number + 1}"
+                    continue
+                try:
+                    prediction = float(actual[1])
+                except ValueError:
+                    first_issue = first_issue or f"previsão inválida na linha {row_number + 1}"
+                    continue
+                if not math.isfinite(prediction) or prediction < 0:
+                    first_issue = first_issue or (
+                        f"previsão ausente, não finita ou negativa na linha {row_number + 1}"
+                    )
+            if expected_rows == 0:
+                return False, 0, ["o arquivo oficial de IDs do teste está vazio"]
+            if first_issue:
+                return False, expected_rows, [first_issue]
+    except (OSError, csv.Error, ValueError):
+        return False, None, ["não foi possível conferir o CSV completo contra os IDs oficiais"]
+    return True, expected_rows, []

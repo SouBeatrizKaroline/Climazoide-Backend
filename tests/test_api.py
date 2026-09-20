@@ -84,8 +84,33 @@ def test_submission_download_is_blocked_until_a_validated_artifact_exists() -> N
     assert status.json()["partial_available"] is True
     assert status.json()["partial_is_complete"] is False
     assert status.json()["partial_rows"] == 78_561
-    assert status.json()["expected_rows"] == 1_885_464
+    assert status.json()["expected_rows"] is None
     assert client.get("/v1/submission/download").status_code == 409
+
+
+def test_submission_requires_the_official_test_ids_and_matching_order(
+    tmp_path, monkeypatch
+) -> None:
+    from app.services import submission_delivery
+
+    official = tmp_path / "sample_submission.csv"
+    prediction = tmp_path / "submission.csv"
+    monkeypatch.setattr(submission_delivery, "OFFICIAL_IDS_PATH", official)
+    monkeypatch.setattr(submission_delivery, "SUBMISSION_PATH", prediction)
+    official.write_text("id,tp_mm_day\n2026_09_-30.00_-53.00,\n2026_09_-30.00_-52.75,\n")
+    prediction.write_text(
+        "id,tp_mm_day\n2026_09_-30.00_-53.00,1.25\n2026_09_-30.00_-52.75,0\n"
+    )
+
+    assert submission_delivery._validate_submission() == (True, 2, [])
+
+    prediction.write_text(
+        "id,tp_mm_day\n2026_09_-30.00_-52.75,1.25\n2026_09_-30.00_-53.00,0\n"
+    )
+    ready, rows, reasons = submission_delivery._validate_submission()
+    assert ready is False
+    assert rows == 2
+    assert "ID ou ordem divergente" in reasons[0]
 
 
 def test_submission_example_is_clearly_named_as_not_valid() -> None:
