@@ -92,6 +92,11 @@ geopotencial em 850 hPa, além dos ventos `u` e `v` em 850 hPa.
 | --- | --- | ---: | ---: |
 | `monthly-climatology-v1` | baseline enviado | 1,882056 | 1,85077 |
 | `xgboost-anomaly-v1` | candidato validado | **1,838655** | pendente |
+| PLS defasado + LSTM (pesquisa) | alinhamento T−1 revisado | 1,840456* | pendente |
+
+\* Métrica da origem auditada: agrega horizontes com pesos diferentes do teste oficial,
+portanto não é diretamente equivalente às duas validações do Climazoide nem a um score
+da competição. A versão com ONI obteve 1,865132 e não foi promovida.
 
 ### Baseline
 
@@ -206,7 +211,7 @@ pytest
 - nenhuma credencial fica no código;
 - CORS é controlado por `ALLOWED_ORIGINS`;
 - `Dockerfile` e `render.yaml` publicam a API no Render;
-- `/health` deve retornar `api_version=0.6.1` e `model_contract_version=1.5`.
+- `/health` deve retornar `api_version=0.6.2` e `model_contract_version=1.5`.
 
 Consulte também [governança](GOVERNANCE.md), [segurança](SECURITY.md),
 [contribuição](CONTRIBUTING.md), [changelog](CHANGELOG.md) e

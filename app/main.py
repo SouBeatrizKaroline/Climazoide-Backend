@@ -24,7 +24,7 @@ from app.services.submission_delivery import (
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.6.1",
+    version="0.6.2",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -41,7 +41,7 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "environment": settings.app_env,
-        "api_version": "0.6.1",
+        "api_version": "0.6.2",
         "model_contract_version": "1.5",
     }
 

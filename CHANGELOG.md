@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-09-20
+
+- atualiza a auditoria somente leitura para `main@228b15c` e `vermelho@8c7fdb5`;
+- registra o novo PLS defasado + LSTM com atmosfera T−1 e RMSE interno 1,840456 sem promovê-lo;
+- documenta que a variante ONI piorou para 1,865132 e permanece bloqueada pelo corte temporal;
+- mantém baseline e candidato XGBoost independentes como os únicos downloads aprovados do produto.
+
 ## [0.6.1] - 2026-09-20
 
 - consolida a regra oficial T−1, alvo público proibido e risco de overfitting ao leaderboard;

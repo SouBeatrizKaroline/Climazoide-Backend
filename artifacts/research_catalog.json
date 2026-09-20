@@ -1,28 +1,28 @@
 {
-  "schema_version": "1.0",
-  "audited_at": "2026-09-19T22:16:28-03:00",
+  "schema_version": "1.1",
+  "audited_at": "2026-09-20T19:24:50-03:00",
   "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
   "source_repository_modified": false,
   "default_branch": "main",
-  "latest_branch": "feature/melhorar-pls-lstm-daiane",
+  "latest_branch": "vermelho",
   "technical_audit": {
-    "status": "critical",
+    "status": "needs_adjustments",
     "forecast_rule": "features disponíveis até T−1 -> precipitação de T",
-    "latest_branch_temporal_alignment": "not_compliant",
+    "latest_branch_temporal_alignment": "compliant_without_oni",
     "oni_experiment_temporal_alignment": "not_compliant",
     "evaluation_target_access_found_in_tracked_code": false,
     "binary_dataset_forensic_check": "not_performed_files_unavailable",
     "final_submission_audited": false,
-    "summary": "A branch mais recente associa atmosfera do mês-alvo à precipitação do mesmo mês no treino/validação. A correção observada em Beatriz/vermelho não está na branch mais recente. ONI centrado atribuído a T−1 pode incluir SST de T. Métricas antigas não devem ser tratadas como pontuação válida.",
+    "summary": "A atualização mais recente corrige o alinhamento atmosférico para T−1 e registra PLS defasado + LSTM sem ONI com RMSE interno 1,840456. A variante com ONI não foi aprovada: piorou para 1,865132 e o índice trimestral centrado pode incorporar o mês T. A métrica agrega horizontes com pesos diferentes do teste oficial; nenhum resultado foi promovido.",
     "source_repository_modified": false
   },
   "branches": [
     {
       "name": "main",
-      "commit": "fac2fa7",
-      "updated_at": "2026-09-16T18:29:04-03:00",
-      "status": "integrated_base",
-      "work": ["PCA/PLS + LSTM", "execução comparativa", "alinhamento atmosférico no mês-alvo requer correção"]
+      "commit": "228b15c",
+      "updated_at": "2026-09-20T11:41:17-03:00",
+      "status": "integrated_temporal_fix",
+      "work": ["integração da correção T−1", "cache e sweep PCA/PLS", "resultado com pós-processamento ENSO ainda não aprovado"]
     },
     {
       "name": "Beatriz",
@@ -33,10 +33,10 @@
     },
     {
       "name": "vermelho",
-      "commit": "62b3626",
-      "updated_at": "2026-09-17T10:26:15-03:00",
-      "status": "experimental_result",
-      "work": ["correção do deslocamento atmosférico presente nesta branch", "cache PCA/PLS", "sweep experimental", "revalidar ENSO/ONI e resultados antes de promover"]
+      "commit": "8c7fdb5",
+      "updated_at": "2026-09-20T16:35:20-03:00",
+      "status": "latest_research",
+      "work": ["alinhamento atmosférico T−1", "PLS defasado + LSTM sem ONI com RMSE interno 1,840456", "redução de dimensionalidade revisada", "sweep com melhor configuração lr=0,0005, hidden=128 e dropout=0,1", "walk-forward ENSO implementado mas sem resultado concluído", "variante ONI rejeitada por desempenho e risco temporal"]
     },
     {
       "name": "feature/eda-outliers-daiane",
@@ -70,13 +70,13 @@
       "name": "feature/melhorar-pls-lstm-daiane",
       "commit": "54ab930",
       "updated_at": "2026-09-17T20:41:36-03:00",
-      "status": "latest",
-      "work": ["consolidação de EDA", "XGBoost v3", "experimento ONI", "branch mais recente auditada com desalinhamento temporal; métricas não aprovadas"]
+      "status": "historical_consolidation",
+      "work": ["consolidação de EDA", "XGBoost v3", "experimento ONI", "snapshot histórico com desalinhamento temporal; métricas não aprovadas"]
     }
   ],
   "promotion_policy": {
     "production_metrics": false,
-    "reason": "O alinhamento da branch mais recente não respeita T−1; ONI e métricas requerem auditoria e retreino temporal antes de qualquer release científica.",
+    "reason": "A execução sem ONI respeita o alinhamento atmosférico T−1, mas sua validação agregada não reproduz exatamente o peso dos 24 meses oficiais e ainda não possui score oficial. ONI e pós-processamento ENSO permanecem bloqueados por disponibilidade temporal e validação incompleta.",
     "binary_artifacts_copied": false
   }
 }

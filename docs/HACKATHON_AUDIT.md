@@ -44,11 +44,16 @@ pontuação pública é registrada separadamente e nunca substitui essa validaç
 
 ## 4. Estado da pesquisa auditada
 
-A consolidação mais recente do repositório WORCAP foi mantida somente para leitura. A
-auditoria encontrou atmosfera do mês-alvo no treino/validação e um ONI centrado cuja
-disponibilidade histórica não estava comprovada. Suas métricas permanecem históricas e
-não foram promovidas. Não foi encontrada evidência versionada de consulta direta ao
-alvo, mas artefatos binários ausentes impediram verificação integral.
+A atualização remota de 20/09/2026 foi novamente examinada somente para leitura. O
+novo PLS defasado + LSTM sem ONI corrige a atmosfera para `T−1` e registra RMSE interno
+`1,840456`. Ele não foi promovido porque a métrica agrega horizontes em proporções
+diferentes do conjunto oficial e ainda não possui score oficial. A variante com ONI
+piorou para `1,865132`; além disso, o índice trimestral centrado em `T−1` pode incorporar
+SST de `T`. O walk-forward ENSO foi adicionado, mas ainda não possui execução concluída.
+
+Não foi encontrada evidência versionada de consulta direta ao alvo. Os novos resultados
+mudam o diagnóstico do alinhamento básico de crítico para **precisa de ajustes**, sem
+autorizar pesos, correções ENSO ou submissões da origem.
 
 O código GPL da origem não foi copiado para os repositórios MIT do Climazoide.
 

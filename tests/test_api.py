@@ -13,7 +13,7 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.6.1"
+    assert response.json()["api_version"] == "0.6.2"
     assert response.json()["model_contract_version"] == "1.5"
 
 
@@ -54,9 +54,13 @@ def test_manifest_separates_internal_rmse_from_public_baseline_score() -> None:
     assert payload["execution"]["entrypoint"] == (
         "python scripts/train_monthly_climatology.py data"
     )
-    assert len(payload["candidate_models"]) == 6
+    assert len(payload["candidate_models"]) == 7
     assert any(
         item["id"] == "monthly-climatology-v1" and item["status"] == "validated_baseline"
+        for item in payload["candidate_models"]
+    )
+    assert any(
+        item["id"] == "pls-lagged-lstm" and "1,840456" in item["purpose"]
         for item in payload["candidate_models"]
     )
     assert any(item["ref"] == "vermelho" for item in payload["reviewed_sources"])
@@ -88,16 +92,21 @@ def test_research_catalog_maps_every_remote_branch_without_promoting_metrics() -
     assert response.status_code == 200
     payload = response.json()
     assert payload["source_repository_modified"] is False
-    assert payload["latest_branch"] == "feature/melhorar-pls-lstm-daiane"
     assert len(payload["branches"]) == 8
     assert payload["promotion_policy"]["production_metrics"] is False
-    assert payload["technical_audit"]["status"] == "critical"
-    assert payload["technical_audit"]["latest_branch_temporal_alignment"] == "not_compliant"
+    assert payload["technical_audit"]["status"] == "needs_adjustments"
+    assert payload["technical_audit"]["latest_branch_temporal_alignment"] == (
+        "compliant_without_oni"
+    )
     assert any(
         branch["name"] == "vermelho"
-        and "correção do deslocamento atmosférico presente nesta branch" in branch["work"]
+        and "alinhamento atmosférico T−1" in branch["work"]
         for branch in payload["branches"]
     )
+    assert payload["latest_branch"] == "vermelho"
+    assert next(
+        branch for branch in payload["branches"] if branch["name"] == "vermelho"
+    )["commit"] == "8c7fdb5"
 
 
 def test_complete_submission_is_available_as_a_validated_baseline() -> None:

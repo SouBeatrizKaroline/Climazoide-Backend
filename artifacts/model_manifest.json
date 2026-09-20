@@ -15,8 +15,8 @@
   "scientific_audit": {
     "status": "passed",
     "rule": "Para prever T, usar somente dados cuja origem seja anterior ou igual a T−1.",
-    "summary": "Baseline e candidato foram validados com corte temporal explícito. Nenhum alvo de 2023–2024 é lido; o candidato usa atmosfera estritamente de T−1.",
-    "source_audit_commit": "54ab930",
+    "summary": "Baseline e candidato foram validados com corte temporal explícito. A nova pesquisa PLS defasado + LSTM também corrige a atmosfera para T−1, mas continua separada da submissão até reproduzir a avaliação oficial; nenhuma variante com ONI foi promovida.",
+    "source_audit_commit": "8c7fdb5",
     "source_repository_read_only": true
   },
   "temporal_contract_check": {
@@ -92,10 +92,17 @@
     },
     {
       "ref": "vermelho",
-      "commit": "62b3626",
-      "decision": "referência de pesquisa, sem cópia de código ou artefatos",
+      "commit": "8c7fdb5",
+      "decision": "pesquisa temporalmente corrigida, sem cópia de código ou artefatos",
       "promoted": false,
-      "reason": "não havia release final reproduzível e validada para promoção"
+      "reason": "o PLS defasado sem ONI obteve RMSE interno 1,840456, mas a agregação dos horizontes não reproduz exatamente o teste oficial e não há score oficial; ONI e pós-processamento ENSO não foram aprovados"
+    },
+    {
+      "ref": "main",
+      "commit": "228b15c",
+      "decision": "integração científica revisada, não promovida",
+      "promoted": false,
+      "reason": "integrou a correção atmosférica T−1, mas ainda referencia pós-processamento ENSO sem comprovação temporal suficiente"
     }
   ],
   "candidate_models": [
@@ -118,6 +125,12 @@
       "purpose": "candidato de pesquisa; requer novo treino e validação temporal independente"
     },
     {
+      "id": "pls-lagged-lstm",
+      "label": "PLS defasado + LSTM",
+      "status": "research_only",
+      "purpose": "nova execução usa atmosfera T−1 e obteve RMSE interno 1,840456; permanece em pesquisa porque a validação agregada não equivale ao teste oficial e não há score oficial"
+    },
+    {
       "id": "convlstm",
       "label": "ConvLSTM",
       "status": "not_implemented",
@@ -131,9 +144,9 @@
     },
     {
       "id": "xgboost-oni",
-      "label": "XGBoost + ONI",
+      "label": "Modelos + ONI",
       "status": "research_only",
-      "purpose": "experimento não promovido; exige comprovação de disponibilidade temporal do ONI"
+      "purpose": "não promovido: no novo PLS + LSTM, ONI piorou o RMSE interno de 1,840456 para 1,865132 e o índice centrado ainda exige comprovação de disponibilidade temporal"
     }
   ],
   "readiness": [
@@ -176,6 +189,8 @@
   "limitations": [
     "O arquivo oficial publicado permanece o baseline de climatologia mensal até o candidato XGBoost receber pontuação oficial.",
     "O XGBoost de anomalias obteve RMSE interno de 1,838655 contra 1,882056 do baseline, mas esse valor não é pontuação pública ou privada da competição.",
+    "O PLS defasado + LSTM atualizado no repositório de pesquisa obteve RMSE interno 1,840456 sem ONI; é uma evidência de pesquisa, não uma comparação oficial diretamente equivalente.",
+    "A variante PLS + LSTM com ONI registrou RMSE interno 1,865132 e não foi promovida; o ONI trimestral centrado também permanece bloqueado pela auditoria temporal.",
     "Nenhum alvo real de 2023–2024 foi usado ou incluído no repositório.",
     "Os arquivos oficiais brutos não são publicados; devem ser obtidos pelo canal oficial e conforme as regras da competição.",
     "Os experimentos do repositório WORCAP foram apenas auditados; código GPL, pesos e artefatos não foram copiados para este projeto MIT."

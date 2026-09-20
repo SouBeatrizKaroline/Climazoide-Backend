@@ -1,33 +1,32 @@
 # Auditoria técnica da pesquisa WORCAP-2026
 
-Auditoria registrada em **19 de setembro de 2026, às 22:16:28 (BRT, UTC−03:00)**.
+Auditoria atualizada em **20 de setembro de 2026, às 19:24:50 (BRT, UTC−03:00)**.
 O repositório de pesquisa foi consultado somente para leitura. A lista remota
-confirmada contém oito branches; os commits examinados localmente eram os refs
-disponíveis até 17/09/2026. Nenhum arquivo de dados binário oficial nem CSV final
-estava disponível para perícia independente. As regras temporais fornecidas pela
-equipe foram tratadas como requisito da auditoria.
+confirmada contém oito branches. A nova leitura incluiu `main@228b15c` e
+`vermelho@8c7fdb5`, publicados em 20/09/2026. Nenhum push, commit ou alteração foi
+feito na origem. As regras temporais fornecidas pela equipe foram tratadas como
+requisito da auditoria.
 
 ## Resultado
 
-**Problema crítico: a branch consolidada mais recente não comprova uma previsão
-legítima de um mês à frente.** Para prever o mês `T`, o contrato é usar apenas
+**Precisa de ajustes: a atualização mais recente corrige o principal deslocamento
+atmosférico, mas ainda não constitui uma release promovível.** Para prever o mês `T`,
+o contrato é usar apenas
 informação originada e publicada até o instante de emissão definido no mês `T−1`.
-O pipeline consolidado associa variáveis atmosféricas do mês-alvo à precipitação
-desse mesmo mês no construtor de exemplos. As métricas resultantes não devem ser
-apresentadas como desempenho de previsão `T−1 → T`.
-
-Há correção de deslocamento nas branches `Beatriz` e `vermelho`, mas ela não está
-na branch consolidada mais recente nem na `main`. É necessário integrar/revisar o
-alinhamento e refazer treino, validação e inferência antes de qualquer promoção.
+O pipeline sem ONI em `vermelho@8c7fdb5` usa atmosfera em `alvo_idx − 1` e foi
+retreinado. A `main@228b15c` também incorporou a correção anterior. Ainda assim,
+ONI e o pós-processamento ENSO não passam na auditoria temporal, e a métrica agregada
+do LSTM não pondera os 24 horizontes como o conjunto oficial. Por isso, nenhum novo
+artefato substitui o baseline ou o candidato independente do Climazoide.
 
 ## Achados temporais
 
 | Componente | Evidência | Decisão |
 | --- | --- | --- |
-| Treino/validação na branch mais recente | `src/data.py` seleciona atmosfera no índice `alvo_idx` e `TP[alvo_idx]` como alvo | **Bloqueado:** usa atmosfera de `T`, não de `T−1` |
-| Branches `Beatriz` e `vermelho` | Implementam índice de feature `alvo_idx − 1` | Referências de correção; ainda exigem integração e nova validação da versão final |
+| Treino/validação em `vermelho@8c7fdb5` | `src/data.py` seleciona atmosfera em `feature_idx = alvo_idx − 1` e `TP[alvo_idx]` como alvo | **Alinhamento básico conforme:** atmosfera de `T−1` para prever `T` |
+| `main@228b15c` | Integra a correção T−1 e resultados anteriores com correção ENSO | Correção básica integrada; saída com ENSO continua não aprovada |
 | Features do teste | O contrato informado associa cada alvo `T` a `time_origem = T−1` | Não foi encontrada dependência automática da linha posterior para prever a anterior; faltam assertions de origem no carregador |
-| ONI | Índice centrado em três meses é atribuído ao mês central e usado como feature | **Bloqueado:** para `T−1`, pode incluir SST observada em `T`; série revisada não prova disponibilidade no instante histórico |
+| ONI | Índice centrado em três meses é atribuído ao mês central; a nova variante lê o ONI de `T−1` | **Bloqueado:** o valor centrado em `T−1` pode incluir SST observada em `T`; a execução também piorou o RMSE interno |
 | Scaler/PCA/PLS/climatologia | Ajustes examinados usam dados até `2018-12` | Não foi identificado ajuste sobre 2023/2024; no retreino final, reajustar somente dentro de cada fold temporal |
 | EDA do teste | Estatísticas agregadas consultam múltiplas linhas do teste, mas não foram vistas alimentando inferência | Risco de análise transdutiva/manual; isolar do pipeline de decisão e documentar |
 
@@ -46,8 +45,12 @@ código não indicou chamadas à CDS API para recuperar o alvo. Isso **não cert
 arquivos binários ausentes: nenhum NetCDF/CSV oficial foi submetido a inspeção
 forense independente, e não se deve baixar o alvo real para esta verificação.
 
-A fórmula do RMSE observada é correta para uma grade completa e pesos iguais, mas
-as métricas atuais são inutilizáveis como validação M→M+1 devido ao desalinhamento.
+A fórmula do RMSE observada é correta para uma grade completa e pesos iguais. A nova
+execução sem ONI registrou RMSE interno `1,840456` e MAE `1,112441`; com ONI,
+RMSE `1,865132` e MAE `1,134670`. Esses valores são informativos, mas a agregação
+contém quantidades diferentes de exemplos por horizonte (47 para lag 1 até 24 para
+lag 24), enquanto o teste oficial tem exatamente uma grade por cada um dos 24 meses.
+A comparação não deve ser tratada como score esperado da competição.
 A validação é cronológica; o embaralhamento do DataLoader ocorre somente entre
 amostras já atribuídas ao treino. Separar e reportar explicitamente horizonte de
 um mês (`lag=1`) e executar avaliação walk-forward após corrigir o pipeline.
@@ -60,12 +63,18 @@ O catálogo completo, commits e resumo de contribuição está em
 [`artifacts/research_catalog.json`](../artifacts/research_catalog.json) e na rota
 `GET /v1/research/branches`. Pontos que afetam prontidão:
 
-- `feature/melhorar-pls-lstm-daiane` é a mais recente no snapshot examinado, mas
-  mantém o desalinhamento atmosférico e inclui o experimento ONI não validado.
+- `vermelho@8c7fdb5` é a atualização remota mais recente: reduz os tetos de
+  componentes, executa novo sweep e promove internamente `lr=5e-4`, `hidden_size=128`
+  e `dropout=0,1`; isso permanece pesquisa, não produção.
+- `main@228b15c` incorporou a correção temporal anterior, mas não a execução mais
+  recente de 20/09 e ainda mantém resultado associado à correção ENSO.
+- `feature/melhorar-pls-lstm-daiane@54ab930` passou a ser um snapshot histórico;
+  seu desalinhamento atmosférico não representa o estado mais recente.
 - `feature/xgboost-v3-daiane` não deve ser descrita como validada “sem vazamento”:
   seu construtor de exemplos no snapshot usa atmosfera do mês-alvo.
-- `vermelho` contém correção de deslocamento no snapshot examinado; não equivale a
-  uma release retreinada, reproduzida e aprovada.
+- O novo script de walk-forward para a correção ENSO está versionado, mas o próprio
+  histórico do commit declara que ele ainda não foi executado até a conclusão; não
+  há relatório final que autorize a correção.
 - ConvLSTM não está integrado como pipeline treinado e reproduzível na branch
   consolidada. Não deve ser mostrado como modelo pronto para treinamento sem essa
   comprovação.
@@ -85,10 +94,10 @@ apenas ilustrativo e não pode ser submetido.
 
 ## Próximas condições para promoção
 
-1. Corrigir `atmosfera T−1 → alvo TP T` na branch científica escolhida.
-2. Definir o instante real de emissão e comprovar disponibilidade/vintage das fontes.
-3. Remover ONI centrado ou reconstruí-lo com dados estritamente disponíveis no corte.
-4. Retreinar, revalidar temporalmente por walk-forward e registrar métricas com hash.
+1. Manter a correção já implementada de `atmosfera T−1 → alvo TP T`.
+2. Avaliar os 24 horizontes com o mesmo peso e a mesma geometria do teste oficial.
+3. Remover ONI centrado ou reconstruí-lo com vintage estritamente disponível no corte.
+4. Concluir e revisar o walk-forward antes de considerar pós-processamento ENSO.
 5. Publicar artefato de inferência reproduzível e executar testes de invariância
    temporal, alinhamento de origem e integridade dos IDs.
 6. Gerar CSV a partir dos IDs oficiais e validar cobertura, ordem, unicidade,
@@ -120,6 +129,7 @@ obteve RMSE interno 1,838655 contra 1,882056 da climatologia no mesmo recorte. O
 candidato preserva os 1.885.464 IDs oficiais, mas permanece separado até receber
 pontuação oficial.
 
-Essas atualizações não mudam o veredito sobre as branches do WORCAP e não copiam
-código GPL. O baseline registra pontuação pública 1,85077; o score oficial do novo
-candidato ainda está pendente.
+A nova leitura do WORCAP melhora o veredito do alinhamento atmosférico básico, mas não
+promove nenhum artefato da origem. Código GPL, pesos e binários continuam fora do
+Climazoide. O baseline registra pontuação pública 1,85077; o score oficial do candidato
+independente ainda está pendente.
