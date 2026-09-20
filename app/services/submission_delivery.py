@@ -1,10 +1,12 @@
 import csv
+import json
 import math
 from itertools import zip_longest
 from pathlib import Path
 
 SUBMISSION_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission.csv"
 OFFICIAL_IDS_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "sample_submission.csv"
+MODEL_MANIFEST_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "model_manifest.json"
 PARTIAL_PATH = (
     Path(__file__).resolve().parents[2]
     / "artifacts"
@@ -48,11 +50,13 @@ def submission_status() -> dict:
 
 
 def _validate_submission() -> tuple[bool, int | None, list[str]]:
+    model_blockers = _model_blockers()
     if not OFFICIAL_IDS_PATH.is_file():
         return False, None, [
             "o arquivo oficial de IDs do conjunto de teste ainda não foi disponibilizado",
             "o CSV deve conter somente os IDs e meses pedidos, na ordem oficial",
             "a validação de cobertura e valores ainda não foi concluída",
+            *model_blockers,
         ]
     if not SUBMISSION_PATH.is_file():
         try:
@@ -67,7 +71,8 @@ def _validate_submission() -> tuple[bool, int | None, list[str]]:
         except (OSError, csv.Error):
             return False, None, ["não foi possível ler o arquivo oficial de IDs do teste"]
         return False, expected_rows, [
-            "o CSV de previsões para os IDs oficiais ainda não foi gerado"
+            "o CSV de previsões para os IDs oficiais ainda não foi gerado",
+            *model_blockers,
         ]
 
     try:
@@ -109,6 +114,23 @@ def _validate_submission() -> tuple[bool, int | None, list[str]]:
                 return False, 0, ["o arquivo oficial de IDs do teste está vazio"]
             if first_issue:
                 return False, expected_rows, [first_issue]
+            if model_blockers:
+                return False, expected_rows, model_blockers
     except (OSError, csv.Error, ValueError):
         return False, None, ["não foi possível conferir o CSV completo contra os IDs oficiais"]
     return True, expected_rows, []
+
+
+def _model_blockers() -> list[str]:
+    try:
+        manifest = json.loads(MODEL_MANIFEST_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return ["não há manifesto auditável de um modelo aprovado para submissão"]
+    blockers = []
+    if manifest.get("status") != "validated_for_submission":
+        blockers.append("o modelo ainda não foi retreinado e validado para o período solicitado")
+    if manifest.get("artifacts", {}).get("inference_artifact_available") is not True:
+        blockers.append("o artefato reproduzível de inferência ainda não foi publicado")
+    if manifest.get("submission_validation", {}).get("passed") is not True:
+        blockers.append("a validação científica e temporal da previsão ainda está pendente")
+    return blockers

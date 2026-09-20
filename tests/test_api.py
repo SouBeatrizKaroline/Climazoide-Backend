@@ -95,8 +95,15 @@ def test_submission_requires_the_official_test_ids_and_matching_order(
 
     official = tmp_path / "sample_submission.csv"
     prediction = tmp_path / "submission.csv"
+    manifest = tmp_path / "model_manifest.json"
     monkeypatch.setattr(submission_delivery, "OFFICIAL_IDS_PATH", official)
     monkeypatch.setattr(submission_delivery, "SUBMISSION_PATH", prediction)
+    monkeypatch.setattr(submission_delivery, "MODEL_MANIFEST_PATH", manifest)
+    manifest.write_text(
+        '{"status":"validated_for_submission",'
+        '"artifacts":{"inference_artifact_available":true},'
+        '"submission_validation":{"passed":true}}'
+    )
     official.write_text("id,tp_mm_day\n2026_09_-30.00_-53.00,\n2026_09_-30.00_-52.75,\n")
     prediction.write_text(
         "id,tp_mm_day\n2026_09_-30.00_-53.00,1.25\n2026_09_-30.00_-52.75,0\n"
