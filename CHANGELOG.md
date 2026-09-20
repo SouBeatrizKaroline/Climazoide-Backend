@@ -4,10 +4,12 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- atualiza a auditoria científica: branch consolidada não comprova alinhamento M→M+1, e bloqueia inferência/submissão sem aprovação temporal explícita;
 - acrescenta MET Norway como contingência gratuita, com cache conforme validade da resposta e metadados de período;
 - valida cada ID e sua ordem contra o arquivo oficial do conjunto de teste e exige manifesto de modelo validado antes de liberar o CSV completo;
 - deixa a quantidade de linhas seguir os IDs oficiais, sem presumir meses a partir do exemplo de formato.
 - registra a disponibilidade real dos campos de contingência e impede impactos de somas parciais tratadas como completas.
+- substitui o download parcial histórico por um gerador de previsões parciais baseado somente nos IDs oficiais disponíveis.
 
 ## [0.3.2] - 2026-09-19
 

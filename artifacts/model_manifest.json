@@ -8,27 +8,35 @@
   "source_artifact_commit": "54ab930",
   "training_period": "1940-01/2018-12",
   "validation_period": "2019-01/2022-12",
-  "evaluation_scope": "retreino obrigatório após correção do alinhamento temporal M→M+1",
+  "evaluation_scope": "retreino obrigatório: não aprovado para previsão até corrigir alinhamento temporal e disponibilidade das fontes",
+  "scientific_audit": {
+    "status": "critical",
+    "rule": "Para prever T, usar somente dados cuja origem e publicação sejam anteriores ou iguais ao instante de emissão definido até T−1.",
+    "summary": "A branch consolidada usa atmosfera do mês-alvo no treino/validação; o ONI centrado também pode incorporar o mês previsto. Nenhum CSV/modelo está aprovado.",
+    "source_audit_commit": "54ab930",
+    "source_repository_read_only": true
+  },
   "metric_unit": "mm/dia",
   "metrics": null,
   "reviewed_sources": [
     {
       "ref": "Beatriz",
       "commit": "f0a17ef",
-      "decision": "contrato temporal e submissão oficial corrigidos",
-      "promoted": true
+      "decision": "referência de contrato temporal; requer nova validação contra a branch final",
+      "promoted": false,
+      "reason": "o pipeline consolidado mais recente mantém alinhamento atmosférico no mês-alvo"
     },
     {
       "ref": "vermelho",
       "commit": "62b3626",
-      "decision": "correção de vazamento, PLS ajustado, sweep e pós-processamento ENSO catalogados",
+      "decision": "há correção de deslocamento nesta branch, mas o resultado ONI e as métricas ainda não estão validados para promoção",
       "promoted": false,
       "reason": "resultado experimental ainda não integrado à branch principal nem publicado como release"
     },
     {
       "ref": "feature/melhorar-pls-lstm-daiane",
       "commit": "54ab930",
-      "decision": "EDA, XGBoost v3 e experimento ONI consolidados como pesquisa",
+      "decision": "branch mais recente; contém desalinhamento temporal de treino/validação e experimento ONI centrado",
       "promoted": false,
       "reason": "faltam integração científica, release e artefato de inferência reproduzível"
     }
@@ -37,42 +45,42 @@
     {
       "id": "pca-lstm",
       "label": "PCA/EOF + LSTM",
-      "status": "ready_for_retraining",
-      "purpose": "baseline neural corrigido para M→M+1"
+      "status": "research_only",
+      "purpose": "baseline de pesquisa; a versão consolidada precisa corrigir atmosfera T para T−1 e ser retreinada"
     },
     {
       "id": "pls-concurrent-lstm",
       "label": "PLS concorrente + LSTM",
       "status": "research_only",
-      "purpose": "redução supervisionada com precipitação do mesmo mês no treino"
+      "purpose": "redução supervisionada experimental; métricas não validadas para previsão M→M+1"
     },
     {
       "id": "pls-lagged-lstm",
       "label": "PLS defasado + LSTM",
       "status": "research_only",
-      "purpose": "redução supervisionada com alvo futuro, sob validação temporal estrita"
+      "purpose": "experimento de redução supervisionada; revisar alinhamento e refazer validação temporal"
     },
     {
       "id": "convlstm",
       "label": "ConvLSTM",
-      "status": "ready_for_training",
-      "purpose": "arquitetura implementada para preservar a estrutura espacial da grade; aguarda treino oficial"
+      "status": "not_implemented",
+      "purpose": "não há pipeline treinado e reproduzível integrado à branch consolidada"
     },
     {
       "id": "xgboost-v3",
       "label": "XGBoost v3",
       "status": "research_only",
-      "purpose": "modelo retreinado sem vazamento e comparado com persistência e climatologia"
+      "purpose": "experimento XGBoost; no código consolidado, o construtor usa atmosfera do mês-alvo, então as métricas não comprovam previsão M→M+1"
     },
     {
       "id": "xgboost-oni",
       "label": "XGBoost + ONI",
       "status": "research_only",
-      "purpose": "experimento de inclusão do ONI como feature, sem promoção para produção"
+      "purpose": "experimento não promovível: ONI centrado atribuído a T−1 incorpora SST do mês T e sofre revisões"
     }
   ],
   "readiness": [
-    {"id": "temporal_contract", "label": "Contrato M→M+1", "status": "passed"},
+    {"id": "temporal_contract", "label": "Alinhamento e disponibilidade temporal M→M+1", "status": "pending"},
     {"id": "official_ids", "label": "IDs oficiais sem reconstrução", "status": "passed"},
     {"id": "full_grid", "label": "Grade 301 × 261", "status": "passed"},
     {"id": "official_dataset", "label": "13 arquivos oficiais", "status": "blocked_by_auth"},
@@ -98,11 +106,15 @@
     ]
   },
   "limitations": [
-    "A execução anterior usou a atmosfera do mês-alvo na validação; o desafio fornece a atmosfera do mês anterior.",
-    "As métricas antigas foram retiradas da interface e não devem embasar comparação.",
+    "A branch consolidada mais recente usa variáveis atmosféricas do mês-alvo no construtor de exemplos; métricas associadas não demonstram previsão legítima de um mês à frente.",
+    "A branch vermelho contém correção de deslocamento, mas ela não foi promovida à branch mais recente nem revalidada como release final.",
+    "O ONI do experimento é uma média móvel centrada e pode incluir SST do mês previsto; não usar até demonstrar disponibilidade as-of do corte.",
+    "A publicação de médias mensais ERA5/ERA5T ocorre após o mês observado; o instante operacional de emissão precisa ser definido e documentado.",
+    "As métricas experimentais anteriores não devem embasar comparação nem ser apresentadas como resultado válido de produção.",
     "Não representa pontuação pública ou privada da avaliação oficial.",
     "Pesos finais e objetos PCA não estão versionados no repositório consultado.",
     "A API ainda não executa inferência espacial real.",
-    "Resultados de vermelho e feature/melhorar-pls-lstm-daiane permanecem experimentais até integração e release."
+    "Nenhum artefato de inferência ou submissão final está aprovado; retreino, validação temporal e checagem de IDs continuam pendentes.",
+    "A auditoria não encontrou evidência em código versionado de consulta ao alvo real de 2023–2024; os arquivos binários do dataset não estavam disponíveis para perícia independente."
   ]
 }

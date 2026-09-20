@@ -7,11 +7,7 @@ from pathlib import Path
 SUBMISSION_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission.csv"
 OFFICIAL_IDS_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "sample_submission.csv"
 MODEL_MANIFEST_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "model_manifest.json"
-PARTIAL_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "artifacts"
-    / "climazoide-partial.csv"
-)
+PARTIAL_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission-partial.csv"
 
 EXAMPLE_CSV = """id,tp_mm_day
 2025_01_-30.00_-53.00,3.812
@@ -22,7 +18,15 @@ EXAMPLE_CSV = """id,tp_mm_day
 
 def submission_status() -> dict:
     ready, expected_rows, validation_reasons = _validate_submission()
-    partial_available = PARTIAL_PATH.is_file()
+    partial_available, partial_rows, partial_months, partial_reasons = (
+        _validate_partial_submission()
+    )
+    if ready:
+        partial_available, partial_rows, partial_months = False, 0, []
+        partial_reasons = []
+    partial_is_complete = bool(
+        partial_available and expected_rows is not None and partial_rows == expected_rows
+    )
     return {
         "ready": ready,
         "filename": "submission.csv" if ready else None,
@@ -36,17 +40,86 @@ def submission_status() -> dict:
         "example_is_submittable": False,
         "partial_available": partial_available,
         "partial_filename": PARTIAL_PATH.name if partial_available else None,
-        "partial_rows": 78_561,
-        "partial_month": "2019-02",
-        "partial_origin_month": "2019-01",
-        "partial_model": "PLS lagged + LSTM",
-        "partial_is_complete": False,
-        "partial_notice": (
-            "Recorte experimental de validação com um mês. Valores negativos foram "
-            "limitados a zero. Não representa a entrega completa do projeto."
+        "partial_rows": partial_rows,
+        "partial_target_months": partial_months,
+        "partial_is_complete": partial_is_complete,
+        "partial_notice": _partial_notice(
+            partial_available, partial_rows, expected_rows, partial_months, partial_reasons
         ),
         "blocking_reasons": [] if ready else validation_reasons,
     }
+
+
+def _partial_notice(
+    available: bool,
+    rows: int,
+    expected_rows: int | None,
+    months: list[str],
+    reasons: list[str],
+) -> str:
+    if expected_rows is not None and rows == expected_rows and available:
+        return "Todas as previsões dos IDs oficiais estão disponíveis; use o CSV completo."
+    if not available:
+        return reasons[0] if reasons else "Ainda não há previsões oficiais parciais validadas."
+    target = ", ".join(months) if months else "meses não identificados"
+    total = f" de {expected_rows:,} IDs oficiais" if expected_rows is not None else " IDs oficiais"
+    return (
+        f"{rows:,}{total}; meses-alvo presentes: {target}. "
+        "Contém apenas previsões disponíveis, sem preencher IDs ausentes."
+    )
+
+
+def _validate_partial_submission() -> tuple[bool, int, list[str], list[str]]:
+    if not OFFICIAL_IDS_PATH.is_file():
+        return False, 0, [], ["aguardando o arquivo oficial de IDs do conjunto de teste"]
+    model_blockers = _model_blockers()
+    if model_blockers:
+        return False, 0, [], model_blockers
+    if not PARTIAL_PATH.is_file():
+        return False, 0, [], ["ainda não há previsões oficiais parciais para baixar"]
+
+    months: set[str] = set()
+    rows = 0
+    try:
+        with (
+            OFFICIAL_IDS_PATH.open(newline="", encoding="utf-8-sig") as source,
+            PARTIAL_PATH.open(newline="", encoding="utf-8-sig") as partial,
+        ):
+            official_reader = csv.reader(source)
+            partial_reader = csv.reader(partial)
+            if next(official_reader, []) != ["id", "tp_mm_day"]:
+                return False, 0, [], ["o arquivo oficial de IDs está inválido"]
+            if next(partial_reader, []) != ["id", "tp_mm_day"]:
+                return False, 0, [], ["o CSV parcial deve conter somente id,tp_mm_day"]
+
+            expected = next(official_reader, None)
+            for row_number, actual in enumerate(partial_reader, start=2):
+                if len(actual) != 2:
+                    return False, 0, [], [f"linha inválida no CSV parcial: {row_number}"]
+                while expected is not None and len(expected) == 2 and expected[0] != actual[0]:
+                    expected = next(official_reader, None)
+                if expected is not None and len(expected) != 2:
+                    return False, 0, [], ["o arquivo oficial de IDs contém uma linha inválida"]
+                if expected is None:
+                    return False, 0, [], ["ID parcial ausente no teste oficial ou fora da ordem"]
+                try:
+                    value = float(actual[1])
+                except ValueError:
+                    return False, 0, [], [f"previsão inválida no CSV parcial: linha {row_number}"]
+                if not math.isfinite(value) or value < 0:
+                    return False, 0, [], [f"previsão não válida no CSV parcial: linha {row_number}"]
+                parts = actual[0].split("_")
+                if len(parts) < 2 or len(parts[0]) != 4 or len(parts[1]) != 2:
+                    return False, 0, [], [f"mês-alvo inválido no ID parcial: linha {row_number}"]
+                months.add(f"{parts[0]}-{parts[1]}")
+                rows += 1
+                expected = next(official_reader, None)
+    except (OSError, csv.Error):
+        return False, 0, [], ["não foi possível validar o CSV parcial contra os IDs oficiais"]
+
+    if rows == 0:
+        return False, 0, [], ["o CSV parcial não contém previsões"]
+    return True, rows, sorted(months), []
 
 
 def _validate_submission() -> tuple[bool, int | None, list[str]]:
@@ -129,6 +202,10 @@ def _model_blockers() -> list[str]:
     blockers = []
     if manifest.get("status") != "validated_for_submission":
         blockers.append("o modelo ainda não foi retreinado e validado para o período solicitado")
+    if manifest.get("scientific_audit", {}).get("status") != "passed":
+        blockers.append("a auditoria temporal/científica ainda não foi aprovada")
+    if manifest.get("temporal_contract_check", {}).get("passed") is not True:
+        blockers.append("não há comprovação automatizada de features disponíveis até T−1")
     if manifest.get("artifacts", {}).get("inference_artifact_available") is not True:
         blockers.append("o artefato reproduzível de inferência ainda não foi publicado")
     if manifest.get("submission_validation", {}).get("passed") is not True:

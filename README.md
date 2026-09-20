@@ -14,8 +14,8 @@ Projeto aberto sob licença MIT. Consulte [como contribuir](CONTRIBUTING.md), [g
 
 Beatriz Karoline • Daiane Fonseca • Tomáz Giansante
 
-> Migração WORCAP: as oito branches foram auditadas sem alterar a origem. Consulte
-> [a auditoria](docs/WORCAP_BRANCH_AUDIT.md) ou `GET /v1/research/branches`.
+> A pesquisa foi auditada sem alterar sua origem. Consulte
+> [o diagnóstico técnico](docs/WORCAP_BRANCH_AUDIT.md) ou `GET /v1/research/branches`.
 
 ## Ecossistema do projeto
 
@@ -95,7 +95,7 @@ uvicorn app.main:app --reload
 | GET | `/v1/model/manifest` | proveniência e métricas do modelo |
 | GET | `/v1/submission/status` | prontidão e bloqueios do CSV Kaggle |
 | GET | `/v1/submission/example.csv` | exemplo pequeno, explicitamente não enviável |
-| GET | `/v1/submission/partial.csv` | grade experimental de um mês, não enviável |
+| GET | `/v1/submission/partial.csv` | previsões válidas já disponíveis para IDs oficiais, se houver |
 | GET | `/v1/submission/download` | CSV completo somente quando validado e publicado |
 
 Pontos operacionais: `buenos-aires`, `la-paz`, `brasilia`, `santiago`, `bogota`, `quito`, `georgetown`, `asuncion`, `lima`, `paramaribo`, `montevideu`, `caracas` e `caiena`.
@@ -138,6 +138,14 @@ de março; e assim por diante. Para uma previsão de setembro de 2026, usa-se ag
 dados mensais estiverem completos e disponíveis. Um modelo pode usar meses anteriores
 adicionais se sua arquitetura os exigir, mas nunca dados posteriores à origem `M`.
 
+**Estado auditado:** esse é o contrato exigido, não uma afirmação de que o modelo atual
+já o cumpre. A branch científica consolidada mais recente foi encontrada usando campos
+atmosféricos do próprio mês-alvo no treino/validação. Até integração da correção,
+retreino e validação temporal reproduzível, não trate os resultados anteriores como
+previsão válida nem como métrica aprovada. A auditoria e o estado detalhado estão em
+[`docs/WORCAP_BRANCH_AUDIT.md`](docs/WORCAP_BRANCH_AUDIT.md) e
+`GET /v1/model/manifest`.
+
 Esse princípio vale sempre que o produto gerar uma previsão mensal atual. Não muda,
 porém, o arquivo de avaliação oficial: ele pede somente os alvos de janeiro de 2023 a
 dezembro de 2024, com os IDs já fornecidos. Previsões para 2025 ou 2026 são uma execução
@@ -171,7 +179,7 @@ O script executa `kagglehub.competition_download('previsao-climatica-de-precipit
 - `teste_features.nc`: `time` indica o mês-alvo; as variáveis atmosféricas dessa posição correspondem ao mês anterior, indicado em `time_origem`. Inclui `tp_alvo` inteiramente `NaN`, `tp_ultima_obs` (dezembro de 2022) e `lag_meses` de 1 a 24;
 - `sample_submission.csv`: lista completa dos IDs para os 24 meses, na ordem exigida. Os zeros em `tp_mm_day` são apenas preenchimento do modelo de submissão, não previsões nem valores observados.
 
-Para cada amostra de treino, alinhe as variáveis atmosféricas do mês `M` ao alvo de precipitação `M+1`. Na avaliação, use as variáveis já defasadas em `teste_features.nc`; não desloque `time` uma segunda vez. A latitude está em ordem crescente. A chuva observada dos 24 meses de teste não é distribuída.
+O alinhamento exigido é variáveis atmosféricas do mês `M` → precipitação de `M+1`. Na avaliação, use as variáveis já defasadas em `teste_features.nc`; não desloque `time` uma segunda vez. A latitude está em ordem crescente. A chuva observada dos 24 meses de teste não é distribuída. A branch consolidada auditada ainda precisa corrigir seu construtor de treino/validação para cumprir esse alinhamento.
 
 ### Regras invariantes
 
@@ -194,16 +202,27 @@ não negativas, ordem preservada e retreino compatível com M→M+1.
 ### Três níveis de download
 
 - **Completo oficial:** terá as 1.885.464 previsões e só será liberado após validação;
-- **Parcial de pesquisa:** contém 78.561 pontos de fevereiro de 2019, previstos com
-  dados até janeiro de 2019 pelo experimento PLS lagged + LSTM de
-  `vermelho@62b3626`. Valores negativos foram limitados a zero. O CSV público contém
-  somente `id,tp_mm_day`; esta proveniência permanece documentada apenas aqui. É um
-  recorte científico real, mas não representa a entrega completa;
+- **Parcial oficial:** é gerado com as previsões válidas que já existirem para IDs do
+  `sample_submission.csv`, mantendo sua ordem. IDs sem previsão válida são omitidos,
+  nunca preenchidos com zero ou com valores de outro período. Não pode ser enviado como
+  submissão completa;
 - **Exemplo de formato:** contém apenas três linhas fictícias para visualizar
   `id,tp_mm_day` e também não pode ser enviado.
 
-O recorte parcial é reproduzível com `scripts/build_research_partial.py`, lendo o artefato
-versionado na cópia local do WORCAP sem alterar o repositório de origem.
+O antigo recorte experimental de 2019 não é servido como CSV parcial oficial. Enquanto
+não houver previsões do modelo para os IDs oficiais, o botão de parcial permanece
+indisponível. O comando abaixo monta o parcial a partir de um CSV de previsões candidatas
+produzido pelo modelo, filtrando previsões ausentes, NaN, infinitas ou negativas e
+rejeitando IDs desconhecidos ou fora de ordem:
+
+```bash
+python scripts/build_partial_submission.py \
+  data/sample_submission.csv data/model_predictions.csv
+```
+
+O script `scripts/build_research_partial.py` serve apenas para reproduzir uma análise
+histórica interna. Seu resultado não é publicado como parcial oficial nem é elegível
+para envio.
 
 Auditoria conjunta do dataset e da submissão:
 
@@ -226,19 +245,26 @@ Isso é análise automática, não texto inventado por um modelo generativo. Uma
 
 Endpoints citados pela comunidade são testados antes de entrar no produto. Nesta validação, NOAA CPC e USNO responderam; o exemplo `apiclima.inmet.gov.br` não respondeu de forma estável e o WFS TerraBrasilis informado devolveu uma exceção de camada. Por isso, ambos permanecem documentados, mas não são anunciados como ativos.
 
-## Modelo do hackathon
+## Estado da validação científica
 
-A auditoria identificou que a execução histórica do `pca_lstm_run1` alinhava as variáveis atmosféricas ao mês-alvo. O contrato correto é usar o estado do mês anterior para prever `M+1`. O código científico foi corrigido e agora exige **retreino**.
+A auditoria mais recente identificou que a branch científica consolidada associa
+variáveis atmosféricas do mês-alvo à precipitação do mesmo mês durante treino e
+validação. O contrato esperado é usar apenas informação disponível até `T−1` para
+prever `T`; por isso, as métricas anteriores não demonstram desempenho válido e
+nenhum candidato está promovido para inferência operacional.
 
-As métricas anteriores foram removidas do manifesto ativo e da interface. Elas não são pontuação do leaderboard e não devem ser usadas para comparar modelos. Como pesos e objetos PCA não estão versionados, a API também não afirma executar inferência Kaggle em produção.
+A correção de deslocamento observada em branches de pesquisa ainda precisa ser
+integrada à versão final, retreinada e validada temporalmente. O experimento ONI
+também permanece bloqueado: sua média móvel centrada pode incluir SST do mês
+previsto. Além disso, o instante de emissão deve considerar a disponibilidade real
+das médias mensais ERA5/ERA5T. O endpoint `/v1/model/manifest` publica esses
+bloqueios, e a API exige aprovação científica e prova automatizada do contrato
+temporal antes de liberar CSV completo ou parcial.
 
-A branch `vermelho` foi revisada no commit `9492b93`. PLS, checkpoints por época e execução de múltiplas variações foram registrados como propostas de pesquisa, não como resultados. O endpoint `/v1/model/manifest` expõe as fontes revisadas, os quatro candidatos e cada bloqueio de prontidão para o frontend.
-
-O ConvLSTM possui arquitetura funcional desde o commit científico `e07dffb`, com células empilhadas, preservação espacial e saída não negativa. Seu estado é **pronto para treinamento**, não validado: métricas só serão publicadas após o dataset oficial e uma rodada temporal reproduzível.
-
-O commit científico `bcfc011` adiciona execução própria para Kaggle Notebook. Com a competição anexada em `/kaggle/input`, `python kaggle_notebook.py` valida os 13 arquivos, treina, confere 1.885.464 linhas e grava o CSV acompanhado de manifesto SHA-256.
-
-A partir de `cf9ea4b`, a mesma execução pode publicar opcionalmente esses artefatos no Cloud Storage e registrar a proveniência no BigQuery usando a conta Google Cloud vinculada pelo Kaggle Secrets. Nenhuma credencial é armazenada no código ou no manifesto.
+Não foram encontrados pesos de inferência ou um CSV final auditável. ConvLSTM e
+demais candidatos são descritos segundo sua prontidão real no manifesto; nenhum
+deve ser apresentado como modelo treinado/aprovado sem artefato reproduzível e
+validação correspondente.
 
 ## Qualidade, segurança e commits
 

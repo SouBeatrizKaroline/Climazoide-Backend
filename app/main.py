@@ -105,12 +105,15 @@ def download_submission() -> FileResponse:
 
 @app.get("/v1/submission/partial.csv", tags=["submission"])
 def download_research_partial() -> FileResponse:
-    if not PARTIAL_PATH.is_file():
-        raise HTTPException(status_code=404, detail="O recorte parcial não está disponível.")
+    if not submission_status()["partial_available"]:
+        raise HTTPException(
+            status_code=409,
+            detail="Ainda não há previsões oficiais parciais validadas para baixar.",
+        )
     return FileResponse(
         PARTIAL_PATH,
         media_type="text/csv",
-        filename="climazoide-partial.csv",
+        filename="submission-partial.csv",
     )
 
 

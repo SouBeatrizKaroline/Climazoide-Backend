@@ -39,12 +39,12 @@ def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
     assert payload["execution"]["entrypoint"] == "documentado no README"
     assert len(payload["candidate_models"]) == 6
     assert any(
-        item["id"] == "convlstm" and item["status"] == "ready_for_training"
+        item["id"] == "convlstm" and item["status"] == "not_implemented"
         for item in payload["candidate_models"]
     )
     assert any(item["ref"] == "vermelho" for item in payload["reviewed_sources"])
     assert any(
-        item["id"] == "temporal_contract" and item["status"] == "passed"
+        item["id"] == "temporal_contract" and item["status"] == "pending"
         for item in payload["readiness"]
     )
     assert not any(
@@ -70,8 +70,11 @@ def test_research_catalog_maps_every_remote_branch_without_promoting_metrics() -
     assert payload["latest_branch"] == "feature/melhorar-pls-lstm-daiane"
     assert len(payload["branches"]) == 8
     assert payload["promotion_policy"]["production_metrics"] is False
+    assert payload["technical_audit"]["status"] == "critical"
+    assert payload["technical_audit"]["latest_branch_temporal_alignment"] == "not_compliant"
     assert any(
-        branch["name"] == "vermelho" and "correção de vazamento temporal" in branch["work"]
+        branch["name"] == "vermelho"
+        and "correção do deslocamento atmosférico presente nesta branch" in branch["work"]
         for branch in payload["branches"]
     )
 
@@ -81,11 +84,30 @@ def test_submission_download_is_blocked_until_a_validated_artifact_exists() -> N
     assert status.status_code == 200
     assert status.json()["ready"] is False
     assert status.json()["example_is_submittable"] is False
-    assert status.json()["partial_available"] is True
+    assert status.json()["partial_available"] is False
     assert status.json()["partial_is_complete"] is False
-    assert status.json()["partial_rows"] == 78_561
+    assert status.json()["partial_rows"] == 0
+    assert "arquivo oficial de IDs" in status.json()["partial_notice"]
     assert status.json()["expected_rows"] is None
     assert client.get("/v1/submission/download").status_code == 409
+
+
+def test_submission_manifest_without_temporal_audit_cannot_be_promoted(
+    tmp_path, monkeypatch
+) -> None:
+    from app.services import submission_delivery
+
+    manifest = tmp_path / "model_manifest.json"
+    monkeypatch.setattr(submission_delivery, "MODEL_MANIFEST_PATH", manifest)
+    manifest.write_text(
+        '{"status":"validated_for_submission",'
+        '"artifacts":{"inference_artifact_available":true},'
+        '"submission_validation":{"passed":true}}'
+    )
+
+    blockers = submission_delivery._model_blockers()
+    assert any("auditoria temporal/científica" in blocker for blocker in blockers)
+    assert any("comprovação automatizada" in blocker for blocker in blockers)
 
 
 def test_submission_requires_the_official_test_ids_and_matching_order(
@@ -101,6 +123,8 @@ def test_submission_requires_the_official_test_ids_and_matching_order(
     monkeypatch.setattr(submission_delivery, "MODEL_MANIFEST_PATH", manifest)
     manifest.write_text(
         '{"status":"validated_for_submission",'
+        '"scientific_audit":{"status":"passed"},'
+        '"temporal_contract_check":{"passed":true},'
         '"artifacts":{"inference_artifact_available":true},'
         '"submission_validation":{"passed":true}}'
     )
@@ -127,10 +151,42 @@ def test_submission_example_is_clearly_named_as_not_valid() -> None:
     assert response.text.startswith("id,tp_mm_day\n")
 
 
-def test_research_partial_is_downloadable_in_the_public_format() -> None:
+def test_research_experiment_is_not_exposed_as_an_official_partial_submission() -> None:
     response = client.get("/v1/submission/partial.csv")
-    assert response.status_code == 200
-    assert "climazoide-partial.csv" in response.headers["content-disposition"]
-    header, first_row, *_ = response.text.splitlines()
-    assert header == "id,tp_mm_day"
-    assert len(first_row.split(",")) == 2
+    assert response.status_code == 409
+    assert "previsões oficiais parciais validadas" in response.json()["detail"]
+
+
+def test_partial_submission_contains_only_valid_official_ids_in_original_order(
+    tmp_path, monkeypatch
+) -> None:
+    from app.services import submission_delivery
+
+    official = tmp_path / "sample_submission.csv"
+    partial = tmp_path / "submission-partial.csv"
+    manifest = tmp_path / "model_manifest.json"
+    monkeypatch.setattr(submission_delivery, "OFFICIAL_IDS_PATH", official)
+    monkeypatch.setattr(submission_delivery, "PARTIAL_PATH", partial)
+    monkeypatch.setattr(submission_delivery, "MODEL_MANIFEST_PATH", manifest)
+    manifest.write_text(
+        '{"status":"validated_for_submission",'
+        '"scientific_audit":{"status":"passed"},'
+        '"temporal_contract_check":{"passed":true},'
+        '"artifacts":{"inference_artifact_available":true},'
+        '"submission_validation":{"passed":true}}'
+    )
+    official.write_text(
+        "id,tp_mm_day\n2023_01_-60.00_-90.00,0\n"
+        "2023_01_-60.00_-89.75,0\n2023_02_-60.00_-90.00,0\n"
+    )
+    partial.write_text(
+        "id,tp_mm_day\n2023_01_-60.00_-90.00,1.2\n"
+        "2023_02_-60.00_-90.00,2.3\n"
+    )
+
+    assert submission_delivery._validate_partial_submission() == (
+        True,
+        2,
+        ["2023-01", "2023-02"],
+        [],
+    )
