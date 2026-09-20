@@ -1,0 +1,4041 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-09-20T10:50:07+00:00",
+  "model_id": "monthly-climatology-v1",
+  "prediction_period": "2023-01/2024-12",
+  "training_period": "1940-01/2022-12",
+  "temporal_contract": "dados históricos até T−1 ou antes → previsão de T",
+  "notice": "Cenários históricos da avaliação 2023–2024; não são previsão atual de 2026.",
+  "locations": {
+    "buenos-aires": {
+      "name": "Buenos Aires",
+      "country": "Argentina",
+      "grid_latitude": -34.5,
+      "grid_longitude": -58.5,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 2.778432,
+          "p33_mm_day": 1.678467,
+          "p67_mm_day": 3.354015
+        },
+        "2": {
+          "mean_mm_day": 3.323969,
+          "p33_mm_day": 2.18729,
+          "p67_mm_day": 3.584557
+        },
+        "3": {
+          "mean_mm_day": 3.439133,
+          "p33_mm_day": 2.240944,
+          "p67_mm_day": 3.564377
+        },
+        "4": {
+          "mean_mm_day": 3.09581,
+          "p33_mm_day": 1.982994,
+          "p67_mm_day": 3.06179
+        },
+        "5": {
+          "mean_mm_day": 2.439499,
+          "p33_mm_day": 1.476974,
+          "p67_mm_day": 2.873192
+        },
+        "6": {
+          "mean_mm_day": 2.315383,
+          "p33_mm_day": 1.419296,
+          "p67_mm_day": 2.53109
+        },
+        "7": {
+          "mean_mm_day": 2.295207,
+          "p33_mm_day": 1.660805,
+          "p67_mm_day": 2.498932
+        },
+        "8": {
+          "mean_mm_day": 2.291185,
+          "p33_mm_day": 1.440849,
+          "p67_mm_day": 2.895317
+        },
+        "9": {
+          "mean_mm_day": 2.824232,
+          "p33_mm_day": 1.885414,
+          "p67_mm_day": 3.550987
+        },
+        "10": {
+          "mean_mm_day": 3.530985,
+          "p33_mm_day": 2.202263,
+          "p67_mm_day": 4.307671
+        },
+        "11": {
+          "mean_mm_day": 2.922391,
+          "p33_mm_day": 1.93821,
+          "p67_mm_day": 3.172951
+        },
+        "12": {
+          "mean_mm_day": 2.410234,
+          "p33_mm_day": 1.601677,
+          "p67_mm_day": 2.635784
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 2.778433,
+          "estimated_monthly_mm": 86.1,
+          "historical_mean_mm_day": 2.778432,
+          "historical_p33_mm_day": 1.678467,
+          "historical_p67_mm_day": 3.354015,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-02": {
+          "predicted_mm_day": 3.323969,
+          "estimated_monthly_mm": 93.1,
+          "historical_mean_mm_day": 3.323969,
+          "historical_p33_mm_day": 2.18729,
+          "historical_p67_mm_day": 3.584557,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-03": {
+          "predicted_mm_day": 3.439134,
+          "estimated_monthly_mm": 106.6,
+          "historical_mean_mm_day": 3.439133,
+          "historical_p33_mm_day": 2.240944,
+          "historical_p67_mm_day": 3.564377,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-04": {
+          "predicted_mm_day": 3.09581,
+          "estimated_monthly_mm": 92.9,
+          "historical_mean_mm_day": 3.09581,
+          "historical_p33_mm_day": 1.982994,
+          "historical_p67_mm_day": 3.06179,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-05": {
+          "predicted_mm_day": 2.439499,
+          "estimated_monthly_mm": 75.6,
+          "historical_mean_mm_day": 2.439499,
+          "historical_p33_mm_day": 1.476974,
+          "historical_p67_mm_day": 2.873192,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-06": {
+          "predicted_mm_day": 2.315383,
+          "estimated_monthly_mm": 69.5,
+          "historical_mean_mm_day": 2.315383,
+          "historical_p33_mm_day": 1.419296,
+          "historical_p67_mm_day": 2.53109,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-07": {
+          "predicted_mm_day": 2.295207,
+          "estimated_monthly_mm": 71.2,
+          "historical_mean_mm_day": 2.295207,
+          "historical_p33_mm_day": 1.660805,
+          "historical_p67_mm_day": 2.498932,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-08": {
+          "predicted_mm_day": 2.291185,
+          "estimated_monthly_mm": 71.0,
+          "historical_mean_mm_day": 2.291185,
+          "historical_p33_mm_day": 1.440849,
+          "historical_p67_mm_day": 2.895317,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-09": {
+          "predicted_mm_day": 2.824232,
+          "estimated_monthly_mm": 84.7,
+          "historical_mean_mm_day": 2.824232,
+          "historical_p33_mm_day": 1.885414,
+          "historical_p67_mm_day": 3.550987,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-10": {
+          "predicted_mm_day": 3.530985,
+          "estimated_monthly_mm": 109.5,
+          "historical_mean_mm_day": 3.530985,
+          "historical_p33_mm_day": 2.202263,
+          "historical_p67_mm_day": 4.307671,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-11": {
+          "predicted_mm_day": 2.922391,
+          "estimated_monthly_mm": 87.7,
+          "historical_mean_mm_day": 2.922391,
+          "historical_p33_mm_day": 1.93821,
+          "historical_p67_mm_day": 3.172951,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-12": {
+          "predicted_mm_day": 2.410234,
+          "estimated_monthly_mm": 74.7,
+          "historical_mean_mm_day": 2.410234,
+          "historical_p33_mm_day": 1.601677,
+          "historical_p67_mm_day": 2.635784,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-01": {
+          "predicted_mm_day": 2.778433,
+          "estimated_monthly_mm": 86.1,
+          "historical_mean_mm_day": 2.778432,
+          "historical_p33_mm_day": 1.678467,
+          "historical_p67_mm_day": 3.354015,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-02": {
+          "predicted_mm_day": 3.323969,
+          "estimated_monthly_mm": 96.4,
+          "historical_mean_mm_day": 3.323969,
+          "historical_p33_mm_day": 2.18729,
+          "historical_p67_mm_day": 3.584557,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-03": {
+          "predicted_mm_day": 3.439134,
+          "estimated_monthly_mm": 106.6,
+          "historical_mean_mm_day": 3.439133,
+          "historical_p33_mm_day": 2.240944,
+          "historical_p67_mm_day": 3.564377,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-04": {
+          "predicted_mm_day": 3.09581,
+          "estimated_monthly_mm": 92.9,
+          "historical_mean_mm_day": 3.09581,
+          "historical_p33_mm_day": 1.982994,
+          "historical_p67_mm_day": 3.06179,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-05": {
+          "predicted_mm_day": 2.439499,
+          "estimated_monthly_mm": 75.6,
+          "historical_mean_mm_day": 2.439499,
+          "historical_p33_mm_day": 1.476974,
+          "historical_p67_mm_day": 2.873192,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-06": {
+          "predicted_mm_day": 2.315383,
+          "estimated_monthly_mm": 69.5,
+          "historical_mean_mm_day": 2.315383,
+          "historical_p33_mm_day": 1.419296,
+          "historical_p67_mm_day": 2.53109,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-07": {
+          "predicted_mm_day": 2.295207,
+          "estimated_monthly_mm": 71.2,
+          "historical_mean_mm_day": 2.295207,
+          "historical_p33_mm_day": 1.660805,
+          "historical_p67_mm_day": 2.498932,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-08": {
+          "predicted_mm_day": 2.291185,
+          "estimated_monthly_mm": 71.0,
+          "historical_mean_mm_day": 2.291185,
+          "historical_p33_mm_day": 1.440849,
+          "historical_p67_mm_day": 2.895317,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-09": {
+          "predicted_mm_day": 2.824232,
+          "estimated_monthly_mm": 84.7,
+          "historical_mean_mm_day": 2.824232,
+          "historical_p33_mm_day": 1.885414,
+          "historical_p67_mm_day": 3.550987,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-10": {
+          "predicted_mm_day": 3.530985,
+          "estimated_monthly_mm": 109.5,
+          "historical_mean_mm_day": 3.530985,
+          "historical_p33_mm_day": 2.202263,
+          "historical_p67_mm_day": 4.307671,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-11": {
+          "predicted_mm_day": 2.922391,
+          "estimated_monthly_mm": 87.7,
+          "historical_mean_mm_day": 2.922391,
+          "historical_p33_mm_day": 1.93821,
+          "historical_p67_mm_day": 3.172951,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-12": {
+          "predicted_mm_day": 2.410234,
+          "estimated_monthly_mm": 74.7,
+          "historical_mean_mm_day": 2.410234,
+          "historical_p33_mm_day": 1.601677,
+          "historical_p67_mm_day": 2.635784,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        }
+      }
+    },
+    "la-paz": {
+      "name": "La Paz",
+      "country": "Bolívia",
+      "grid_latitude": -16.5,
+      "grid_longitude": -68.0,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 7.557455,
+          "p33_mm_day": 6.778584,
+          "p67_mm_day": 8.227673
+        },
+        "2": {
+          "mean_mm_day": 7.282487,
+          "p33_mm_day": 6.417236,
+          "p67_mm_day": 7.814846
+        },
+        "3": {
+          "mean_mm_day": 5.916067,
+          "p33_mm_day": 5.20771,
+          "p67_mm_day": 6.58596
+        },
+        "4": {
+          "mean_mm_day": 4.053598,
+          "p33_mm_day": 3.458328,
+          "p67_mm_day": 4.612255
+        },
+        "5": {
+          "mean_mm_day": 2.350382,
+          "p33_mm_day": 1.878662,
+          "p67_mm_day": 2.671852
+        },
+        "6": {
+          "mean_mm_day": 1.826091,
+          "p33_mm_day": 1.286469,
+          "p67_mm_day": 2.075806
+        },
+        "7": {
+          "mean_mm_day": 1.900638,
+          "p33_mm_day": 1.560555,
+          "p67_mm_day": 2.089767
+        },
+        "8": {
+          "mean_mm_day": 2.787716,
+          "p33_mm_day": 2.181168,
+          "p67_mm_day": 3.270874
+        },
+        "9": {
+          "mean_mm_day": 4.202096,
+          "p33_mm_day": 3.704147,
+          "p67_mm_day": 4.70295
+        },
+        "10": {
+          "mean_mm_day": 4.786227,
+          "p33_mm_day": 4.227371,
+          "p67_mm_day": 4.995308
+        },
+        "11": {
+          "mean_mm_day": 5.209727,
+          "p33_mm_day": 4.542274,
+          "p67_mm_day": 5.666561
+        },
+        "12": {
+          "mean_mm_day": 6.848049,
+          "p33_mm_day": 6.215744,
+          "p67_mm_day": 7.309723
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 7.557454,
+          "estimated_monthly_mm": 234.3,
+          "historical_mean_mm_day": 7.557455,
+          "historical_p33_mm_day": 6.778584,
+          "historical_p67_mm_day": 8.227673,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-02": {
+          "predicted_mm_day": 7.282488,
+          "estimated_monthly_mm": 203.9,
+          "historical_mean_mm_day": 7.282487,
+          "historical_p33_mm_day": 6.417236,
+          "historical_p67_mm_day": 7.814846,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-03": {
+          "predicted_mm_day": 5.916068,
+          "estimated_monthly_mm": 183.4,
+          "historical_mean_mm_day": 5.916067,
+          "historical_p33_mm_day": 5.20771,
+          "historical_p67_mm_day": 6.58596,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-04": {
+          "predicted_mm_day": 4.053598,
+          "estimated_monthly_mm": 121.6,
+          "historical_mean_mm_day": 4.053598,
+          "historical_p33_mm_day": 3.458328,
+          "historical_p67_mm_day": 4.612255,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-05": {
+          "predicted_mm_day": 2.350382,
+          "estimated_monthly_mm": 72.9,
+          "historical_mean_mm_day": 2.350382,
+          "historical_p33_mm_day": 1.878662,
+          "historical_p67_mm_day": 2.671852,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-06": {
+          "predicted_mm_day": 1.826091,
+          "estimated_monthly_mm": 54.8,
+          "historical_mean_mm_day": 1.826091,
+          "historical_p33_mm_day": 1.286469,
+          "historical_p67_mm_day": 2.075806,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-07": {
+          "predicted_mm_day": 1.900638,
+          "estimated_monthly_mm": 58.9,
+          "historical_mean_mm_day": 1.900638,
+          "historical_p33_mm_day": 1.560555,
+          "historical_p67_mm_day": 2.089767,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-08": {
+          "predicted_mm_day": 2.787716,
+          "estimated_monthly_mm": 86.4,
+          "historical_mean_mm_day": 2.787716,
+          "historical_p33_mm_day": 2.181168,
+          "historical_p67_mm_day": 3.270874,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-09": {
+          "predicted_mm_day": 4.202096,
+          "estimated_monthly_mm": 126.1,
+          "historical_mean_mm_day": 4.202096,
+          "historical_p33_mm_day": 3.704147,
+          "historical_p67_mm_day": 4.70295,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-10": {
+          "predicted_mm_day": 4.786227,
+          "estimated_monthly_mm": 148.4,
+          "historical_mean_mm_day": 4.786227,
+          "historical_p33_mm_day": 4.227371,
+          "historical_p67_mm_day": 4.995308,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-11": {
+          "predicted_mm_day": 5.209727,
+          "estimated_monthly_mm": 156.3,
+          "historical_mean_mm_day": 5.209727,
+          "historical_p33_mm_day": 4.542274,
+          "historical_p67_mm_day": 5.666561,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-12": {
+          "predicted_mm_day": 6.848047,
+          "estimated_monthly_mm": 212.3,
+          "historical_mean_mm_day": 6.848049,
+          "historical_p33_mm_day": 6.215744,
+          "historical_p67_mm_day": 7.309723,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-01": {
+          "predicted_mm_day": 7.557454,
+          "estimated_monthly_mm": 234.3,
+          "historical_mean_mm_day": 7.557455,
+          "historical_p33_mm_day": 6.778584,
+          "historical_p67_mm_day": 8.227673,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-02": {
+          "predicted_mm_day": 7.282488,
+          "estimated_monthly_mm": 211.2,
+          "historical_mean_mm_day": 7.282487,
+          "historical_p33_mm_day": 6.417236,
+          "historical_p67_mm_day": 7.814846,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-03": {
+          "predicted_mm_day": 5.916068,
+          "estimated_monthly_mm": 183.4,
+          "historical_mean_mm_day": 5.916067,
+          "historical_p33_mm_day": 5.20771,
+          "historical_p67_mm_day": 6.58596,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-04": {
+          "predicted_mm_day": 4.053598,
+          "estimated_monthly_mm": 121.6,
+          "historical_mean_mm_day": 4.053598,
+          "historical_p33_mm_day": 3.458328,
+          "historical_p67_mm_day": 4.612255,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-05": {
+          "predicted_mm_day": 2.350382,
+          "estimated_monthly_mm": 72.9,
+          "historical_mean_mm_day": 2.350382,
+          "historical_p33_mm_day": 1.878662,
+          "historical_p67_mm_day": 2.671852,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-06": {
+          "predicted_mm_day": 1.826091,
+          "estimated_monthly_mm": 54.8,
+          "historical_mean_mm_day": 1.826091,
+          "historical_p33_mm_day": 1.286469,
+          "historical_p67_mm_day": 2.075806,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-07": {
+          "predicted_mm_day": 1.900638,
+          "estimated_monthly_mm": 58.9,
+          "historical_mean_mm_day": 1.900638,
+          "historical_p33_mm_day": 1.560555,
+          "historical_p67_mm_day": 2.089767,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-08": {
+          "predicted_mm_day": 2.787716,
+          "estimated_monthly_mm": 86.4,
+          "historical_mean_mm_day": 2.787716,
+          "historical_p33_mm_day": 2.181168,
+          "historical_p67_mm_day": 3.270874,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-09": {
+          "predicted_mm_day": 4.202096,
+          "estimated_monthly_mm": 126.1,
+          "historical_mean_mm_day": 4.202096,
+          "historical_p33_mm_day": 3.704147,
+          "historical_p67_mm_day": 4.70295,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-10": {
+          "predicted_mm_day": 4.786227,
+          "estimated_monthly_mm": 148.4,
+          "historical_mean_mm_day": 4.786227,
+          "historical_p33_mm_day": 4.227371,
+          "historical_p67_mm_day": 4.995308,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-11": {
+          "predicted_mm_day": 5.209727,
+          "estimated_monthly_mm": 156.3,
+          "historical_mean_mm_day": 5.209727,
+          "historical_p33_mm_day": 4.542274,
+          "historical_p67_mm_day": 5.666561,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-12": {
+          "predicted_mm_day": 6.848047,
+          "estimated_monthly_mm": 212.3,
+          "historical_mean_mm_day": 6.848049,
+          "historical_p33_mm_day": 6.215744,
+          "historical_p67_mm_day": 7.309723,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        }
+      }
+    },
+    "brasilia": {
+      "name": "Brasília",
+      "country": "Brasil",
+      "grid_latitude": -15.75,
+      "grid_longitude": -48.0,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 7.60515,
+          "p33_mm_day": 6.140747,
+          "p67_mm_day": 8.677177
+        },
+        "2": {
+          "mean_mm_day": 7.607196,
+          "p33_mm_day": 5.624237,
+          "p67_mm_day": 8.816757
+        },
+        "3": {
+          "mean_mm_day": 6.797112,
+          "p33_mm_day": 5.87677,
+          "p67_mm_day": 7.918873
+        },
+        "4": {
+          "mean_mm_day": 3.67129,
+          "p33_mm_day": 2.578354,
+          "p67_mm_day": 4.431839
+        },
+        "5": {
+          "mean_mm_day": 0.990534,
+          "p33_mm_day": 0.471458,
+          "p67_mm_day": 1.092682
+        },
+        "6": {
+          "mean_mm_day": 0.22725,
+          "p33_mm_day": 0.021095,
+          "p67_mm_day": 0.079651
+        },
+        "7": {
+          "mean_mm_day": 0.121863,
+          "p33_mm_day": 0.007629,
+          "p67_mm_day": 0.051155
+        },
+        "8": {
+          "mean_mm_day": 0.221413,
+          "p33_mm_day": 0.005722,
+          "p67_mm_day": 0.095253
+        },
+        "9": {
+          "mean_mm_day": 1.360606,
+          "p33_mm_day": 0.523643,
+          "p67_mm_day": 1.67614
+        },
+        "10": {
+          "mean_mm_day": 5.030012,
+          "p33_mm_day": 3.721848,
+          "p67_mm_day": 6.128502
+        },
+        "11": {
+          "mean_mm_day": 7.827586,
+          "p33_mm_day": 7.004356,
+          "p67_mm_day": 9.060402
+        },
+        "12": {
+          "mean_mm_day": 8.692443,
+          "p33_mm_day": 7.155724,
+          "p67_mm_day": 9.769306
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 7.60515,
+          "estimated_monthly_mm": 235.8,
+          "historical_mean_mm_day": 7.60515,
+          "historical_p33_mm_day": 6.140747,
+          "historical_p67_mm_day": 8.677177,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-02": {
+          "predicted_mm_day": 7.607197,
+          "estimated_monthly_mm": 213.0,
+          "historical_mean_mm_day": 7.607196,
+          "historical_p33_mm_day": 5.624237,
+          "historical_p67_mm_day": 8.816757,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-03": {
+          "predicted_mm_day": 6.797112,
+          "estimated_monthly_mm": 210.7,
+          "historical_mean_mm_day": 6.797112,
+          "historical_p33_mm_day": 5.87677,
+          "historical_p67_mm_day": 7.918873,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-04": {
+          "predicted_mm_day": 3.67129,
+          "estimated_monthly_mm": 110.1,
+          "historical_mean_mm_day": 3.67129,
+          "historical_p33_mm_day": 2.578354,
+          "historical_p67_mm_day": 4.431839,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-05": {
+          "predicted_mm_day": 0.990534,
+          "estimated_monthly_mm": 30.7,
+          "historical_mean_mm_day": 0.990534,
+          "historical_p33_mm_day": 0.471458,
+          "historical_p67_mm_day": 1.092682,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-06": {
+          "predicted_mm_day": 0.22725,
+          "estimated_monthly_mm": 6.8,
+          "historical_mean_mm_day": 0.22725,
+          "historical_p33_mm_day": 0.021095,
+          "historical_p67_mm_day": 0.079651,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-07": {
+          "predicted_mm_day": 0.121863,
+          "estimated_monthly_mm": 3.8,
+          "historical_mean_mm_day": 0.121863,
+          "historical_p33_mm_day": 0.007629,
+          "historical_p67_mm_day": 0.051155,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-08": {
+          "predicted_mm_day": 0.221413,
+          "estimated_monthly_mm": 6.9,
+          "historical_mean_mm_day": 0.221413,
+          "historical_p33_mm_day": 0.005722,
+          "historical_p67_mm_day": 0.095253,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-09": {
+          "predicted_mm_day": 1.360606,
+          "estimated_monthly_mm": 40.8,
+          "historical_mean_mm_day": 1.360606,
+          "historical_p33_mm_day": 0.523643,
+          "historical_p67_mm_day": 1.67614,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-10": {
+          "predicted_mm_day": 5.030012,
+          "estimated_monthly_mm": 155.9,
+          "historical_mean_mm_day": 5.030012,
+          "historical_p33_mm_day": 3.721848,
+          "historical_p67_mm_day": 6.128502,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-11": {
+          "predicted_mm_day": 7.827586,
+          "estimated_monthly_mm": 234.8,
+          "historical_mean_mm_day": 7.827586,
+          "historical_p33_mm_day": 7.004356,
+          "historical_p67_mm_day": 9.060402,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-12": {
+          "predicted_mm_day": 8.692442,
+          "estimated_monthly_mm": 269.5,
+          "historical_mean_mm_day": 8.692443,
+          "historical_p33_mm_day": 7.155724,
+          "historical_p67_mm_day": 9.769306,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-01": {
+          "predicted_mm_day": 7.60515,
+          "estimated_monthly_mm": 235.8,
+          "historical_mean_mm_day": 7.60515,
+          "historical_p33_mm_day": 6.140747,
+          "historical_p67_mm_day": 8.677177,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-02": {
+          "predicted_mm_day": 7.607197,
+          "estimated_monthly_mm": 220.6,
+          "historical_mean_mm_day": 7.607196,
+          "historical_p33_mm_day": 5.624237,
+          "historical_p67_mm_day": 8.816757,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-03": {
+          "predicted_mm_day": 6.797112,
+          "estimated_monthly_mm": 210.7,
+          "historical_mean_mm_day": 6.797112,
+          "historical_p33_mm_day": 5.87677,
+          "historical_p67_mm_day": 7.918873,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-04": {
+          "predicted_mm_day": 3.67129,
+          "estimated_monthly_mm": 110.1,
+          "historical_mean_mm_day": 3.67129,
+          "historical_p33_mm_day": 2.578354,
+          "historical_p67_mm_day": 4.431839,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-05": {
+          "predicted_mm_day": 0.990534,
+          "estimated_monthly_mm": 30.7,
+          "historical_mean_mm_day": 0.990534,
+          "historical_p33_mm_day": 0.471458,
+          "historical_p67_mm_day": 1.092682,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-06": {
+          "predicted_mm_day": 0.22725,
+          "estimated_monthly_mm": 6.8,
+          "historical_mean_mm_day": 0.22725,
+          "historical_p33_mm_day": 0.021095,
+          "historical_p67_mm_day": 0.079651,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-07": {
+          "predicted_mm_day": 0.121863,
+          "estimated_monthly_mm": 3.8,
+          "historical_mean_mm_day": 0.121863,
+          "historical_p33_mm_day": 0.007629,
+          "historical_p67_mm_day": 0.051155,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-08": {
+          "predicted_mm_day": 0.221413,
+          "estimated_monthly_mm": 6.9,
+          "historical_mean_mm_day": 0.221413,
+          "historical_p33_mm_day": 0.005722,
+          "historical_p67_mm_day": 0.095253,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-09": {
+          "predicted_mm_day": 1.360606,
+          "estimated_monthly_mm": 40.8,
+          "historical_mean_mm_day": 1.360606,
+          "historical_p33_mm_day": 0.523643,
+          "historical_p67_mm_day": 1.67614,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-10": {
+          "predicted_mm_day": 5.030012,
+          "estimated_monthly_mm": 155.9,
+          "historical_mean_mm_day": 5.030012,
+          "historical_p33_mm_day": 3.721848,
+          "historical_p67_mm_day": 6.128502,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-11": {
+          "predicted_mm_day": 7.827586,
+          "estimated_monthly_mm": 234.8,
+          "historical_mean_mm_day": 7.827586,
+          "historical_p33_mm_day": 7.004356,
+          "historical_p67_mm_day": 9.060402,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-12": {
+          "predicted_mm_day": 8.692442,
+          "estimated_monthly_mm": 269.5,
+          "historical_mean_mm_day": 8.692443,
+          "historical_p33_mm_day": 7.155724,
+          "historical_p67_mm_day": 9.769306,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        }
+      }
+    },
+    "santiago": {
+      "name": "Santiago",
+      "country": "Chile",
+      "grid_latitude": -33.5,
+      "grid_longitude": -70.75,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 0.128011,
+          "p33_mm_day": 0.045776,
+          "p67_mm_day": 0.110626
+        },
+        "2": {
+          "mean_mm_day": 0.152634,
+          "p33_mm_day": 0.021095,
+          "p67_mm_day": 0.12352
+        },
+        "3": {
+          "mean_mm_day": 0.204397,
+          "p33_mm_day": 0.020981,
+          "p67_mm_day": 0.146637
+        },
+        "4": {
+          "mean_mm_day": 0.751852,
+          "p33_mm_day": 0.242615,
+          "p67_mm_day": 0.696259
+        },
+        "5": {
+          "mean_mm_day": 2.031142,
+          "p33_mm_day": 0.757523,
+          "p67_mm_day": 2.619781
+        },
+        "6": {
+          "mean_mm_day": 3.555988,
+          "p33_mm_day": 2.042122,
+          "p67_mm_day": 3.840027
+        },
+        "7": {
+          "mean_mm_day": 3.267587,
+          "p33_mm_day": 1.779251,
+          "p67_mm_day": 3.495636
+        },
+        "8": {
+          "mean_mm_day": 2.57214,
+          "p33_mm_day": 1.486626,
+          "p67_mm_day": 3.237839
+        },
+        "9": {
+          "mean_mm_day": 2.061706,
+          "p33_mm_day": 1.235085,
+          "p67_mm_day": 2.307434
+        },
+        "10": {
+          "mean_mm_day": 1.21821,
+          "p33_mm_day": 0.574341,
+          "p67_mm_day": 1.286659
+        },
+        "11": {
+          "mean_mm_day": 0.489005,
+          "p33_mm_day": 0.174828,
+          "p67_mm_day": 0.472183
+        },
+        "12": {
+          "mean_mm_day": 0.184163,
+          "p33_mm_day": 0.043926,
+          "p67_mm_day": 0.154152
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 0.128011,
+          "estimated_monthly_mm": 4.0,
+          "historical_mean_mm_day": 0.128011,
+          "historical_p33_mm_day": 0.045776,
+          "historical_p67_mm_day": 0.110626,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-02": {
+          "predicted_mm_day": 0.152634,
+          "estimated_monthly_mm": 4.3,
+          "historical_mean_mm_day": 0.152634,
+          "historical_p33_mm_day": 0.021095,
+          "historical_p67_mm_day": 0.12352,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-03": {
+          "predicted_mm_day": 0.204397,
+          "estimated_monthly_mm": 6.3,
+          "historical_mean_mm_day": 0.204397,
+          "historical_p33_mm_day": 0.020981,
+          "historical_p67_mm_day": 0.146637,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-04": {
+          "predicted_mm_day": 0.751852,
+          "estimated_monthly_mm": 22.6,
+          "historical_mean_mm_day": 0.751852,
+          "historical_p33_mm_day": 0.242615,
+          "historical_p67_mm_day": 0.696259,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-05": {
+          "predicted_mm_day": 2.031142,
+          "estimated_monthly_mm": 63.0,
+          "historical_mean_mm_day": 2.031142,
+          "historical_p33_mm_day": 0.757523,
+          "historical_p67_mm_day": 2.619781,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-06": {
+          "predicted_mm_day": 3.555987,
+          "estimated_monthly_mm": 106.7,
+          "historical_mean_mm_day": 3.555988,
+          "historical_p33_mm_day": 2.042122,
+          "historical_p67_mm_day": 3.840027,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-07": {
+          "predicted_mm_day": 3.267587,
+          "estimated_monthly_mm": 101.3,
+          "historical_mean_mm_day": 3.267587,
+          "historical_p33_mm_day": 1.779251,
+          "historical_p67_mm_day": 3.495636,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-08": {
+          "predicted_mm_day": 2.57214,
+          "estimated_monthly_mm": 79.7,
+          "historical_mean_mm_day": 2.57214,
+          "historical_p33_mm_day": 1.486626,
+          "historical_p67_mm_day": 3.237839,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-09": {
+          "predicted_mm_day": 2.061706,
+          "estimated_monthly_mm": 61.9,
+          "historical_mean_mm_day": 2.061706,
+          "historical_p33_mm_day": 1.235085,
+          "historical_p67_mm_day": 2.307434,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-10": {
+          "predicted_mm_day": 1.21821,
+          "estimated_monthly_mm": 37.8,
+          "historical_mean_mm_day": 1.21821,
+          "historical_p33_mm_day": 0.574341,
+          "historical_p67_mm_day": 1.286659,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-11": {
+          "predicted_mm_day": 0.489005,
+          "estimated_monthly_mm": 14.7,
+          "historical_mean_mm_day": 0.489005,
+          "historical_p33_mm_day": 0.174828,
+          "historical_p67_mm_day": 0.472183,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-12": {
+          "predicted_mm_day": 0.184163,
+          "estimated_monthly_mm": 5.7,
+          "historical_mean_mm_day": 0.184163,
+          "historical_p33_mm_day": 0.043926,
+          "historical_p67_mm_day": 0.154152,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-01": {
+          "predicted_mm_day": 0.128011,
+          "estimated_monthly_mm": 4.0,
+          "historical_mean_mm_day": 0.128011,
+          "historical_p33_mm_day": 0.045776,
+          "historical_p67_mm_day": 0.110626,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-02": {
+          "predicted_mm_day": 0.152634,
+          "estimated_monthly_mm": 4.4,
+          "historical_mean_mm_day": 0.152634,
+          "historical_p33_mm_day": 0.021095,
+          "historical_p67_mm_day": 0.12352,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-03": {
+          "predicted_mm_day": 0.204397,
+          "estimated_monthly_mm": 6.3,
+          "historical_mean_mm_day": 0.204397,
+          "historical_p33_mm_day": 0.020981,
+          "historical_p67_mm_day": 0.146637,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-04": {
+          "predicted_mm_day": 0.751852,
+          "estimated_monthly_mm": 22.6,
+          "historical_mean_mm_day": 0.751852,
+          "historical_p33_mm_day": 0.242615,
+          "historical_p67_mm_day": 0.696259,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-05": {
+          "predicted_mm_day": 2.031142,
+          "estimated_monthly_mm": 63.0,
+          "historical_mean_mm_day": 2.031142,
+          "historical_p33_mm_day": 0.757523,
+          "historical_p67_mm_day": 2.619781,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-06": {
+          "predicted_mm_day": 3.555987,
+          "estimated_monthly_mm": 106.7,
+          "historical_mean_mm_day": 3.555988,
+          "historical_p33_mm_day": 2.042122,
+          "historical_p67_mm_day": 3.840027,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-07": {
+          "predicted_mm_day": 3.267587,
+          "estimated_monthly_mm": 101.3,
+          "historical_mean_mm_day": 3.267587,
+          "historical_p33_mm_day": 1.779251,
+          "historical_p67_mm_day": 3.495636,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-08": {
+          "predicted_mm_day": 2.57214,
+          "estimated_monthly_mm": 79.7,
+          "historical_mean_mm_day": 2.57214,
+          "historical_p33_mm_day": 1.486626,
+          "historical_p67_mm_day": 3.237839,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-09": {
+          "predicted_mm_day": 2.061706,
+          "estimated_monthly_mm": 61.9,
+          "historical_mean_mm_day": 2.061706,
+          "historical_p33_mm_day": 1.235085,
+          "historical_p67_mm_day": 2.307434,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-10": {
+          "predicted_mm_day": 1.21821,
+          "estimated_monthly_mm": 37.8,
+          "historical_mean_mm_day": 1.21821,
+          "historical_p33_mm_day": 0.574341,
+          "historical_p67_mm_day": 1.286659,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-11": {
+          "predicted_mm_day": 0.489005,
+          "estimated_monthly_mm": 14.7,
+          "historical_mean_mm_day": 0.489005,
+          "historical_p33_mm_day": 0.174828,
+          "historical_p67_mm_day": 0.472183,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-12": {
+          "predicted_mm_day": 0.184163,
+          "estimated_monthly_mm": 5.7,
+          "historical_mean_mm_day": 0.184163,
+          "historical_p33_mm_day": 0.043926,
+          "historical_p67_mm_day": 0.154152,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        }
+      }
+    },
+    "bogota": {
+      "name": "Bogotá",
+      "country": "Colômbia",
+      "grid_latitude": 4.75,
+      "grid_longitude": -74.0,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 2.526593,
+          "p33_mm_day": 1.72905,
+          "p67_mm_day": 2.87838
+        },
+        "2": {
+          "mean_mm_day": 3.604337,
+          "p33_mm_day": 2.556477,
+          "p67_mm_day": 4.051323
+        },
+        "3": {
+          "mean_mm_day": 4.920224,
+          "p33_mm_day": 3.502312,
+          "p67_mm_day": 5.625496
+        },
+        "4": {
+          "mean_mm_day": 5.823296,
+          "p33_mm_day": 4.431,
+          "p67_mm_day": 6.921177
+        },
+        "5": {
+          "mean_mm_day": 3.856015,
+          "p33_mm_day": 2.851334,
+          "p67_mm_day": 4.332848
+        },
+        "6": {
+          "mean_mm_day": 1.926813,
+          "p33_mm_day": 1.374207,
+          "p67_mm_day": 2.129021
+        },
+        "7": {
+          "mean_mm_day": 1.353161,
+          "p33_mm_day": 1.027184,
+          "p67_mm_day": 1.490631
+        },
+        "8": {
+          "mean_mm_day": 1.043297,
+          "p33_mm_day": 0.793686,
+          "p67_mm_day": 1.142044
+        },
+        "9": {
+          "mean_mm_day": 1.464683,
+          "p33_mm_day": 1.022568,
+          "p67_mm_day": 1.644897
+        },
+        "10": {
+          "mean_mm_day": 3.907216,
+          "p33_mm_day": 2.985458,
+          "p67_mm_day": 4.451637
+        },
+        "11": {
+          "mean_mm_day": 4.713495,
+          "p33_mm_day": 3.859692,
+          "p67_mm_day": 5.541534
+        },
+        "12": {
+          "mean_mm_day": 2.855542,
+          "p33_mm_day": 2.156315,
+          "p67_mm_day": 3.23204
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 2.526593,
+          "estimated_monthly_mm": 78.3,
+          "historical_mean_mm_day": 2.526593,
+          "historical_p33_mm_day": 1.72905,
+          "historical_p67_mm_day": 2.87838,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-02": {
+          "predicted_mm_day": 3.604337,
+          "estimated_monthly_mm": 100.9,
+          "historical_mean_mm_day": 3.604337,
+          "historical_p33_mm_day": 2.556477,
+          "historical_p67_mm_day": 4.051323,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-03": {
+          "predicted_mm_day": 4.920225,
+          "estimated_monthly_mm": 152.5,
+          "historical_mean_mm_day": 4.920224,
+          "historical_p33_mm_day": 3.502312,
+          "historical_p67_mm_day": 5.625496,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-04": {
+          "predicted_mm_day": 5.823296,
+          "estimated_monthly_mm": 174.7,
+          "historical_mean_mm_day": 5.823296,
+          "historical_p33_mm_day": 4.431,
+          "historical_p67_mm_day": 6.921177,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-05": {
+          "predicted_mm_day": 3.856016,
+          "estimated_monthly_mm": 119.5,
+          "historical_mean_mm_day": 3.856015,
+          "historical_p33_mm_day": 2.851334,
+          "historical_p67_mm_day": 4.332848,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-06": {
+          "predicted_mm_day": 1.926813,
+          "estimated_monthly_mm": 57.8,
+          "historical_mean_mm_day": 1.926813,
+          "historical_p33_mm_day": 1.374207,
+          "historical_p67_mm_day": 2.129021,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-07": {
+          "predicted_mm_day": 1.353161,
+          "estimated_monthly_mm": 41.9,
+          "historical_mean_mm_day": 1.353161,
+          "historical_p33_mm_day": 1.027184,
+          "historical_p67_mm_day": 1.490631,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-08": {
+          "predicted_mm_day": 1.043297,
+          "estimated_monthly_mm": 32.3,
+          "historical_mean_mm_day": 1.043297,
+          "historical_p33_mm_day": 0.793686,
+          "historical_p67_mm_day": 1.142044,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-09": {
+          "predicted_mm_day": 1.464683,
+          "estimated_monthly_mm": 43.9,
+          "historical_mean_mm_day": 1.464683,
+          "historical_p33_mm_day": 1.022568,
+          "historical_p67_mm_day": 1.644897,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-10": {
+          "predicted_mm_day": 3.907215,
+          "estimated_monthly_mm": 121.1,
+          "historical_mean_mm_day": 3.907216,
+          "historical_p33_mm_day": 2.985458,
+          "historical_p67_mm_day": 4.451637,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-11": {
+          "predicted_mm_day": 4.713495,
+          "estimated_monthly_mm": 141.4,
+          "historical_mean_mm_day": 4.713495,
+          "historical_p33_mm_day": 3.859692,
+          "historical_p67_mm_day": 5.541534,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-12": {
+          "predicted_mm_day": 2.855542,
+          "estimated_monthly_mm": 88.5,
+          "historical_mean_mm_day": 2.855542,
+          "historical_p33_mm_day": 2.156315,
+          "historical_p67_mm_day": 3.23204,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-01": {
+          "predicted_mm_day": 2.526593,
+          "estimated_monthly_mm": 78.3,
+          "historical_mean_mm_day": 2.526593,
+          "historical_p33_mm_day": 1.72905,
+          "historical_p67_mm_day": 2.87838,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-02": {
+          "predicted_mm_day": 3.604337,
+          "estimated_monthly_mm": 104.5,
+          "historical_mean_mm_day": 3.604337,
+          "historical_p33_mm_day": 2.556477,
+          "historical_p67_mm_day": 4.051323,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-03": {
+          "predicted_mm_day": 4.920225,
+          "estimated_monthly_mm": 152.5,
+          "historical_mean_mm_day": 4.920224,
+          "historical_p33_mm_day": 3.502312,
+          "historical_p67_mm_day": 5.625496,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-04": {
+          "predicted_mm_day": 5.823296,
+          "estimated_monthly_mm": 174.7,
+          "historical_mean_mm_day": 5.823296,
+          "historical_p33_mm_day": 4.431,
+          "historical_p67_mm_day": 6.921177,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-05": {
+          "predicted_mm_day": 3.856016,
+          "estimated_monthly_mm": 119.5,
+          "historical_mean_mm_day": 3.856015,
+          "historical_p33_mm_day": 2.851334,
+          "historical_p67_mm_day": 4.332848,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-06": {
+          "predicted_mm_day": 1.926813,
+          "estimated_monthly_mm": 57.8,
+          "historical_mean_mm_day": 1.926813,
+          "historical_p33_mm_day": 1.374207,
+          "historical_p67_mm_day": 2.129021,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-07": {
+          "predicted_mm_day": 1.353161,
+          "estimated_monthly_mm": 41.9,
+          "historical_mean_mm_day": 1.353161,
+          "historical_p33_mm_day": 1.027184,
+          "historical_p67_mm_day": 1.490631,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-08": {
+          "predicted_mm_day": 1.043297,
+          "estimated_monthly_mm": 32.3,
+          "historical_mean_mm_day": 1.043297,
+          "historical_p33_mm_day": 0.793686,
+          "historical_p67_mm_day": 1.142044,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-09": {
+          "predicted_mm_day": 1.464683,
+          "estimated_monthly_mm": 43.9,
+          "historical_mean_mm_day": 1.464683,
+          "historical_p33_mm_day": 1.022568,
+          "historical_p67_mm_day": 1.644897,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-10": {
+          "predicted_mm_day": 3.907215,
+          "estimated_monthly_mm": 121.1,
+          "historical_mean_mm_day": 3.907216,
+          "historical_p33_mm_day": 2.985458,
+          "historical_p67_mm_day": 4.451637,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-11": {
+          "predicted_mm_day": 4.713495,
+          "estimated_monthly_mm": 141.4,
+          "historical_mean_mm_day": 4.713495,
+          "historical_p33_mm_day": 3.859692,
+          "historical_p67_mm_day": 5.541534,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-12": {
+          "predicted_mm_day": 2.855542,
+          "estimated_monthly_mm": 88.5,
+          "historical_mean_mm_day": 2.855542,
+          "historical_p33_mm_day": 2.156315,
+          "historical_p67_mm_day": 3.23204,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        }
+      }
+    },
+    "quito": {
+      "name": "Quito",
+      "country": "Equador",
+      "grid_latitude": -0.25,
+      "grid_longitude": -78.5,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 9.226489,
+          "p33_mm_day": 8.477516,
+          "p67_mm_day": 10.192184
+        },
+        "2": {
+          "mean_mm_day": 9.673738,
+          "p33_mm_day": 8.679218,
+          "p67_mm_day": 10.389824
+        },
+        "3": {
+          "mean_mm_day": 10.042029,
+          "p33_mm_day": 9.155674,
+          "p67_mm_day": 10.773468
+        },
+        "4": {
+          "mean_mm_day": 10.823134,
+          "p33_mm_day": 9.85096,
+          "p67_mm_day": 11.698952
+        },
+        "5": {
+          "mean_mm_day": 8.633441,
+          "p33_mm_day": 7.863922,
+          "p67_mm_day": 9.335327
+        },
+        "6": {
+          "mean_mm_day": 5.73519,
+          "p33_mm_day": 4.922066,
+          "p67_mm_day": 6.270142
+        },
+        "7": {
+          "mean_mm_day": 4.022644,
+          "p33_mm_day": 3.283119,
+          "p67_mm_day": 4.325104
+        },
+        "8": {
+          "mean_mm_day": 4.622379,
+          "p33_mm_day": 3.847923,
+          "p67_mm_day": 5.360298
+        },
+        "9": {
+          "mean_mm_day": 7.243237,
+          "p33_mm_day": 6.488686,
+          "p67_mm_day": 7.996941
+        },
+        "10": {
+          "mean_mm_day": 9.033513,
+          "p33_mm_day": 8.039398,
+          "p67_mm_day": 9.872055
+        },
+        "11": {
+          "mean_mm_day": 8.984657,
+          "p33_mm_day": 7.896614,
+          "p67_mm_day": 9.831657
+        },
+        "12": {
+          "mean_mm_day": 9.227316,
+          "p33_mm_day": 8.025818,
+          "p67_mm_day": 10.22068
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 9.22649,
+          "estimated_monthly_mm": 286.0,
+          "historical_mean_mm_day": 9.226489,
+          "historical_p33_mm_day": 8.477516,
+          "historical_p67_mm_day": 10.192184,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-02": {
+          "predicted_mm_day": 9.673738,
+          "estimated_monthly_mm": 270.9,
+          "historical_mean_mm_day": 9.673738,
+          "historical_p33_mm_day": 8.679218,
+          "historical_p67_mm_day": 10.389824,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-03": {
+          "predicted_mm_day": 10.042029,
+          "estimated_monthly_mm": 311.3,
+          "historical_mean_mm_day": 10.042029,
+          "historical_p33_mm_day": 9.155674,
+          "historical_p67_mm_day": 10.773468,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-04": {
+          "predicted_mm_day": 10.823139,
+          "estimated_monthly_mm": 324.7,
+          "historical_mean_mm_day": 10.823134,
+          "historical_p33_mm_day": 9.85096,
+          "historical_p67_mm_day": 11.698952,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-05": {
+          "predicted_mm_day": 8.633441,
+          "estimated_monthly_mm": 267.6,
+          "historical_mean_mm_day": 8.633441,
+          "historical_p33_mm_day": 7.863922,
+          "historical_p67_mm_day": 9.335327,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-06": {
+          "predicted_mm_day": 5.73519,
+          "estimated_monthly_mm": 172.1,
+          "historical_mean_mm_day": 5.73519,
+          "historical_p33_mm_day": 4.922066,
+          "historical_p67_mm_day": 6.270142,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-07": {
+          "predicted_mm_day": 4.022644,
+          "estimated_monthly_mm": 124.7,
+          "historical_mean_mm_day": 4.022644,
+          "historical_p33_mm_day": 3.283119,
+          "historical_p67_mm_day": 4.325104,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-08": {
+          "predicted_mm_day": 4.622378,
+          "estimated_monthly_mm": 143.3,
+          "historical_mean_mm_day": 4.622379,
+          "historical_p33_mm_day": 3.847923,
+          "historical_p67_mm_day": 5.360298,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-09": {
+          "predicted_mm_day": 7.243237,
+          "estimated_monthly_mm": 217.3,
+          "historical_mean_mm_day": 7.243237,
+          "historical_p33_mm_day": 6.488686,
+          "historical_p67_mm_day": 7.996941,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-10": {
+          "predicted_mm_day": 9.033515,
+          "estimated_monthly_mm": 280.0,
+          "historical_mean_mm_day": 9.033513,
+          "historical_p33_mm_day": 8.039398,
+          "historical_p67_mm_day": 9.872055,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-11": {
+          "predicted_mm_day": 8.984657,
+          "estimated_monthly_mm": 269.5,
+          "historical_mean_mm_day": 8.984657,
+          "historical_p33_mm_day": 7.896614,
+          "historical_p67_mm_day": 9.831657,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-12": {
+          "predicted_mm_day": 9.227317,
+          "estimated_monthly_mm": 286.0,
+          "historical_mean_mm_day": 9.227316,
+          "historical_p33_mm_day": 8.025818,
+          "historical_p67_mm_day": 10.22068,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-01": {
+          "predicted_mm_day": 9.22649,
+          "estimated_monthly_mm": 286.0,
+          "historical_mean_mm_day": 9.226489,
+          "historical_p33_mm_day": 8.477516,
+          "historical_p67_mm_day": 10.192184,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-02": {
+          "predicted_mm_day": 9.673738,
+          "estimated_monthly_mm": 280.5,
+          "historical_mean_mm_day": 9.673738,
+          "historical_p33_mm_day": 8.679218,
+          "historical_p67_mm_day": 10.389824,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-03": {
+          "predicted_mm_day": 10.042029,
+          "estimated_monthly_mm": 311.3,
+          "historical_mean_mm_day": 10.042029,
+          "historical_p33_mm_day": 9.155674,
+          "historical_p67_mm_day": 10.773468,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-04": {
+          "predicted_mm_day": 10.823139,
+          "estimated_monthly_mm": 324.7,
+          "historical_mean_mm_day": 10.823134,
+          "historical_p33_mm_day": 9.85096,
+          "historical_p67_mm_day": 11.698952,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-05": {
+          "predicted_mm_day": 8.633441,
+          "estimated_monthly_mm": 267.6,
+          "historical_mean_mm_day": 8.633441,
+          "historical_p33_mm_day": 7.863922,
+          "historical_p67_mm_day": 9.335327,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-06": {
+          "predicted_mm_day": 5.73519,
+          "estimated_monthly_mm": 172.1,
+          "historical_mean_mm_day": 5.73519,
+          "historical_p33_mm_day": 4.922066,
+          "historical_p67_mm_day": 6.270142,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-07": {
+          "predicted_mm_day": 4.022644,
+          "estimated_monthly_mm": 124.7,
+          "historical_mean_mm_day": 4.022644,
+          "historical_p33_mm_day": 3.283119,
+          "historical_p67_mm_day": 4.325104,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-08": {
+          "predicted_mm_day": 4.622378,
+          "estimated_monthly_mm": 143.3,
+          "historical_mean_mm_day": 4.622379,
+          "historical_p33_mm_day": 3.847923,
+          "historical_p67_mm_day": 5.360298,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-09": {
+          "predicted_mm_day": 7.243237,
+          "estimated_monthly_mm": 217.3,
+          "historical_mean_mm_day": 7.243237,
+          "historical_p33_mm_day": 6.488686,
+          "historical_p67_mm_day": 7.996941,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-10": {
+          "predicted_mm_day": 9.033515,
+          "estimated_monthly_mm": 280.0,
+          "historical_mean_mm_day": 9.033513,
+          "historical_p33_mm_day": 8.039398,
+          "historical_p67_mm_day": 9.872055,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-11": {
+          "predicted_mm_day": 8.984657,
+          "estimated_monthly_mm": 269.5,
+          "historical_mean_mm_day": 8.984657,
+          "historical_p33_mm_day": 7.896614,
+          "historical_p67_mm_day": 9.831657,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-12": {
+          "predicted_mm_day": 9.227317,
+          "estimated_monthly_mm": 286.0,
+          "historical_mean_mm_day": 9.227316,
+          "historical_p33_mm_day": 8.025818,
+          "historical_p67_mm_day": 10.22068,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        }
+      }
+    },
+    "georgetown": {
+      "name": "Georgetown",
+      "country": "Guiana",
+      "grid_latitude": 6.75,
+      "grid_longitude": -58.25,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 5.849241,
+          "p33_mm_day": 3.953152,
+          "p67_mm_day": 6.484394
+        },
+        "2": {
+          "mean_mm_day": 4.433506,
+          "p33_mm_day": 2.852631,
+          "p67_mm_day": 4.861717
+        },
+        "3": {
+          "mean_mm_day": 3.748388,
+          "p33_mm_day": 2.680511,
+          "p67_mm_day": 3.912163
+        },
+        "4": {
+          "mean_mm_day": 5.252103,
+          "p33_mm_day": 3.909645,
+          "p67_mm_day": 6.487961
+        },
+        "5": {
+          "mean_mm_day": 8.750893,
+          "p33_mm_day": 7.468948,
+          "p67_mm_day": 10.130424
+        },
+        "6": {
+          "mean_mm_day": 11.338383,
+          "p33_mm_day": 10.036392,
+          "p67_mm_day": 12.036018
+        },
+        "7": {
+          "mean_mm_day": 8.486783,
+          "p33_mm_day": 7.900696,
+          "p67_mm_day": 8.986626
+        },
+        "8": {
+          "mean_mm_day": 5.797559,
+          "p33_mm_day": 5.014763,
+          "p67_mm_day": 6.514244
+        },
+        "9": {
+          "mean_mm_day": 3.572832,
+          "p33_mm_day": 3.039818,
+          "p67_mm_day": 4.126129
+        },
+        "10": {
+          "mean_mm_day": 3.951567,
+          "p33_mm_day": 3.054047,
+          "p67_mm_day": 4.648628
+        },
+        "11": {
+          "mean_mm_day": 6.324596,
+          "p33_mm_day": 5.180016,
+          "p67_mm_day": 7.044926
+        },
+        "12": {
+          "mean_mm_day": 7.472991,
+          "p33_mm_day": 6.039009,
+          "p67_mm_day": 8.104343
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 5.849242,
+          "estimated_monthly_mm": 181.3,
+          "historical_mean_mm_day": 5.849241,
+          "historical_p33_mm_day": 3.953152,
+          "historical_p67_mm_day": 6.484394,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-02": {
+          "predicted_mm_day": 4.433505,
+          "estimated_monthly_mm": 124.1,
+          "historical_mean_mm_day": 4.433506,
+          "historical_p33_mm_day": 2.852631,
+          "historical_p67_mm_day": 4.861717,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-03": {
+          "predicted_mm_day": 3.748389,
+          "estimated_monthly_mm": 116.2,
+          "historical_mean_mm_day": 3.748388,
+          "historical_p33_mm_day": 2.680511,
+          "historical_p67_mm_day": 3.912163,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-04": {
+          "predicted_mm_day": 5.252103,
+          "estimated_monthly_mm": 157.6,
+          "historical_mean_mm_day": 5.252103,
+          "historical_p33_mm_day": 3.909645,
+          "historical_p67_mm_day": 6.487961,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-05": {
+          "predicted_mm_day": 8.750895,
+          "estimated_monthly_mm": 271.3,
+          "historical_mean_mm_day": 8.750893,
+          "historical_p33_mm_day": 7.468948,
+          "historical_p67_mm_day": 10.130424,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-06": {
+          "predicted_mm_day": 11.338386,
+          "estimated_monthly_mm": 340.2,
+          "historical_mean_mm_day": 11.338383,
+          "historical_p33_mm_day": 10.036392,
+          "historical_p67_mm_day": 12.036018,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-07": {
+          "predicted_mm_day": 8.486781,
+          "estimated_monthly_mm": 263.1,
+          "historical_mean_mm_day": 8.486783,
+          "historical_p33_mm_day": 7.900696,
+          "historical_p67_mm_day": 8.986626,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-08": {
+          "predicted_mm_day": 5.79756,
+          "estimated_monthly_mm": 179.7,
+          "historical_mean_mm_day": 5.797559,
+          "historical_p33_mm_day": 5.014763,
+          "historical_p67_mm_day": 6.514244,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-09": {
+          "predicted_mm_day": 3.572831,
+          "estimated_monthly_mm": 107.2,
+          "historical_mean_mm_day": 3.572832,
+          "historical_p33_mm_day": 3.039818,
+          "historical_p67_mm_day": 4.126129,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-10": {
+          "predicted_mm_day": 3.951567,
+          "estimated_monthly_mm": 122.5,
+          "historical_mean_mm_day": 3.951567,
+          "historical_p33_mm_day": 3.054047,
+          "historical_p67_mm_day": 4.648628,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-11": {
+          "predicted_mm_day": 6.324594,
+          "estimated_monthly_mm": 189.7,
+          "historical_mean_mm_day": 6.324596,
+          "historical_p33_mm_day": 5.180016,
+          "historical_p67_mm_day": 7.044926,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-12": {
+          "predicted_mm_day": 7.472991,
+          "estimated_monthly_mm": 231.7,
+          "historical_mean_mm_day": 7.472991,
+          "historical_p33_mm_day": 6.039009,
+          "historical_p67_mm_day": 8.104343,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-01": {
+          "predicted_mm_day": 5.849242,
+          "estimated_monthly_mm": 181.3,
+          "historical_mean_mm_day": 5.849241,
+          "historical_p33_mm_day": 3.953152,
+          "historical_p67_mm_day": 6.484394,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-02": {
+          "predicted_mm_day": 4.433505,
+          "estimated_monthly_mm": 128.6,
+          "historical_mean_mm_day": 4.433506,
+          "historical_p33_mm_day": 2.852631,
+          "historical_p67_mm_day": 4.861717,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-03": {
+          "predicted_mm_day": 3.748389,
+          "estimated_monthly_mm": 116.2,
+          "historical_mean_mm_day": 3.748388,
+          "historical_p33_mm_day": 2.680511,
+          "historical_p67_mm_day": 3.912163,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-04": {
+          "predicted_mm_day": 5.252103,
+          "estimated_monthly_mm": 157.6,
+          "historical_mean_mm_day": 5.252103,
+          "historical_p33_mm_day": 3.909645,
+          "historical_p67_mm_day": 6.487961,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-05": {
+          "predicted_mm_day": 8.750895,
+          "estimated_monthly_mm": 271.3,
+          "historical_mean_mm_day": 8.750893,
+          "historical_p33_mm_day": 7.468948,
+          "historical_p67_mm_day": 10.130424,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-06": {
+          "predicted_mm_day": 11.338386,
+          "estimated_monthly_mm": 340.2,
+          "historical_mean_mm_day": 11.338383,
+          "historical_p33_mm_day": 10.036392,
+          "historical_p67_mm_day": 12.036018,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-07": {
+          "predicted_mm_day": 8.486781,
+          "estimated_monthly_mm": 263.1,
+          "historical_mean_mm_day": 8.486783,
+          "historical_p33_mm_day": 7.900696,
+          "historical_p67_mm_day": 8.986626,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-08": {
+          "predicted_mm_day": 5.79756,
+          "estimated_monthly_mm": 179.7,
+          "historical_mean_mm_day": 5.797559,
+          "historical_p33_mm_day": 5.014763,
+          "historical_p67_mm_day": 6.514244,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-09": {
+          "predicted_mm_day": 3.572831,
+          "estimated_monthly_mm": 107.2,
+          "historical_mean_mm_day": 3.572832,
+          "historical_p33_mm_day": 3.039818,
+          "historical_p67_mm_day": 4.126129,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-10": {
+          "predicted_mm_day": 3.951567,
+          "estimated_monthly_mm": 122.5,
+          "historical_mean_mm_day": 3.951567,
+          "historical_p33_mm_day": 3.054047,
+          "historical_p67_mm_day": 4.648628,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-11": {
+          "predicted_mm_day": 6.324594,
+          "estimated_monthly_mm": 189.7,
+          "historical_mean_mm_day": 6.324596,
+          "historical_p33_mm_day": 5.180016,
+          "historical_p67_mm_day": 7.044926,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-12": {
+          "predicted_mm_day": 7.472991,
+          "estimated_monthly_mm": 231.7,
+          "historical_mean_mm_day": 7.472991,
+          "historical_p33_mm_day": 6.039009,
+          "historical_p67_mm_day": 8.104343,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        }
+      }
+    },
+    "asuncion": {
+      "name": "Assunção",
+      "country": "Paraguai",
+      "grid_latitude": -25.25,
+      "grid_longitude": -57.5,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 5.050854,
+          "p33_mm_day": 3.49453,
+          "p67_mm_day": 5.658569
+        },
+        "2": {
+          "mean_mm_day": 5.396705,
+          "p33_mm_day": 3.614006,
+          "p67_mm_day": 6.038322
+        },
+        "3": {
+          "mean_mm_day": 4.34633,
+          "p33_mm_day": 3.150177,
+          "p67_mm_day": 5.229988
+        },
+        "4": {
+          "mean_mm_day": 5.005445,
+          "p33_mm_day": 3.43956,
+          "p67_mm_day": 5.977859
+        },
+        "5": {
+          "mean_mm_day": 4.318237,
+          "p33_mm_day": 3.050804,
+          "p67_mm_day": 5.577736
+        },
+        "6": {
+          "mean_mm_day": 3.796497,
+          "p33_mm_day": 2.4823,
+          "p67_mm_day": 4.00692
+        },
+        "7": {
+          "mean_mm_day": 2.573358,
+          "p33_mm_day": 1.425323,
+          "p67_mm_day": 3.226051
+        },
+        "8": {
+          "mean_mm_day": 2.81674,
+          "p33_mm_day": 1.537666,
+          "p67_mm_day": 3.569717
+        },
+        "9": {
+          "mean_mm_day": 4.424796,
+          "p33_mm_day": 3.337708,
+          "p67_mm_day": 5.111885
+        },
+        "10": {
+          "mean_mm_day": 6.309302,
+          "p33_mm_day": 4.789963,
+          "p67_mm_day": 7.365685
+        },
+        "11": {
+          "mean_mm_day": 5.875565,
+          "p33_mm_day": 4.250603,
+          "p67_mm_day": 6.662941
+        },
+        "12": {
+          "mean_mm_day": 5.457085,
+          "p33_mm_day": 3.913288,
+          "p67_mm_day": 6.32576
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 5.050854,
+          "estimated_monthly_mm": 156.6,
+          "historical_mean_mm_day": 5.050854,
+          "historical_p33_mm_day": 3.49453,
+          "historical_p67_mm_day": 5.658569,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-02": {
+          "predicted_mm_day": 5.396704,
+          "estimated_monthly_mm": 151.1,
+          "historical_mean_mm_day": 5.396705,
+          "historical_p33_mm_day": 3.614006,
+          "historical_p67_mm_day": 6.038322,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-03": {
+          "predicted_mm_day": 4.34633,
+          "estimated_monthly_mm": 134.7,
+          "historical_mean_mm_day": 4.34633,
+          "historical_p33_mm_day": 3.150177,
+          "historical_p67_mm_day": 5.229988,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-04": {
+          "predicted_mm_day": 5.005447,
+          "estimated_monthly_mm": 150.2,
+          "historical_mean_mm_day": 5.005445,
+          "historical_p33_mm_day": 3.43956,
+          "historical_p67_mm_day": 5.977859,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-05": {
+          "predicted_mm_day": 4.318238,
+          "estimated_monthly_mm": 133.9,
+          "historical_mean_mm_day": 4.318237,
+          "historical_p33_mm_day": 3.050804,
+          "historical_p67_mm_day": 5.577736,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-06": {
+          "predicted_mm_day": 3.796497,
+          "estimated_monthly_mm": 113.9,
+          "historical_mean_mm_day": 3.796497,
+          "historical_p33_mm_day": 2.4823,
+          "historical_p67_mm_day": 4.00692,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-07": {
+          "predicted_mm_day": 2.573358,
+          "estimated_monthly_mm": 79.8,
+          "historical_mean_mm_day": 2.573358,
+          "historical_p33_mm_day": 1.425323,
+          "historical_p67_mm_day": 3.226051,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-08": {
+          "predicted_mm_day": 2.81674,
+          "estimated_monthly_mm": 87.3,
+          "historical_mean_mm_day": 2.81674,
+          "historical_p33_mm_day": 1.537666,
+          "historical_p67_mm_day": 3.569717,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-09": {
+          "predicted_mm_day": 4.424796,
+          "estimated_monthly_mm": 132.7,
+          "historical_mean_mm_day": 4.424796,
+          "historical_p33_mm_day": 3.337708,
+          "historical_p67_mm_day": 5.111885,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-10": {
+          "predicted_mm_day": 6.309302,
+          "estimated_monthly_mm": 195.6,
+          "historical_mean_mm_day": 6.309302,
+          "historical_p33_mm_day": 4.789963,
+          "historical_p67_mm_day": 7.365685,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-11": {
+          "predicted_mm_day": 5.875566,
+          "estimated_monthly_mm": 176.3,
+          "historical_mean_mm_day": 5.875565,
+          "historical_p33_mm_day": 4.250603,
+          "historical_p67_mm_day": 6.662941,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-12": {
+          "predicted_mm_day": 5.457085,
+          "estimated_monthly_mm": 169.2,
+          "historical_mean_mm_day": 5.457085,
+          "historical_p33_mm_day": 3.913288,
+          "historical_p67_mm_day": 6.32576,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-01": {
+          "predicted_mm_day": 5.050854,
+          "estimated_monthly_mm": 156.6,
+          "historical_mean_mm_day": 5.050854,
+          "historical_p33_mm_day": 3.49453,
+          "historical_p67_mm_day": 5.658569,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-02": {
+          "predicted_mm_day": 5.396704,
+          "estimated_monthly_mm": 156.5,
+          "historical_mean_mm_day": 5.396705,
+          "historical_p33_mm_day": 3.614006,
+          "historical_p67_mm_day": 6.038322,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-03": {
+          "predicted_mm_day": 4.34633,
+          "estimated_monthly_mm": 134.7,
+          "historical_mean_mm_day": 4.34633,
+          "historical_p33_mm_day": 3.150177,
+          "historical_p67_mm_day": 5.229988,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-04": {
+          "predicted_mm_day": 5.005447,
+          "estimated_monthly_mm": 150.2,
+          "historical_mean_mm_day": 5.005445,
+          "historical_p33_mm_day": 3.43956,
+          "historical_p67_mm_day": 5.977859,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-05": {
+          "predicted_mm_day": 4.318238,
+          "estimated_monthly_mm": 133.9,
+          "historical_mean_mm_day": 4.318237,
+          "historical_p33_mm_day": 3.050804,
+          "historical_p67_mm_day": 5.577736,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-06": {
+          "predicted_mm_day": 3.796497,
+          "estimated_monthly_mm": 113.9,
+          "historical_mean_mm_day": 3.796497,
+          "historical_p33_mm_day": 2.4823,
+          "historical_p67_mm_day": 4.00692,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-07": {
+          "predicted_mm_day": 2.573358,
+          "estimated_monthly_mm": 79.8,
+          "historical_mean_mm_day": 2.573358,
+          "historical_p33_mm_day": 1.425323,
+          "historical_p67_mm_day": 3.226051,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-08": {
+          "predicted_mm_day": 2.81674,
+          "estimated_monthly_mm": 87.3,
+          "historical_mean_mm_day": 2.81674,
+          "historical_p33_mm_day": 1.537666,
+          "historical_p67_mm_day": 3.569717,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-09": {
+          "predicted_mm_day": 4.424796,
+          "estimated_monthly_mm": 132.7,
+          "historical_mean_mm_day": 4.424796,
+          "historical_p33_mm_day": 3.337708,
+          "historical_p67_mm_day": 5.111885,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-10": {
+          "predicted_mm_day": 6.309302,
+          "estimated_monthly_mm": 195.6,
+          "historical_mean_mm_day": 6.309302,
+          "historical_p33_mm_day": 4.789963,
+          "historical_p67_mm_day": 7.365685,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-11": {
+          "predicted_mm_day": 5.875566,
+          "estimated_monthly_mm": 176.3,
+          "historical_mean_mm_day": 5.875565,
+          "historical_p33_mm_day": 4.250603,
+          "historical_p67_mm_day": 6.662941,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-12": {
+          "predicted_mm_day": 5.457085,
+          "estimated_monthly_mm": 169.2,
+          "historical_mean_mm_day": 5.457085,
+          "historical_p33_mm_day": 3.913288,
+          "historical_p67_mm_day": 6.32576,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        }
+      }
+    },
+    "lima": {
+      "name": "Lima",
+      "country": "Peru",
+      "grid_latitude": -12.0,
+      "grid_longitude": -77.0,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 0.921962,
+          "p33_mm_day": 0.593109,
+          "p67_mm_day": 1.090393
+        },
+        "2": {
+          "mean_mm_day": 1.393766,
+          "p33_mm_day": 0.979404,
+          "p67_mm_day": 1.451263
+        },
+        "3": {
+          "mean_mm_day": 1.116247,
+          "p33_mm_day": 0.821648,
+          "p67_mm_day": 1.159554
+        },
+        "4": {
+          "mean_mm_day": 0.548282,
+          "p33_mm_day": 0.286789,
+          "p67_mm_day": 0.519676
+        },
+        "5": {
+          "mean_mm_day": 0.412815,
+          "p33_mm_day": 0.227089,
+          "p67_mm_day": 0.31662
+        },
+        "6": {
+          "mean_mm_day": 0.474999,
+          "p33_mm_day": 0.305405,
+          "p67_mm_day": 0.38887
+        },
+        "7": {
+          "mean_mm_day": 0.405507,
+          "p33_mm_day": 0.350952,
+          "p67_mm_day": 0.423431
+        },
+        "8": {
+          "mean_mm_day": 0.348218,
+          "p33_mm_day": 0.305519,
+          "p67_mm_day": 0.392914
+        },
+        "9": {
+          "mean_mm_day": 0.31963,
+          "p33_mm_day": 0.255699,
+          "p67_mm_day": 0.354652
+        },
+        "10": {
+          "mean_mm_day": 0.305279,
+          "p33_mm_day": 0.228882,
+          "p67_mm_day": 0.346794
+        },
+        "11": {
+          "mean_mm_day": 0.293088,
+          "p33_mm_day": 0.216713,
+          "p67_mm_day": 0.316505
+        },
+        "12": {
+          "mean_mm_day": 0.402002,
+          "p33_mm_day": 0.294075,
+          "p67_mm_day": 0.442104
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 0.921962,
+          "estimated_monthly_mm": 28.6,
+          "historical_mean_mm_day": 0.921962,
+          "historical_p33_mm_day": 0.593109,
+          "historical_p67_mm_day": 1.090393,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-02": {
+          "predicted_mm_day": 1.393766,
+          "estimated_monthly_mm": 39.0,
+          "historical_mean_mm_day": 1.393766,
+          "historical_p33_mm_day": 0.979404,
+          "historical_p67_mm_day": 1.451263,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-03": {
+          "predicted_mm_day": 1.116247,
+          "estimated_monthly_mm": 34.6,
+          "historical_mean_mm_day": 1.116247,
+          "historical_p33_mm_day": 0.821648,
+          "historical_p67_mm_day": 1.159554,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-04": {
+          "predicted_mm_day": 0.548282,
+          "estimated_monthly_mm": 16.4,
+          "historical_mean_mm_day": 0.548282,
+          "historical_p33_mm_day": 0.286789,
+          "historical_p67_mm_day": 0.519676,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-05": {
+          "predicted_mm_day": 0.412815,
+          "estimated_monthly_mm": 12.8,
+          "historical_mean_mm_day": 0.412815,
+          "historical_p33_mm_day": 0.227089,
+          "historical_p67_mm_day": 0.31662,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-06": {
+          "predicted_mm_day": 0.474999,
+          "estimated_monthly_mm": 14.2,
+          "historical_mean_mm_day": 0.474999,
+          "historical_p33_mm_day": 0.305405,
+          "historical_p67_mm_day": 0.38887,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-07": {
+          "predicted_mm_day": 0.405507,
+          "estimated_monthly_mm": 12.6,
+          "historical_mean_mm_day": 0.405507,
+          "historical_p33_mm_day": 0.350952,
+          "historical_p67_mm_day": 0.423431,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-08": {
+          "predicted_mm_day": 0.348218,
+          "estimated_monthly_mm": 10.8,
+          "historical_mean_mm_day": 0.348218,
+          "historical_p33_mm_day": 0.305519,
+          "historical_p67_mm_day": 0.392914,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-09": {
+          "predicted_mm_day": 0.31963,
+          "estimated_monthly_mm": 9.6,
+          "historical_mean_mm_day": 0.31963,
+          "historical_p33_mm_day": 0.255699,
+          "historical_p67_mm_day": 0.354652,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-10": {
+          "predicted_mm_day": 0.305279,
+          "estimated_monthly_mm": 9.5,
+          "historical_mean_mm_day": 0.305279,
+          "historical_p33_mm_day": 0.228882,
+          "historical_p67_mm_day": 0.346794,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-11": {
+          "predicted_mm_day": 0.293088,
+          "estimated_monthly_mm": 8.8,
+          "historical_mean_mm_day": 0.293088,
+          "historical_p33_mm_day": 0.216713,
+          "historical_p67_mm_day": 0.316505,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2023-12": {
+          "predicted_mm_day": 0.402002,
+          "estimated_monthly_mm": 12.5,
+          "historical_mean_mm_day": 0.402002,
+          "historical_p33_mm_day": 0.294075,
+          "historical_p67_mm_day": 0.442104,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-01": {
+          "predicted_mm_day": 0.921962,
+          "estimated_monthly_mm": 28.6,
+          "historical_mean_mm_day": 0.921962,
+          "historical_p33_mm_day": 0.593109,
+          "historical_p67_mm_day": 1.090393,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-02": {
+          "predicted_mm_day": 1.393766,
+          "estimated_monthly_mm": 40.4,
+          "historical_mean_mm_day": 1.393766,
+          "historical_p33_mm_day": 0.979404,
+          "historical_p67_mm_day": 1.451263,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-03": {
+          "predicted_mm_day": 1.116247,
+          "estimated_monthly_mm": 34.6,
+          "historical_mean_mm_day": 1.116247,
+          "historical_p33_mm_day": 0.821648,
+          "historical_p67_mm_day": 1.159554,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-04": {
+          "predicted_mm_day": 0.548282,
+          "estimated_monthly_mm": 16.4,
+          "historical_mean_mm_day": 0.548282,
+          "historical_p33_mm_day": 0.286789,
+          "historical_p67_mm_day": 0.519676,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-05": {
+          "predicted_mm_day": 0.412815,
+          "estimated_monthly_mm": 12.8,
+          "historical_mean_mm_day": 0.412815,
+          "historical_p33_mm_day": 0.227089,
+          "historical_p67_mm_day": 0.31662,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-06": {
+          "predicted_mm_day": 0.474999,
+          "estimated_monthly_mm": 14.2,
+          "historical_mean_mm_day": 0.474999,
+          "historical_p33_mm_day": 0.305405,
+          "historical_p67_mm_day": 0.38887,
+          "anomaly_percent": 0.0,
+          "historical_class": "above_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-07": {
+          "predicted_mm_day": 0.405507,
+          "estimated_monthly_mm": 12.6,
+          "historical_mean_mm_day": 0.405507,
+          "historical_p33_mm_day": 0.350952,
+          "historical_p67_mm_day": 0.423431,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-08": {
+          "predicted_mm_day": 0.348218,
+          "estimated_monthly_mm": 10.8,
+          "historical_mean_mm_day": 0.348218,
+          "historical_p33_mm_day": 0.305519,
+          "historical_p67_mm_day": 0.392914,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-09": {
+          "predicted_mm_day": 0.31963,
+          "estimated_monthly_mm": 9.6,
+          "historical_mean_mm_day": 0.31963,
+          "historical_p33_mm_day": 0.255699,
+          "historical_p67_mm_day": 0.354652,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-10": {
+          "predicted_mm_day": 0.305279,
+          "estimated_monthly_mm": 9.5,
+          "historical_mean_mm_day": 0.305279,
+          "historical_p33_mm_day": 0.228882,
+          "historical_p67_mm_day": 0.346794,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-11": {
+          "predicted_mm_day": 0.293088,
+          "estimated_monthly_mm": 8.8,
+          "historical_mean_mm_day": 0.293088,
+          "historical_p33_mm_day": 0.216713,
+          "historical_p67_mm_day": 0.316505,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        },
+        "2024-12": {
+          "predicted_mm_day": 0.402002,
+          "estimated_monthly_mm": 12.5,
+          "historical_mean_mm_day": 0.402002,
+          "historical_p33_mm_day": 0.294075,
+          "historical_p67_mm_day": 0.442104,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_low"
+        }
+      }
+    },
+    "paramaribo": {
+      "name": "Paramaribo",
+      "country": "Suriname",
+      "grid_latitude": 5.75,
+      "grid_longitude": -55.25,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 4.400322,
+          "p33_mm_day": 2.813835,
+          "p67_mm_day": 4.897404
+        },
+        "2": {
+          "mean_mm_day": 3.657881,
+          "p33_mm_day": 2.3279,
+          "p67_mm_day": 4.373112
+        },
+        "3": {
+          "mean_mm_day": 3.406375,
+          "p33_mm_day": 2.361603,
+          "p67_mm_day": 3.765602
+        },
+        "4": {
+          "mean_mm_day": 5.438448,
+          "p33_mm_day": 3.955803,
+          "p67_mm_day": 6.156158
+        },
+        "5": {
+          "mean_mm_day": 9.150287,
+          "p33_mm_day": 7.864685,
+          "p67_mm_day": 10.233803
+        },
+        "6": {
+          "mean_mm_day": 10.483109,
+          "p33_mm_day": 9.141769,
+          "p67_mm_day": 11.300507
+        },
+        "7": {
+          "mean_mm_day": 7.788579,
+          "p33_mm_day": 6.987953,
+          "p67_mm_day": 8.566208
+        },
+        "8": {
+          "mean_mm_day": 4.837979,
+          "p33_mm_day": 3.893127,
+          "p67_mm_day": 5.620575
+        },
+        "9": {
+          "mean_mm_day": 2.750305,
+          "p33_mm_day": 2.156563,
+          "p67_mm_day": 3.049736
+        },
+        "10": {
+          "mean_mm_day": 2.75019,
+          "p33_mm_day": 2.020149,
+          "p67_mm_day": 2.905998
+        },
+        "11": {
+          "mean_mm_day": 4.233498,
+          "p33_mm_day": 3.270607,
+          "p67_mm_day": 5.000343
+        },
+        "12": {
+          "mean_mm_day": 5.228732,
+          "p33_mm_day": 3.825455,
+          "p67_mm_day": 5.978813
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 4.400323,
+          "estimated_monthly_mm": 136.4,
+          "historical_mean_mm_day": 4.400322,
+          "historical_p33_mm_day": 2.813835,
+          "historical_p67_mm_day": 4.897404,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-02": {
+          "predicted_mm_day": 3.657881,
+          "estimated_monthly_mm": 102.4,
+          "historical_mean_mm_day": 3.657881,
+          "historical_p33_mm_day": 2.3279,
+          "historical_p67_mm_day": 4.373112,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-03": {
+          "predicted_mm_day": 3.406375,
+          "estimated_monthly_mm": 105.6,
+          "historical_mean_mm_day": 3.406375,
+          "historical_p33_mm_day": 2.361603,
+          "historical_p67_mm_day": 3.765602,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-04": {
+          "predicted_mm_day": 5.438447,
+          "estimated_monthly_mm": 163.2,
+          "historical_mean_mm_day": 5.438448,
+          "historical_p33_mm_day": 3.955803,
+          "historical_p67_mm_day": 6.156158,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-05": {
+          "predicted_mm_day": 9.150288,
+          "estimated_monthly_mm": 283.7,
+          "historical_mean_mm_day": 9.150287,
+          "historical_p33_mm_day": 7.864685,
+          "historical_p67_mm_day": 10.233803,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-06": {
+          "predicted_mm_day": 10.483107,
+          "estimated_monthly_mm": 314.5,
+          "historical_mean_mm_day": 10.483109,
+          "historical_p33_mm_day": 9.141769,
+          "historical_p67_mm_day": 11.300507,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-07": {
+          "predicted_mm_day": 7.788579,
+          "estimated_monthly_mm": 241.4,
+          "historical_mean_mm_day": 7.788579,
+          "historical_p33_mm_day": 6.987953,
+          "historical_p67_mm_day": 8.566208,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-08": {
+          "predicted_mm_day": 4.83798,
+          "estimated_monthly_mm": 150.0,
+          "historical_mean_mm_day": 4.837979,
+          "historical_p33_mm_day": 3.893127,
+          "historical_p67_mm_day": 5.620575,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-09": {
+          "predicted_mm_day": 2.750305,
+          "estimated_monthly_mm": 82.5,
+          "historical_mean_mm_day": 2.750305,
+          "historical_p33_mm_day": 2.156563,
+          "historical_p67_mm_day": 3.049736,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-10": {
+          "predicted_mm_day": 2.75019,
+          "estimated_monthly_mm": 85.3,
+          "historical_mean_mm_day": 2.75019,
+          "historical_p33_mm_day": 2.020149,
+          "historical_p67_mm_day": 2.905998,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-11": {
+          "predicted_mm_day": 4.233497,
+          "estimated_monthly_mm": 127.0,
+          "historical_mean_mm_day": 4.233498,
+          "historical_p33_mm_day": 3.270607,
+          "historical_p67_mm_day": 5.000343,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-12": {
+          "predicted_mm_day": 5.228733,
+          "estimated_monthly_mm": 162.1,
+          "historical_mean_mm_day": 5.228732,
+          "historical_p33_mm_day": 3.825455,
+          "historical_p67_mm_day": 5.978813,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-01": {
+          "predicted_mm_day": 4.400323,
+          "estimated_monthly_mm": 136.4,
+          "historical_mean_mm_day": 4.400322,
+          "historical_p33_mm_day": 2.813835,
+          "historical_p67_mm_day": 4.897404,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-02": {
+          "predicted_mm_day": 3.657881,
+          "estimated_monthly_mm": 106.1,
+          "historical_mean_mm_day": 3.657881,
+          "historical_p33_mm_day": 2.3279,
+          "historical_p67_mm_day": 4.373112,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-03": {
+          "predicted_mm_day": 3.406375,
+          "estimated_monthly_mm": 105.6,
+          "historical_mean_mm_day": 3.406375,
+          "historical_p33_mm_day": 2.361603,
+          "historical_p67_mm_day": 3.765602,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-04": {
+          "predicted_mm_day": 5.438447,
+          "estimated_monthly_mm": 163.2,
+          "historical_mean_mm_day": 5.438448,
+          "historical_p33_mm_day": 3.955803,
+          "historical_p67_mm_day": 6.156158,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-05": {
+          "predicted_mm_day": 9.150288,
+          "estimated_monthly_mm": 283.7,
+          "historical_mean_mm_day": 9.150287,
+          "historical_p33_mm_day": 7.864685,
+          "historical_p67_mm_day": 10.233803,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-06": {
+          "predicted_mm_day": 10.483107,
+          "estimated_monthly_mm": 314.5,
+          "historical_mean_mm_day": 10.483109,
+          "historical_p33_mm_day": 9.141769,
+          "historical_p67_mm_day": 11.300507,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-07": {
+          "predicted_mm_day": 7.788579,
+          "estimated_monthly_mm": 241.4,
+          "historical_mean_mm_day": 7.788579,
+          "historical_p33_mm_day": 6.987953,
+          "historical_p67_mm_day": 8.566208,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-08": {
+          "predicted_mm_day": 4.83798,
+          "estimated_monthly_mm": 150.0,
+          "historical_mean_mm_day": 4.837979,
+          "historical_p33_mm_day": 3.893127,
+          "historical_p67_mm_day": 5.620575,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-09": {
+          "predicted_mm_day": 2.750305,
+          "estimated_monthly_mm": 82.5,
+          "historical_mean_mm_day": 2.750305,
+          "historical_p33_mm_day": 2.156563,
+          "historical_p67_mm_day": 3.049736,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-10": {
+          "predicted_mm_day": 2.75019,
+          "estimated_monthly_mm": 85.3,
+          "historical_mean_mm_day": 2.75019,
+          "historical_p33_mm_day": 2.020149,
+          "historical_p67_mm_day": 2.905998,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-11": {
+          "predicted_mm_day": 4.233497,
+          "estimated_monthly_mm": 127.0,
+          "historical_mean_mm_day": 4.233498,
+          "historical_p33_mm_day": 3.270607,
+          "historical_p67_mm_day": 5.000343,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-12": {
+          "predicted_mm_day": 5.228733,
+          "estimated_monthly_mm": 162.1,
+          "historical_mean_mm_day": 5.228732,
+          "historical_p33_mm_day": 3.825455,
+          "historical_p67_mm_day": 5.978813,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        }
+      }
+    },
+    "montevideu": {
+      "name": "Montevidéu",
+      "country": "Uruguai",
+      "grid_latitude": -35.0,
+      "grid_longitude": -56.25,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 2.246466,
+          "p33_mm_day": 1.27121,
+          "p67_mm_day": 2.597694
+        },
+        "2": {
+          "mean_mm_day": 3.106704,
+          "p33_mm_day": 1.696911,
+          "p67_mm_day": 3.381577
+        },
+        "3": {
+          "mean_mm_day": 3.151882,
+          "p33_mm_day": 2.083969,
+          "p67_mm_day": 3.347549
+        },
+        "4": {
+          "mean_mm_day": 3.31974,
+          "p33_mm_day": 1.937332,
+          "p67_mm_day": 3.6483
+        },
+        "5": {
+          "mean_mm_day": 2.85429,
+          "p33_mm_day": 2.149963,
+          "p67_mm_day": 3.363686
+        },
+        "6": {
+          "mean_mm_day": 3.007682,
+          "p33_mm_day": 2.164803,
+          "p67_mm_day": 3.429794
+        },
+        "7": {
+          "mean_mm_day": 2.993641,
+          "p33_mm_day": 2.077484,
+          "p67_mm_day": 3.274994
+        },
+        "8": {
+          "mean_mm_day": 3.014415,
+          "p33_mm_day": 2.091026,
+          "p67_mm_day": 3.732338
+        },
+        "9": {
+          "mean_mm_day": 3.122766,
+          "p33_mm_day": 2.244453,
+          "p67_mm_day": 3.578186
+        },
+        "10": {
+          "mean_mm_day": 3.197486,
+          "p33_mm_day": 2.112389,
+          "p67_mm_day": 3.946228
+        },
+        "11": {
+          "mean_mm_day": 2.724854,
+          "p33_mm_day": 1.730042,
+          "p67_mm_day": 3.101311
+        },
+        "12": {
+          "mean_mm_day": 2.016964,
+          "p33_mm_day": 1.211395,
+          "p67_mm_day": 2.153282
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 2.246466,
+          "estimated_monthly_mm": 69.6,
+          "historical_mean_mm_day": 2.246466,
+          "historical_p33_mm_day": 1.27121,
+          "historical_p67_mm_day": 2.597694,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-02": {
+          "predicted_mm_day": 3.106703,
+          "estimated_monthly_mm": 87.0,
+          "historical_mean_mm_day": 3.106704,
+          "historical_p33_mm_day": 1.696911,
+          "historical_p67_mm_day": 3.381577,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-03": {
+          "predicted_mm_day": 3.151882,
+          "estimated_monthly_mm": 97.7,
+          "historical_mean_mm_day": 3.151882,
+          "historical_p33_mm_day": 2.083969,
+          "historical_p67_mm_day": 3.347549,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-04": {
+          "predicted_mm_day": 3.31974,
+          "estimated_monthly_mm": 99.6,
+          "historical_mean_mm_day": 3.31974,
+          "historical_p33_mm_day": 1.937332,
+          "historical_p67_mm_day": 3.6483,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-05": {
+          "predicted_mm_day": 2.85429,
+          "estimated_monthly_mm": 88.5,
+          "historical_mean_mm_day": 2.85429,
+          "historical_p33_mm_day": 2.149963,
+          "historical_p67_mm_day": 3.363686,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-06": {
+          "predicted_mm_day": 3.007682,
+          "estimated_monthly_mm": 90.2,
+          "historical_mean_mm_day": 3.007682,
+          "historical_p33_mm_day": 2.164803,
+          "historical_p67_mm_day": 3.429794,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-07": {
+          "predicted_mm_day": 2.993641,
+          "estimated_monthly_mm": 92.8,
+          "historical_mean_mm_day": 2.993641,
+          "historical_p33_mm_day": 2.077484,
+          "historical_p67_mm_day": 3.274994,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-08": {
+          "predicted_mm_day": 3.014415,
+          "estimated_monthly_mm": 93.4,
+          "historical_mean_mm_day": 3.014415,
+          "historical_p33_mm_day": 2.091026,
+          "historical_p67_mm_day": 3.732338,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-09": {
+          "predicted_mm_day": 3.122766,
+          "estimated_monthly_mm": 93.7,
+          "historical_mean_mm_day": 3.122766,
+          "historical_p33_mm_day": 2.244453,
+          "historical_p67_mm_day": 3.578186,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-10": {
+          "predicted_mm_day": 3.197486,
+          "estimated_monthly_mm": 99.1,
+          "historical_mean_mm_day": 3.197486,
+          "historical_p33_mm_day": 2.112389,
+          "historical_p67_mm_day": 3.946228,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-11": {
+          "predicted_mm_day": 2.724854,
+          "estimated_monthly_mm": 81.7,
+          "historical_mean_mm_day": 2.724854,
+          "historical_p33_mm_day": 1.730042,
+          "historical_p67_mm_day": 3.101311,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-12": {
+          "predicted_mm_day": 2.016963,
+          "estimated_monthly_mm": 62.5,
+          "historical_mean_mm_day": 2.016964,
+          "historical_p33_mm_day": 1.211395,
+          "historical_p67_mm_day": 2.153282,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-01": {
+          "predicted_mm_day": 2.246466,
+          "estimated_monthly_mm": 69.6,
+          "historical_mean_mm_day": 2.246466,
+          "historical_p33_mm_day": 1.27121,
+          "historical_p67_mm_day": 2.597694,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-02": {
+          "predicted_mm_day": 3.106703,
+          "estimated_monthly_mm": 90.1,
+          "historical_mean_mm_day": 3.106704,
+          "historical_p33_mm_day": 1.696911,
+          "historical_p67_mm_day": 3.381577,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-03": {
+          "predicted_mm_day": 3.151882,
+          "estimated_monthly_mm": 97.7,
+          "historical_mean_mm_day": 3.151882,
+          "historical_p33_mm_day": 2.083969,
+          "historical_p67_mm_day": 3.347549,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-04": {
+          "predicted_mm_day": 3.31974,
+          "estimated_monthly_mm": 99.6,
+          "historical_mean_mm_day": 3.31974,
+          "historical_p33_mm_day": 1.937332,
+          "historical_p67_mm_day": 3.6483,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-05": {
+          "predicted_mm_day": 2.85429,
+          "estimated_monthly_mm": 88.5,
+          "historical_mean_mm_day": 2.85429,
+          "historical_p33_mm_day": 2.149963,
+          "historical_p67_mm_day": 3.363686,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-06": {
+          "predicted_mm_day": 3.007682,
+          "estimated_monthly_mm": 90.2,
+          "historical_mean_mm_day": 3.007682,
+          "historical_p33_mm_day": 2.164803,
+          "historical_p67_mm_day": 3.429794,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-07": {
+          "predicted_mm_day": 2.993641,
+          "estimated_monthly_mm": 92.8,
+          "historical_mean_mm_day": 2.993641,
+          "historical_p33_mm_day": 2.077484,
+          "historical_p67_mm_day": 3.274994,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-08": {
+          "predicted_mm_day": 3.014415,
+          "estimated_monthly_mm": 93.4,
+          "historical_mean_mm_day": 3.014415,
+          "historical_p33_mm_day": 2.091026,
+          "historical_p67_mm_day": 3.732338,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-09": {
+          "predicted_mm_day": 3.122766,
+          "estimated_monthly_mm": 93.7,
+          "historical_mean_mm_day": 3.122766,
+          "historical_p33_mm_day": 2.244453,
+          "historical_p67_mm_day": 3.578186,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-10": {
+          "predicted_mm_day": 3.197486,
+          "estimated_monthly_mm": 99.1,
+          "historical_mean_mm_day": 3.197486,
+          "historical_p33_mm_day": 2.112389,
+          "historical_p67_mm_day": 3.946228,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-11": {
+          "predicted_mm_day": 2.724854,
+          "estimated_monthly_mm": 81.7,
+          "historical_mean_mm_day": 2.724854,
+          "historical_p33_mm_day": 1.730042,
+          "historical_p67_mm_day": 3.101311,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-12": {
+          "predicted_mm_day": 2.016963,
+          "estimated_monthly_mm": 62.5,
+          "historical_mean_mm_day": 2.016964,
+          "historical_p33_mm_day": 1.211395,
+          "historical_p67_mm_day": 2.153282,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        }
+      }
+    },
+    "caracas": {
+      "name": "Caracas",
+      "country": "Venezuela",
+      "grid_latitude": 10.5,
+      "grid_longitude": -67.0,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 1.264745,
+          "p33_mm_day": 0.782852,
+          "p67_mm_day": 1.35498
+        },
+        "2": {
+          "mean_mm_day": 1.232239,
+          "p33_mm_day": 0.662193,
+          "p67_mm_day": 1.416874
+        },
+        "3": {
+          "mean_mm_day": 1.459972,
+          "p33_mm_day": 0.776749,
+          "p67_mm_day": 1.797047
+        },
+        "4": {
+          "mean_mm_day": 4.045555,
+          "p33_mm_day": 2.508774,
+          "p67_mm_day": 5.016785
+        },
+        "5": {
+          "mean_mm_day": 5.437367,
+          "p33_mm_day": 4.208221,
+          "p67_mm_day": 6.466408
+        },
+        "6": {
+          "mean_mm_day": 4.765131,
+          "p33_mm_day": 3.533783,
+          "p67_mm_day": 5.234413
+        },
+        "7": {
+          "mean_mm_day": 5.098113,
+          "p33_mm_day": 3.825569,
+          "p67_mm_day": 5.685196
+        },
+        "8": {
+          "mean_mm_day": 6.460718,
+          "p33_mm_day": 5.195312,
+          "p67_mm_day": 7.420502
+        },
+        "9": {
+          "mean_mm_day": 6.495923,
+          "p33_mm_day": 5.800819,
+          "p67_mm_day": 6.948433
+        },
+        "10": {
+          "mean_mm_day": 7.259323,
+          "p33_mm_day": 6.217709,
+          "p67_mm_day": 8.162537
+        },
+        "11": {
+          "mean_mm_day": 5.992016,
+          "p33_mm_day": 4.433594,
+          "p67_mm_day": 6.672668
+        },
+        "12": {
+          "mean_mm_day": 2.546081,
+          "p33_mm_day": 1.732235,
+          "p67_mm_day": 3.04615
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 1.264745,
+          "estimated_monthly_mm": 39.2,
+          "historical_mean_mm_day": 1.264745,
+          "historical_p33_mm_day": 0.782852,
+          "historical_p67_mm_day": 1.35498,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-02": {
+          "predicted_mm_day": 1.232239,
+          "estimated_monthly_mm": 34.5,
+          "historical_mean_mm_day": 1.232239,
+          "historical_p33_mm_day": 0.662193,
+          "historical_p67_mm_day": 1.416874,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-03": {
+          "predicted_mm_day": 1.459972,
+          "estimated_monthly_mm": 45.3,
+          "historical_mean_mm_day": 1.459972,
+          "historical_p33_mm_day": 0.776749,
+          "historical_p67_mm_day": 1.797047,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-04": {
+          "predicted_mm_day": 4.045555,
+          "estimated_monthly_mm": 121.4,
+          "historical_mean_mm_day": 4.045555,
+          "historical_p33_mm_day": 2.508774,
+          "historical_p67_mm_day": 5.016785,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-05": {
+          "predicted_mm_day": 5.437367,
+          "estimated_monthly_mm": 168.6,
+          "historical_mean_mm_day": 5.437367,
+          "historical_p33_mm_day": 4.208221,
+          "historical_p67_mm_day": 6.466408,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-06": {
+          "predicted_mm_day": 4.76513,
+          "estimated_monthly_mm": 143.0,
+          "historical_mean_mm_day": 4.765131,
+          "historical_p33_mm_day": 3.533783,
+          "historical_p67_mm_day": 5.234413,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-07": {
+          "predicted_mm_day": 5.098113,
+          "estimated_monthly_mm": 158.0,
+          "historical_mean_mm_day": 5.098113,
+          "historical_p33_mm_day": 3.825569,
+          "historical_p67_mm_day": 5.685196,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-08": {
+          "predicted_mm_day": 6.460718,
+          "estimated_monthly_mm": 200.3,
+          "historical_mean_mm_day": 6.460718,
+          "historical_p33_mm_day": 5.195312,
+          "historical_p67_mm_day": 7.420502,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-09": {
+          "predicted_mm_day": 6.495924,
+          "estimated_monthly_mm": 194.9,
+          "historical_mean_mm_day": 6.495923,
+          "historical_p33_mm_day": 5.800819,
+          "historical_p67_mm_day": 6.948433,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-10": {
+          "predicted_mm_day": 7.259323,
+          "estimated_monthly_mm": 225.0,
+          "historical_mean_mm_day": 7.259323,
+          "historical_p33_mm_day": 6.217709,
+          "historical_p67_mm_day": 8.162537,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-11": {
+          "predicted_mm_day": 5.992016,
+          "estimated_monthly_mm": 179.8,
+          "historical_mean_mm_day": 5.992016,
+          "historical_p33_mm_day": 4.433594,
+          "historical_p67_mm_day": 6.672668,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-12": {
+          "predicted_mm_day": 2.546081,
+          "estimated_monthly_mm": 78.9,
+          "historical_mean_mm_day": 2.546081,
+          "historical_p33_mm_day": 1.732235,
+          "historical_p67_mm_day": 3.04615,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-01": {
+          "predicted_mm_day": 1.264745,
+          "estimated_monthly_mm": 39.2,
+          "historical_mean_mm_day": 1.264745,
+          "historical_p33_mm_day": 0.782852,
+          "historical_p67_mm_day": 1.35498,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-02": {
+          "predicted_mm_day": 1.232239,
+          "estimated_monthly_mm": 35.7,
+          "historical_mean_mm_day": 1.232239,
+          "historical_p33_mm_day": 0.662193,
+          "historical_p67_mm_day": 1.416874,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-03": {
+          "predicted_mm_day": 1.459972,
+          "estimated_monthly_mm": 45.3,
+          "historical_mean_mm_day": 1.459972,
+          "historical_p33_mm_day": 0.776749,
+          "historical_p67_mm_day": 1.797047,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-04": {
+          "predicted_mm_day": 4.045555,
+          "estimated_monthly_mm": 121.4,
+          "historical_mean_mm_day": 4.045555,
+          "historical_p33_mm_day": 2.508774,
+          "historical_p67_mm_day": 5.016785,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-05": {
+          "predicted_mm_day": 5.437367,
+          "estimated_monthly_mm": 168.6,
+          "historical_mean_mm_day": 5.437367,
+          "historical_p33_mm_day": 4.208221,
+          "historical_p67_mm_day": 6.466408,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-06": {
+          "predicted_mm_day": 4.76513,
+          "estimated_monthly_mm": 143.0,
+          "historical_mean_mm_day": 4.765131,
+          "historical_p33_mm_day": 3.533783,
+          "historical_p67_mm_day": 5.234413,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-07": {
+          "predicted_mm_day": 5.098113,
+          "estimated_monthly_mm": 158.0,
+          "historical_mean_mm_day": 5.098113,
+          "historical_p33_mm_day": 3.825569,
+          "historical_p67_mm_day": 5.685196,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-08": {
+          "predicted_mm_day": 6.460718,
+          "estimated_monthly_mm": 200.3,
+          "historical_mean_mm_day": 6.460718,
+          "historical_p33_mm_day": 5.195312,
+          "historical_p67_mm_day": 7.420502,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-09": {
+          "predicted_mm_day": 6.495924,
+          "estimated_monthly_mm": 194.9,
+          "historical_mean_mm_day": 6.495923,
+          "historical_p33_mm_day": 5.800819,
+          "historical_p67_mm_day": 6.948433,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-10": {
+          "predicted_mm_day": 7.259323,
+          "estimated_monthly_mm": 225.0,
+          "historical_mean_mm_day": 7.259323,
+          "historical_p33_mm_day": 6.217709,
+          "historical_p67_mm_day": 8.162537,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-11": {
+          "predicted_mm_day": 5.992016,
+          "estimated_monthly_mm": 179.8,
+          "historical_mean_mm_day": 5.992016,
+          "historical_p33_mm_day": 4.433594,
+          "historical_p67_mm_day": 6.672668,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-12": {
+          "predicted_mm_day": 2.546081,
+          "estimated_monthly_mm": 78.9,
+          "historical_mean_mm_day": 2.546081,
+          "historical_p33_mm_day": 1.732235,
+          "historical_p67_mm_day": 3.04615,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        }
+      }
+    },
+    "caiena": {
+      "name": "Caiena",
+      "country": "Guiana Francesa",
+      "grid_latitude": 5.0,
+      "grid_longitude": -52.25,
+      "monthly_history": {
+        "1": {
+          "mean_mm_day": 9.123871,
+          "p33_mm_day": 6.703568,
+          "p67_mm_day": 11.33812
+        },
+        "2": {
+          "mean_mm_day": 8.012209,
+          "p33_mm_day": 5.853691,
+          "p67_mm_day": 9.047375
+        },
+        "3": {
+          "mean_mm_day": 7.237204,
+          "p33_mm_day": 5.306854,
+          "p67_mm_day": 7.899971
+        },
+        "4": {
+          "mean_mm_day": 9.193523,
+          "p33_mm_day": 6.721687,
+          "p67_mm_day": 10.59433
+        },
+        "5": {
+          "mean_mm_day": 14.052495,
+          "p33_mm_day": 12.181015,
+          "p67_mm_day": 15.842361
+        },
+        "6": {
+          "mean_mm_day": 12.651009,
+          "p33_mm_day": 11.091805,
+          "p67_mm_day": 14.006462
+        },
+        "7": {
+          "mean_mm_day": 7.277064,
+          "p33_mm_day": 6.394348,
+          "p67_mm_day": 8.127747
+        },
+        "8": {
+          "mean_mm_day": 2.944992,
+          "p33_mm_day": 2.31575,
+          "p67_mm_day": 3.247604
+        },
+        "9": {
+          "mean_mm_day": 1.49612,
+          "p33_mm_day": 0.953674,
+          "p67_mm_day": 1.639748
+        },
+        "10": {
+          "mean_mm_day": 1.980839,
+          "p33_mm_day": 1.302643,
+          "p67_mm_day": 2.288361
+        },
+        "11": {
+          "mean_mm_day": 4.756674,
+          "p33_mm_day": 3.644981,
+          "p67_mm_day": 5.466938
+        },
+        "12": {
+          "mean_mm_day": 8.976788,
+          "p33_mm_day": 7.719688,
+          "p67_mm_day": 10.323715
+        }
+      },
+      "predictions": {
+        "2023-01": {
+          "predicted_mm_day": 9.123873,
+          "estimated_monthly_mm": 282.8,
+          "historical_mean_mm_day": 9.123871,
+          "historical_p33_mm_day": 6.703568,
+          "historical_p67_mm_day": 11.33812,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-02": {
+          "predicted_mm_day": 8.01221,
+          "estimated_monthly_mm": 224.3,
+          "historical_mean_mm_day": 8.012209,
+          "historical_p33_mm_day": 5.853691,
+          "historical_p67_mm_day": 9.047375,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-03": {
+          "predicted_mm_day": 7.237204,
+          "estimated_monthly_mm": 224.4,
+          "historical_mean_mm_day": 7.237204,
+          "historical_p33_mm_day": 5.306854,
+          "historical_p67_mm_day": 7.899971,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-04": {
+          "predicted_mm_day": 9.193523,
+          "estimated_monthly_mm": 275.8,
+          "historical_mean_mm_day": 9.193523,
+          "historical_p33_mm_day": 6.721687,
+          "historical_p67_mm_day": 10.59433,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-05": {
+          "predicted_mm_day": 14.052495,
+          "estimated_monthly_mm": 435.6,
+          "historical_mean_mm_day": 14.052495,
+          "historical_p33_mm_day": 12.181015,
+          "historical_p67_mm_day": 15.842361,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-06": {
+          "predicted_mm_day": 12.651004,
+          "estimated_monthly_mm": 379.5,
+          "historical_mean_mm_day": 12.651009,
+          "historical_p33_mm_day": 11.091805,
+          "historical_p67_mm_day": 14.006462,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2023-07": {
+          "predicted_mm_day": 7.277063,
+          "estimated_monthly_mm": 225.6,
+          "historical_mean_mm_day": 7.277064,
+          "historical_p33_mm_day": 6.394348,
+          "historical_p67_mm_day": 8.127747,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2023-08": {
+          "predicted_mm_day": 2.944992,
+          "estimated_monthly_mm": 91.3,
+          "historical_mean_mm_day": 2.944992,
+          "historical_p33_mm_day": 2.31575,
+          "historical_p67_mm_day": 3.247604,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-09": {
+          "predicted_mm_day": 1.49612,
+          "estimated_monthly_mm": 44.9,
+          "historical_mean_mm_day": 1.49612,
+          "historical_p33_mm_day": 0.953674,
+          "historical_p67_mm_day": 1.639748,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-10": {
+          "predicted_mm_day": 1.980839,
+          "estimated_monthly_mm": 61.4,
+          "historical_mean_mm_day": 1.980839,
+          "historical_p33_mm_day": 1.302643,
+          "historical_p67_mm_day": 2.288361,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2023-11": {
+          "predicted_mm_day": 4.756674,
+          "estimated_monthly_mm": 142.7,
+          "historical_mean_mm_day": 4.756674,
+          "historical_p33_mm_day": 3.644981,
+          "historical_p67_mm_day": 5.466938,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2023-12": {
+          "predicted_mm_day": 8.976786,
+          "estimated_monthly_mm": 278.3,
+          "historical_mean_mm_day": 8.976788,
+          "historical_p33_mm_day": 7.719688,
+          "historical_p67_mm_day": 10.323715,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-01": {
+          "predicted_mm_day": 9.123873,
+          "estimated_monthly_mm": 282.8,
+          "historical_mean_mm_day": 9.123871,
+          "historical_p33_mm_day": 6.703568,
+          "historical_p67_mm_day": 11.33812,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-02": {
+          "predicted_mm_day": 8.01221,
+          "estimated_monthly_mm": 232.4,
+          "historical_mean_mm_day": 8.012209,
+          "historical_p33_mm_day": 5.853691,
+          "historical_p67_mm_day": 9.047375,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-03": {
+          "predicted_mm_day": 7.237204,
+          "estimated_monthly_mm": 224.4,
+          "historical_mean_mm_day": 7.237204,
+          "historical_p33_mm_day": 5.306854,
+          "historical_p67_mm_day": 7.899971,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-04": {
+          "predicted_mm_day": 9.193523,
+          "estimated_monthly_mm": 275.8,
+          "historical_mean_mm_day": 9.193523,
+          "historical_p33_mm_day": 6.721687,
+          "historical_p67_mm_day": 10.59433,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-05": {
+          "predicted_mm_day": 14.052495,
+          "estimated_monthly_mm": 435.6,
+          "historical_mean_mm_day": 14.052495,
+          "historical_p33_mm_day": 12.181015,
+          "historical_p67_mm_day": 15.842361,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-06": {
+          "predicted_mm_day": 12.651004,
+          "estimated_monthly_mm": 379.5,
+          "historical_mean_mm_day": 12.651009,
+          "historical_p33_mm_day": 11.091805,
+          "historical_p67_mm_day": 14.006462,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        },
+        "2024-07": {
+          "predicted_mm_day": 7.277063,
+          "estimated_monthly_mm": 225.6,
+          "historical_mean_mm_day": 7.277064,
+          "historical_p33_mm_day": 6.394348,
+          "historical_p67_mm_day": 8.127747,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "high"
+        },
+        "2024-08": {
+          "predicted_mm_day": 2.944992,
+          "estimated_monthly_mm": 91.3,
+          "historical_mean_mm_day": 2.944992,
+          "historical_p33_mm_day": 2.31575,
+          "historical_p67_mm_day": 3.247604,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-09": {
+          "predicted_mm_day": 1.49612,
+          "estimated_monthly_mm": 44.9,
+          "historical_mean_mm_day": 1.49612,
+          "historical_p33_mm_day": 0.953674,
+          "historical_p67_mm_day": 1.639748,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-10": {
+          "predicted_mm_day": 1.980839,
+          "estimated_monthly_mm": 61.4,
+          "historical_mean_mm_day": 1.980839,
+          "historical_p33_mm_day": 1.302643,
+          "historical_p67_mm_day": 2.288361,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "low"
+        },
+        "2024-11": {
+          "predicted_mm_day": 4.756674,
+          "estimated_monthly_mm": 142.7,
+          "historical_mean_mm_day": 4.756674,
+          "historical_p33_mm_day": 3.644981,
+          "historical_p67_mm_day": 5.466938,
+          "anomaly_percent": 0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "moderate"
+        },
+        "2024-12": {
+          "predicted_mm_day": 8.976786,
+          "estimated_monthly_mm": 278.3,
+          "historical_mean_mm_day": 8.976788,
+          "historical_p33_mm_day": 7.719688,
+          "historical_p67_mm_day": 10.323715,
+          "anomaly_percent": -0.0,
+          "historical_class": "within_historical",
+          "rainfall_regime": "very_high"
+        }
+      }
+    }
+  }
+}

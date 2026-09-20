@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-09-20
+
+- cria a camada `Climazoide Decisão` para agricultura, agronegócio, áreas de risco, hidroenergia, turismo e gestão da água;
+- cruza previsões mensais já validadas com estatísticas históricas locais, sem alterar a submissão oficial;
+- identifica explicitamente os cenários 2023–2024 como históricos e não como previsão atual;
+- adiciona limites setoriais e ações prudentes, sem prescrição automática ou alertas oficiais.
+
 ## [0.4.0] - 2026-09-20
 
 - publica no manifesto as nove variáveis atmosféricas e o contrato completo do dataset oficial;

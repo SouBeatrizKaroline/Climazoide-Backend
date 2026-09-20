@@ -7,6 +7,8 @@ from app.config import get_settings
 from app.models import CatalogItem, DashboardOptions, PowerMonthlyQuery
 from app.services.catalog import CATALOG
 from app.services.dashboard import get_options
+from app.services.decision_support import options as decision_options
+from app.services.decision_support import scenario as decision_scenario
 from app.services.live_data import LOCATIONS, fetch_live_overview
 from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
@@ -21,7 +23,7 @@ from app.services.submission_delivery import (
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.4.0",
+    version="0.5.0",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -38,9 +40,26 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "environment": settings.app_env,
-        "api_version": "0.4.0",
+        "api_version": "0.5.0",
         "model_contract_version": "1.4",
     }
+
+
+@app.get("/v1/decision-support/options", tags=["decision-support"])
+def get_decision_options() -> dict:
+    return decision_options()
+
+
+@app.get("/v1/decision-support/scenario", tags=["decision-support"])
+def get_decision_scenario(
+    location: str = Query(default="brasilia"),
+    target_month: str = Query(default="2024-12", pattern=r"^\d{4}-(0[1-9]|1[0-2])$"),
+    sector: str = Query(default="agriculture"),
+) -> dict:
+    try:
+        return decision_scenario(location, target_month, sector)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @app.get("/v1/dashboard/summary", tags=["dashboard"], deprecated=True)
@@ -100,6 +119,7 @@ def download_submission() -> StreamingResponse:
             status_code=409,
             detail="A submissão validada ainda não foi gerada. Consulte /v1/submission/status.",
         )
+
     def decompressed_csv():
         import gzip
 

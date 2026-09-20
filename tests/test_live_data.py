@@ -51,9 +51,24 @@ def test_short_range_analysis_correlates_only_received_daily_values() -> None:
     assert analysis["period_end"] == "2026-09-22"
     assert analysis["rain_temperature_correlation"]["value"] == -1
     assert "não causalidade" in analysis["rain_temperature_correlation"]["detail"]
-    assert next(item for item in analysis["metrics"] if item["id"] == "rain_total")[
-        "value"
-    ] == 3
+    assert next(item for item in analysis["metrics"] if item["id"] == "rain_total")["value"] == 3
+
+
+def test_hargreaves_estimate_is_labelled_when_provider_omits_et0() -> None:
+    weather = {
+        "daily": {
+            "time": ["2026-09-20", "2026-09-21"],
+            "temperature_2m_max": [32, 33],
+            "temperature_2m_min": [20, 21],
+            "precipitation_sum": [1, 0],
+            "et0_fao_evapotranspiration": [None, None],
+        }
+    }
+    impacts = _impact_indicators(weather, {}, -15.8)
+    agriculture = next(item for item in impacts if item["id"] == "agriculture")
+    assert agriculture["value"] > 0
+    assert agriculture["status"] == "estimated"
+    assert "Hargreaves" in agriculture["availability_note"]
 
 
 def test_met_norway_fallback_preserves_period_and_does_not_invent_wmo_or_soil_values() -> None:
@@ -64,13 +79,16 @@ def test_met_norway_fallback_preserves_period_and_does_not_invent_wmo_or_soil_va
                 {
                     "time": "2026-09-19T18:00:00Z",
                     "data": {
-                        "instant": {"details": {
-                            "air_temperature": 21.5,
-                            "relative_humidity": 60,
-                            "wind_speed": 2,
-                            "wind_speed_of_gust": 4,
-                            "cloud_area_fraction": 30,
-                        }},
+                        "instant": {
+                            "details": {
+                                "air_temperature": 21.5,
+                                "relative_humidity": 60,
+                                "wind_speed": 2,
+                                "wind_speed_of_gust": 4,
+                                "cloud_area_fraction": 30,
+                                "air_pressure_at_sea_level": 1013,
+                            }
+                        },
                         "next_1_hours": {
                             "summary": {"symbol_code": "partlycloudy_day"},
                             "details": {"precipitation_amount": 0.4},
@@ -95,6 +113,7 @@ def test_met_norway_fallback_preserves_period_and_does_not_invent_wmo_or_soil_va
     assert result["current"]["wind_speed_10m"] == 7.2
     assert result["current"]["weather_code"] is None
     assert result["current"]["condition"] == "Parcialmente nublado"
+    assert result["current"]["sea_level_pressure"] == 1013
     assert result["current"]["apparent_temperature"] is None
     assert result["daily"]["precipitation_sum"] == [0.6]
     assert result["daily"]["precipitation_probability_max"] == [None]

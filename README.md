@@ -42,6 +42,12 @@ Detalhes, links oficiais e cuidados metodológicos estão em [Fontes e APIs](doc
 Falhas são isoladas por fonte. A fonte meteorológica principal usa tentativas curtas; se
 falhar, o backend tenta MET Norway e informa a fonte e o período válido. Campos ausentes
 na contingência permanecem `null`; ausência nunca é convertida em zero ou dado simulado.
+Quando o MET Norway não publica ET₀, o painel pode calcular uma aproximação de
+evapotranspiração por Hargreaves-Samani a partir das temperaturas previstas e da
+latitude. Ela é rotulada como **estimativa aproximada**, não entra na previsão mensal
+e não substitui cálculo agronômico local. Probabilidade de chuva, umidade do solo e
+outras variáveis sem alternativa segura recebem uma explicação específica em vez de
+um zero ou uma falsa precisão.
 
 ## Funcionalidades
 
@@ -55,6 +61,7 @@ na contingência permanecem `null`; ausência nunca é convertida em zero ou dad
 - baseline completo de climatologia mensal, auditado e validado temporalmente;
 - catálogo rastreável de PCA, PLS concorrente, PLS defasado e ConvLSTM;
 - download verificável do Kaggle e validação do CSV de submissão.
+- apoio à decisão por setor, com cenário mensal, comparação histórica, próximos passos e limites explícitos.
 
 ## Arquitetura
 
@@ -98,6 +105,33 @@ uvicorn app.main:app --reload
 | GET | `/v1/submission/example.csv` | exemplo pequeno, explicitamente não enviável |
 | GET | `/v1/submission/partial.csv` | previsões válidas já disponíveis para IDs oficiais, se houver |
 | GET | `/v1/submission/download` | CSV completo somente quando validado e publicado |
+| GET | `/v1/decision-support/options` | setores, localidades e meses disponíveis |
+| GET | `/v1/decision-support/scenario` | cenário e orientações por local, mês e setor |
+
+### Climazoide Decisão
+
+A camada de apoio à decisão usa o baseline mensal já validado e estatísticas de
+precipitação de 1940–2022 no ponto de grade mais próximo de cada localidade. Ela
+atende agricultura e plantio, agronegócio e logística, áreas de risco,
+hidroenergia, turismo/rios/cataratas e gestão urbana da água.
+
+O endpoint não modifica nem acrescenta colunas ao CSV oficial. Os cenários
+disponíveis correspondem ao período de avaliação **2023–2024** e são identificados
+como históricos, não como previsão atual de 2026. A resposta inclui `mm/dia`, uma
+estimativa de total mensal, comparação com percentis históricos, origem, período e
+limitações. As sugestões são regras transparentes de preparação e monitoramento:
+não são recomendação agronômica, previsão de vazão/energia, alerta de desastre,
+ordem de evacuação nem garantia para turismo.
+
+Para atualizar essa camada sem tocar na submissão:
+
+```bash
+python scripts/build_decision_support.py
+```
+
+O script lê `treino_tp.nc` e `artifacts/submission.csv`, grava somente o catálogo
+compacto `artifacts/decision_support_catalog.json` e verifica 24 meses em cada uma
+das 13 localidades.
 
 Pontos operacionais: `buenos-aires`, `la-paz`, `brasilia`, `santiago`, `bogota`, `quito`, `georgetown`, `asuncion`, `lima`, `paramaribo`, `montevideu`, `caracas` e `caiena`.
 

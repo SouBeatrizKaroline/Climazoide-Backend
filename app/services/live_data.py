@@ -9,56 +9,96 @@ import httpx
 
 LOCATIONS = {
     "buenos-aires": {
-        "name": "Buenos Aires", "country": "Argentina", "code": "AR",
-        "latitude": -34.6037, "longitude": -58.3816,
+        "name": "Buenos Aires",
+        "country": "Argentina",
+        "code": "AR",
+        "latitude": -34.6037,
+        "longitude": -58.3816,
     },
     "la-paz": {
-        "name": "La Paz", "country": "Bolívia", "code": "BO",
-        "latitude": -16.4897, "longitude": -68.1193,
+        "name": "La Paz",
+        "country": "Bolívia",
+        "code": "BO",
+        "latitude": -16.4897,
+        "longitude": -68.1193,
     },
     "brasilia": {
-        "name": "Brasília", "country": "Brasil", "code": "BR", "state": "DF",
-        "latitude": -15.7939, "longitude": -47.8828,
+        "name": "Brasília",
+        "country": "Brasil",
+        "code": "BR",
+        "state": "DF",
+        "latitude": -15.7939,
+        "longitude": -47.8828,
     },
     "santiago": {
-        "name": "Santiago", "country": "Chile", "code": "CL",
-        "latitude": -33.4489, "longitude": -70.6693,
+        "name": "Santiago",
+        "country": "Chile",
+        "code": "CL",
+        "latitude": -33.4489,
+        "longitude": -70.6693,
     },
     "bogota": {
-        "name": "Bogotá", "country": "Colômbia", "code": "CO",
-        "latitude": 4.7110, "longitude": -74.0721,
+        "name": "Bogotá",
+        "country": "Colômbia",
+        "code": "CO",
+        "latitude": 4.7110,
+        "longitude": -74.0721,
     },
     "quito": {
-        "name": "Quito", "country": "Equador", "code": "EC",
-        "latitude": -0.1807, "longitude": -78.4678,
+        "name": "Quito",
+        "country": "Equador",
+        "code": "EC",
+        "latitude": -0.1807,
+        "longitude": -78.4678,
     },
     "georgetown": {
-        "name": "Georgetown", "country": "Guiana", "code": "GY",
-        "latitude": 6.8013, "longitude": -58.1551,
+        "name": "Georgetown",
+        "country": "Guiana",
+        "code": "GY",
+        "latitude": 6.8013,
+        "longitude": -58.1551,
     },
     "asuncion": {
-        "name": "Assunção", "country": "Paraguai", "code": "PY",
-        "latitude": -25.2637, "longitude": -57.5759,
+        "name": "Assunção",
+        "country": "Paraguai",
+        "code": "PY",
+        "latitude": -25.2637,
+        "longitude": -57.5759,
     },
     "lima": {
-        "name": "Lima", "country": "Peru", "code": "PE",
-        "latitude": -12.0464, "longitude": -77.0428,
+        "name": "Lima",
+        "country": "Peru",
+        "code": "PE",
+        "latitude": -12.0464,
+        "longitude": -77.0428,
     },
     "paramaribo": {
-        "name": "Paramaribo", "country": "Suriname", "code": "SR",
-        "latitude": 5.8520, "longitude": -55.2038,
+        "name": "Paramaribo",
+        "country": "Suriname",
+        "code": "SR",
+        "latitude": 5.8520,
+        "longitude": -55.2038,
     },
     "montevideu": {
-        "name": "Montevidéu", "country": "Uruguai", "code": "UY",
-        "latitude": -34.9011, "longitude": -56.1645,
+        "name": "Montevidéu",
+        "country": "Uruguai",
+        "code": "UY",
+        "latitude": -34.9011,
+        "longitude": -56.1645,
     },
     "caracas": {
-        "name": "Caracas", "country": "Venezuela", "code": "VE",
-        "latitude": 10.4806, "longitude": -66.9036,
+        "name": "Caracas",
+        "country": "Venezuela",
+        "code": "VE",
+        "latitude": 10.4806,
+        "longitude": -66.9036,
     },
     "caiena": {
-        "name": "Caiena", "country": "Guiana Francesa", "code": "GF",
-        "latitude": 4.9224, "longitude": -52.3135,
+        "name": "Caiena",
+        "country": "Guiana Francesa",
+        "code": "GF",
+        "latitude": 4.9224,
+        "longitude": -52.3135,
     },
 }
 
@@ -79,14 +119,18 @@ def _value(payload: dict, group: str, key: str, default=None):
 def _daily(weather: dict) -> list[dict]:
     daily = weather.get("daily", {})
     keys = [
-        "time", "weather_code", "temperature_2m_max", "temperature_2m_min",
-        "precipitation_sum", "precipitation_probability_max", "uv_index_max",
+        "time",
+        "weather_code",
+        "temperature_2m_max",
+        "temperature_2m_min",
+        "precipitation_sum",
+        "precipitation_probability_max",
+        "uv_index_max",
         "et0_fao_evapotranspiration",
     ]
     length = len(daily.get("time", []))
     return [
-        {key: daily.get(key, [None] * length)[index] for key in keys}
-        for index in range(length)
+        {key: daily.get(key, [None] * length)[index] for key in keys} for index in range(length)
     ]
 
 
@@ -114,15 +158,20 @@ async def _fetch_met_no(client: httpx.AsyncClient, latitude: float, longitude: f
     response = await client.get(
         MET_NO_URL,
         params={"lat": latitude, "lon": longitude},
-        headers={"User-Agent": "Climazoide/0.4 (https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
+        headers={
+            "User-Agent": "Climazoide/0.4 (https://github.com/SouBeatrizKaroline/Climazoide-Backend)"
+        },
     )
     response.raise_for_status()
     payload = response.json()
     cache_control = response.headers.get("cache-control", "")
     try:
         max_age = next(
-            (int(part.split("=", 1)[1]) for part in cache_control.split(",")
-             if part.strip().startswith("max-age=")),
+            (
+                int(part.split("=", 1)[1])
+                for part in cache_control.split(",")
+                if part.strip().startswith("max-age=")
+            ),
             None,
         )
     except ValueError:
@@ -152,6 +201,7 @@ def _met_no_weather(payload: dict, timezone: str) -> dict:
     symbol = (
         current_data.get("next_1_hours", {}).get("summary", {}).get("symbol_code")
         or current_data.get("next_6_hours", {}).get("summary", {}).get("symbol_code")
+        or current_data.get("next_12_hours", {}).get("summary", {}).get("symbol_code")
         or ""
     )
     condition = _met_no_condition(symbol)
@@ -164,14 +214,17 @@ def _met_no_weather(payload: dict, timezone: str) -> dict:
         "condition": condition,
         "cloud_cover": current_details.get("cloud_area_fraction"),
         "surface_pressure": None,
+        "sea_level_pressure": current_details.get("air_pressure_at_sea_level"),
         "wind_speed_10m": (
             round(current_details["wind_speed"] * 3.6, 1)
-            if current_details.get("wind_speed") is not None else None
+            if current_details.get("wind_speed") is not None
+            else None
         ),
         "wind_direction_10m": current_details.get("wind_from_direction"),
         "wind_gusts_10m": (
             round(current_details["wind_speed_of_gust"] * 3.6, 1)
-            if current_details.get("wind_speed_of_gust") is not None else None
+            if current_details.get("wind_speed_of_gust") is not None
+            else None
         ),
     }
     # MET Norway's symbols are descriptive but are not WMO codes. Do not
@@ -239,9 +292,7 @@ def _met_no_condition(symbol: str) -> str | None:
     return None
 
 
-async def _fetch_cptec(
-    client: httpx.AsyncClient, latitude: float, longitude: float
-) -> dict:
+async def _fetch_cptec(client: httpx.AsyncClient, latitude: float, longitude: float) -> dict:
     url = CPTEC_URL.format(lat=latitude, lon=longitude)
     response = await client.get(url)
     response.raise_for_status()
@@ -280,9 +331,7 @@ async def _fetch_oni(client: httpx.AsyncClient) -> dict:
     }
 
 
-async def _fetch_astronomy(
-    client: httpx.AsyncClient, latitude: float, longitude: float
-) -> dict:
+async def _fetch_astronomy(client: httpx.AsyncClient, latitude: float, longitude: float) -> dict:
     response = await client.get(
         USNO_URL,
         params={"date": datetime.now(UTC).date().isoformat(), "coords": f"{latitude},{longitude}"},
@@ -309,17 +358,32 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         **coordinates,
         "timezone": "auto",
         "forecast_days": 7,
-        "current": ",".join([
-            "temperature_2m", "relative_humidity_2m", "apparent_temperature",
-            "precipitation", "weather_code", "cloud_cover", "surface_pressure",
-            "wind_speed_10m", "wind_direction_10m", "wind_gusts_10m",
-        ]),
+        "current": ",".join(
+            [
+                "temperature_2m",
+                "relative_humidity_2m",
+                "apparent_temperature",
+                "precipitation",
+                "weather_code",
+                "cloud_cover",
+                "surface_pressure",
+                "wind_speed_10m",
+                "wind_direction_10m",
+                "wind_gusts_10m",
+            ]
+        ),
         "hourly": "soil_moisture_0_to_1cm,vapour_pressure_deficit",
-        "daily": ",".join([
-            "weather_code", "temperature_2m_max", "temperature_2m_min",
-            "precipitation_sum", "precipitation_probability_max", "uv_index_max",
-            "et0_fao_evapotranspiration",
-        ]),
+        "daily": ",".join(
+            [
+                "weather_code",
+                "temperature_2m_max",
+                "temperature_2m_min",
+                "precipitation_sum",
+                "precipitation_probability_max",
+                "uv_index_max",
+                "et0_fao_evapotranspiration",
+            ]
+        ),
     }
     air_params = {
         **coordinates,
@@ -332,7 +396,9 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         timeout=client_timeout,
         transport=transport,
         follow_redirects=True,
-        headers={"User-Agent": "Climazoide/0.4 (+https://github.com/SouBeatrizKaroline/Climazoide-Backend)"},
+        headers={
+            "User-Agent": "Climazoide/0.4 (+https://github.com/SouBeatrizKaroline/Climazoide-Backend)"
+        },
     ) as client:
         weather_task = _fetch_json(client, WEATHER_URL, weather_params)
         air_task = _fetch_json(client, AIR_URL, air_params)
@@ -423,6 +489,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
             "weather_code": current.get("weather_code"),
             "cloud_cover": current.get("cloud_cover"),
             "surface_pressure": current.get("surface_pressure"),
+            "sea_level_pressure": current.get("sea_level_pressure"),
             "wind_speed": current.get("wind_speed_10m"),
             "wind_direction": current.get("wind_direction_10m"),
             "wind_gusts": current.get("wind_gusts_10m"),
@@ -443,7 +510,7 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
         "cptec": cptec,
         "climate_context": {"oni": oni},
         "astronomy": astronomy,
-        "impacts": _impact_indicators(weather, air),
+        "impacts": _impact_indicators(weather, air, location["latitude"]),
         "short_range_analysis": _short_range_analysis(weather),
         "sources": [
             {
@@ -454,15 +521,21 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
                 "note": weather_failure if weather_failure and provider != "Open-Meteo" else None,
                 "url": "https://open-meteo.com/en/docs",
             },
-            *([{
-                "name": "MET Norway",
-                "scope": "previsão meteorológica global de contingência",
-                "available": bool(weather),
-                "updated_at": weather.get("model_updated_at"),
-                "valid_from": weather.get("valid_from"),
-                "valid_until": weather.get("valid_until"),
-                "url": "https://api.met.no/weatherapi/locationforecast/2.0/documentation",
-            }] if provider == "MET Norway" else []),
+            *(
+                [
+                    {
+                        "name": "MET Norway",
+                        "scope": "previsão meteorológica global de contingência",
+                        "available": bool(weather),
+                        "updated_at": weather.get("model_updated_at"),
+                        "valid_from": weather.get("valid_from"),
+                        "valid_until": weather.get("valid_until"),
+                        "url": "https://api.met.no/weatherapi/locationforecast/2.0/documentation",
+                    }
+                ]
+                if provider == "MET Norway"
+                else []
+            ),
             {
                 "name": "CAMS/Copernicus",
                 "scope": "composição atmosférica e qualidade do ar",
@@ -496,7 +569,48 @@ async def fetch_live_overview(location_id: str, timeout: float) -> dict:
     }
 
 
-def _impact_indicators(weather: dict, air: dict) -> list[dict]:
+def _estimated_et0(weather: dict, latitude: float | None) -> float | None:
+    """Estimate seven-day reference ET with Hargreaves-Samani when ET0 is absent."""
+    if latitude is None:
+        return None
+    daily = weather.get("daily", {})
+    dates = daily.get("time", [])
+    highs = daily.get("temperature_2m_max", [])
+    lows = daily.get("temperature_2m_min", [])
+    if not dates or not (len(dates) == len(highs) == len(lows)):
+        return None
+    latitude_rad = math.radians(latitude)
+    total = 0.0
+    for date, high, low in zip(dates, highs, lows, strict=True):
+        if high is None or low is None:
+            return None
+        day = datetime.fromisoformat(date).timetuple().tm_yday
+        distance = 1 + 0.033 * math.cos(2 * math.pi * day / 365)
+        declination = 0.409 * math.sin(2 * math.pi * day / 365 - 1.39)
+        sunset = math.acos(max(-1.0, min(1.0, -math.tan(latitude_rad) * math.tan(declination))))
+        radiation = (
+            (24 * 60 / math.pi)
+            * 0.0820
+            * distance
+            * (
+                sunset * math.sin(latitude_rad) * math.sin(declination)
+                + math.cos(latitude_rad) * math.cos(declination) * math.sin(sunset)
+            )
+        )
+        high_value, low_value = float(high), float(low)
+        mean = (high_value + low_value) / 2
+        total += max(
+            0.0,
+            0.0023
+            * (mean + 17.8)
+            * math.sqrt(max(0.0, high_value - low_value))
+            * radiation
+            * 0.408,
+        )
+    return total
+
+
+def _impact_indicators(weather: dict, air: dict, latitude: float | None = None) -> list[dict]:
     daily = weather.get("daily", {})
     precipitation_values = daily.get("precipitation_sum", [])
     et0_values = daily.get("et0_fao_evapotranspiration", [])
@@ -509,7 +623,9 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
         if precipitation_values and len(precipitation_available) == len(precipitation_values)
         else None
     )
-    et0 = sum(et0_available) if et0_values and len(et0_available) == len(et0_values) else None
+    et0_modelled = bool(et0_values) and len(et0_available) == len(et0_values)
+    et0 = sum(et0_available) if et0_modelled else _estimated_et0(weather, latitude)
+    et0_status = "modelled" if et0_modelled else "estimated" if et0 is not None else "unavailable"
     max_temperature = (
         max(temperature_available)
         if temperature_values and len(temperature_available) == len(temperature_values)
@@ -527,6 +643,12 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
             ),
             "unit": "mm",
             "detail": "Chuva prevista menos evapotranspiração de referência.",
+            "status": et0_status if precipitation is not None else "unavailable",
+            "availability_note": (
+                "ET₀ aproximada por Hargreaves-Samani com as temperaturas previstas."
+                if et0_status == "estimated"
+                else None
+            ),
         },
         {
             "id": "agriculture",
@@ -534,6 +656,12 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
             "value": round(et0, 1) if et0 is not None else None,
             "unit": "mm",
             "detail": "Indicador útil para irrigação; não substitui manejo agronômico.",
+            "status": et0_status,
+            "availability_note": (
+                "Estimativa Hargreaves-Samani; aproximação, não medição."
+                if et0_status == "estimated"
+                else None
+            ),
         },
         {
             "id": "heat",
@@ -541,6 +669,8 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
             "value": round(max_temperature, 1) if max_temperature is not None else None,
             "unit": "°C",
             "detail": "Sinal de atenção para conforto térmico e demanda de energia.",
+            "status": "modelled" if max_temperature is not None else "unavailable",
+            "availability_note": None,
         },
         {
             "id": "health",
@@ -548,6 +678,8 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
             "value": aqi,
             "unit": "AQI",
             "detail": "Índice dos EUA calculado pelo CAMS; maior significa pior.",
+            "status": "modelled" if aqi is not None else "unavailable",
+            "availability_note": None,
         },
     ]
 
@@ -555,18 +687,12 @@ def _impact_indicators(weather: dict, air: dict) -> list[dict]:
 def _short_range_analysis(weather: dict) -> dict:
     days = _daily(weather)
     complete_rain = bool(days) and all(day["precipitation_sum"] is not None for day in days)
-    complete_temperature = bool(days) and all(
-        day["temperature_2m_max"] is not None for day in days
-    )
+    complete_temperature = bool(days) and all(day["temperature_2m_max"] is not None for day in days)
     rain_values = [
-        float(day["precipitation_sum"])
-        for day in days
-        if day["precipitation_sum"] is not None
+        float(day["precipitation_sum"]) for day in days if day["precipitation_sum"] is not None
     ]
     temperature_values = [
-        float(day["temperature_2m_max"])
-        for day in days
-        if day["temperature_2m_max"] is not None
+        float(day["temperature_2m_max"]) for day in days if day["temperature_2m_max"] is not None
     ]
     total_rain = sum(rain_values) if complete_rain else None
     wet_days = sum(value >= 0.1 for value in rain_values) if complete_rain else None
@@ -640,10 +766,7 @@ def _pearson(pairs: list[tuple[float, float]]) -> float | None:
     y_variance = sum((value - y_mean) ** 2 for value in y_values)
     if x_variance == 0 or y_variance == 0:
         return None
-    covariance = sum(
-        (x_value - x_mean) * (y_value - y_mean)
-        for x_value, y_value in pairs
-    )
+    covariance = sum((x_value - x_mean) * (y_value - y_mean) for x_value, y_value in pairs)
     return covariance / math.sqrt(x_variance * y_variance)
 
 
