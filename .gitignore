@@ -12,6 +12,8 @@ artifacts/*
 !artifacts/model_manifest.json
 !artifacts/research_catalog.json
 !artifacts/climazoide-partial.csv
+!artifacts/submission.csv.gz
+!artifacts/submission_report.json
 *.nc
 *.csv
 !artifacts/climazoide-partial.csv

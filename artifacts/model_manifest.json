@@ -1,120 +1,127 @@
 {
   "schema_version": "1.3",
-  "model_id": "pca-lstm-run1",
-  "model_name": "PCA/EOF + LSTM",
-  "status": "requires_retraining",
-  "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
-  "source_branch": "feature/melhorar-pls-lstm-daiane",
-  "source_artifact_commit": "54ab930",
-  "training_period": "1940-01/2018-12",
+  "model_id": "monthly-climatology-v1",
+  "model_name": "Climatologia mensal espacial",
+  "status": "validated_for_submission",
+  "submission_kind": "validated_baseline",
+  "official_score": null,
+  "source_repository": "https://github.com/SouBeatrizKaroline/Climazoide-Backend",
+  "source_branch": "main",
+  "source_artifact_commit": "generated-by-scripts/train_monthly_climatology.py",
+  "training_period": "1940-01/2022-12",
   "validation_period": "2019-01/2022-12",
-  "evaluation_scope": "retreino obrigatório: não aprovado para previsão até corrigir alinhamento temporal e disponibilidade das fontes",
+  "target_period": "2023-01/2024-12",
+  "evaluation_scope": "baseline completo validado fora da avaliação oficial; pontuação pública e privada ainda não disponível",
   "scientific_audit": {
-    "status": "critical",
-    "rule": "Para prever T, usar somente dados cuja origem e publicação sejam anteriores ou iguais ao instante de emissão definido até T−1.",
-    "summary": "A branch consolidada usa atmosfera do mês-alvo no treino/validação; o ONI centrado também pode incorporar o mês previsto. Nenhum CSV/modelo está aprovado.",
+    "status": "passed",
+    "rule": "Para prever T, usar somente dados cuja origem seja anterior ou igual a T−1.",
+    "summary": "O baseline usa somente precipitação histórica de 1940–2022 e calcula a climatologia espacial do mesmo mês do ano. Nenhum alvo de 2023–2024 é lido.",
     "source_audit_commit": "54ab930",
     "source_repository_read_only": true
   },
+  "temporal_contract_check": {
+    "passed": true,
+    "target": "T",
+    "latest_allowed_information": "T−1",
+    "implementation": "climatologia ajustada somente no treino oficial encerrado em 2022-12",
+    "test_target_is_all_nan": true,
+    "test_origin_alignment_checked": true
+  },
   "metric_unit": "mm/dia",
-  "metrics": null,
+  "metrics": {
+    "name": "RMSE",
+    "value": 1.882055517472783,
+    "training_period": "1940-01/2018-12",
+    "validation_period": "2019-01/2022-12",
+    "observations": 3770928,
+    "scope": "validação temporal interna; não é pontuação oficial"
+  },
   "reviewed_sources": [
     {
-      "ref": "Beatriz",
-      "commit": "f0a17ef",
-      "decision": "referência de contrato temporal; requer nova validação contra a branch final",
+      "ref": "feature/melhorar-pls-lstm-daiane",
+      "commit": "54ab930",
+      "decision": "não promovido",
       "promoted": false,
-      "reason": "o pipeline consolidado mais recente mantém alinhamento atmosférico no mês-alvo"
+      "reason": "o pipeline consolidado usa atmosfera do mês-alvo e não atende ao corte T−1"
     },
     {
       "ref": "vermelho",
       "commit": "62b3626",
-      "decision": "há correção de deslocamento nesta branch, mas o resultado ONI e as métricas ainda não estão validados para promoção",
+      "decision": "referência de pesquisa, sem cópia de código ou artefatos",
       "promoted": false,
-      "reason": "resultado experimental ainda não integrado à branch principal nem publicado como release"
-    },
-    {
-      "ref": "feature/melhorar-pls-lstm-daiane",
-      "commit": "54ab930",
-      "decision": "branch mais recente; contém desalinhamento temporal de treino/validação e experimento ONI centrado",
-      "promoted": false,
-      "reason": "faltam integração científica, release e artefato de inferência reproduzível"
+      "reason": "não havia release final reproduzível e validada para promoção"
     }
   ],
   "candidate_models": [
     {
+      "id": "monthly-climatology-v1",
+      "label": "Climatologia mensal espacial",
+      "status": "validated_baseline",
+      "purpose": "baseline completo, reproduzível e sem vazamento para os 24 meses oficiais"
+    },
+    {
       "id": "pca-lstm",
       "label": "PCA/EOF + LSTM",
       "status": "research_only",
-      "purpose": "baseline de pesquisa; a versão consolidada precisa corrigir atmosfera T para T−1 e ser retreinada"
-    },
-    {
-      "id": "pls-concurrent-lstm",
-      "label": "PLS concorrente + LSTM",
-      "status": "research_only",
-      "purpose": "redução supervisionada experimental; métricas não validadas para previsão M→M+1"
-    },
-    {
-      "id": "pls-lagged-lstm",
-      "label": "PLS defasado + LSTM",
-      "status": "research_only",
-      "purpose": "experimento de redução supervisionada; revisar alinhamento e refazer validação temporal"
+      "purpose": "candidato de pesquisa; requer novo treino e validação temporal independente"
     },
     {
       "id": "convlstm",
       "label": "ConvLSTM",
       "status": "not_implemented",
-      "purpose": "não há pipeline treinado e reproduzível integrado à branch consolidada"
+      "purpose": "arquitetura candidata ainda sem artefato final reproduzível"
     },
     {
       "id": "xgboost-v3",
       "label": "XGBoost v3",
       "status": "research_only",
-      "purpose": "experimento XGBoost; no código consolidado, o construtor usa atmosfera do mês-alvo, então as métricas não comprovam previsão M→M+1"
+      "purpose": "candidato de pesquisa não promovido após auditoria do alinhamento temporal"
     },
     {
       "id": "xgboost-oni",
       "label": "XGBoost + ONI",
       "status": "research_only",
-      "purpose": "experimento não promovível: ONI centrado atribuído a T−1 incorpora SST do mês T e sofre revisões"
+      "purpose": "experimento não promovido; exige comprovação de disponibilidade temporal do ONI"
     }
   ],
   "readiness": [
-    {"id": "temporal_contract", "label": "Alinhamento e disponibilidade temporal M→M+1", "status": "pending"},
+    {"id": "temporal_contract", "label": "Alinhamento temporal M→M+1", "status": "passed"},
     {"id": "official_ids", "label": "IDs oficiais sem reconstrução", "status": "passed"},
     {"id": "full_grid", "label": "Grade 301 × 261", "status": "passed"},
-    {"id": "official_dataset", "label": "13 arquivos oficiais", "status": "blocked_by_auth"},
-    {"id": "retraining", "label": "Retreino corrigido", "status": "pending"},
-    {"id": "submission", "label": "CSV com 1.885.464 linhas", "status": "pending"},
+    {"id": "official_dataset", "label": "13 arquivos oficiais verificados localmente", "status": "passed"},
+    {"id": "retraining", "label": "Baseline ajustado e validado", "status": "passed"},
+    {"id": "submission", "label": "CSV com 1.885.464 linhas", "status": "passed"},
     {"id": "official_score", "label": "Pontuação oficial", "status": "pending"}
   ],
   "artifacts": {
-    "metrics": "experiments/pca_lstm_run1/metrics.json",
-    "history": "experiments/pca_lstm_run1/history.csv",
-    "sample_grids": "experiments/pca_lstm_run1/sample_grids.npz",
-    "model_weights_available": false,
-    "pca_objects_available": false,
-    "submission_available": false
+    "generator": "scripts/train_monthly_climatology.py",
+    "submission": "artifacts/submission.csv.gz",
+    "report": "artifacts/submission_report.json",
+    "inference_artifact_available": true,
+    "submission_available": true
+  },
+  "submission_validation": {
+    "passed": true,
+    "rows": 1885464,
+    "columns": ["id", "tp_mm_day"],
+    "sample_sha256": "34fe449ddb309b0579a87786f76049863833d82c26f183d18e943dc76f1e4c8c",
+    "csv_sha256": "4f86259b9e8aa8f22af9100f0f92232bef96039ed3b873a10833445029a3ff01",
+    "csv_bytes": 57677113,
+    "gzip_sha256": "17df4c6beae11bbe1da88c9dd3b9cf6c2746c5a596ad6c2d965443b910078506",
+    "gzip_bytes": 12695932,
+    "ids_and_order_preserved": true,
+    "finite_non_negative_values": true
   },
   "execution": {
-    "notebook_execution_ready": true,
-    "entrypoint": "documentado no README",
-    "cloud_artifact_export_optional": true,
-    "expected_outputs": [
-      "submission_pca_lstm.csv",
-      "submission_manifest.json"
-    ]
+    "entrypoint": "python scripts/train_monthly_climatology.py data",
+    "optional_dependency": "pip install -e .[science]",
+    "raw_official_data_published": false
   },
   "limitations": [
-    "A branch consolidada mais recente usa variáveis atmosféricas do mês-alvo no construtor de exemplos; métricas associadas não demonstram previsão legítima de um mês à frente.",
-    "A branch vermelho contém correção de deslocamento, mas ela não foi promovida à branch mais recente nem revalidada como release final.",
-    "O ONI do experimento é uma média móvel centrada e pode incluir SST do mês previsto; não usar até demonstrar disponibilidade as-of do corte.",
-    "A publicação de médias mensais ERA5/ERA5T ocorre após o mês observado; o instante operacional de emissão precisa ser definido e documentado.",
-    "As métricas experimentais anteriores não devem embasar comparação nem ser apresentadas como resultado válido de produção.",
-    "Não representa pontuação pública ou privada da avaliação oficial.",
-    "Pesos finais e objetos PCA não estão versionados no repositório consultado.",
-    "A API ainda não executa inferência espacial real.",
-    "Nenhum artefato de inferência ou submissão final está aprovado; retreino, validação temporal e checagem de IDs continuam pendentes.",
-    "A auditoria não encontrou evidência em código versionado de consulta ao alvo real de 2023–2024; os arquivos binários do dataset não estavam disponíveis para perícia independente."
+    "Este é um baseline de climatologia mensal; ele não usa as nove variáveis atmosféricas e não representa o modelo mais competitivo possível.",
+    "O RMSE informado é de validação temporal interna em 2019–2022, não é pontuação pública ou privada da competição.",
+    "Nenhum alvo real de 2023–2024 foi usado ou incluído no repositório.",
+    "Os arquivos oficiais brutos não são publicados; devem ser obtidos pelo canal oficial e conforme as regras da competição.",
+    "Os experimentos do repositório WORCAP foram apenas auditados; código GPL, pesos e artefatos não foram copiados para este projeto MIT."
   ]
 }

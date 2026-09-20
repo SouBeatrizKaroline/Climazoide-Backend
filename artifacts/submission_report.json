@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-09-20T01:52:39+00:00",
+  "model_id": "monthly-climatology-v1",
+  "method": "média espacial por mês do ano, ajustada somente com 1940–2022",
+  "temporal_contract": "dados históricos até T−1 ou antes → previsão de T",
+  "target_period": "2023-01/2024-12",
+  "validation": {
+    "metric": "RMSE",
+    "unit": "mm/dia",
+    "value": 1.882055517472783,
+    "training_period": "1940-01/2018-12",
+    "validation_period": "2019-01/2022-12",
+    "observations": 3770928
+  },
+  "submission": {
+    "rows": 1885464,
+    "columns": [
+      "id",
+      "tp_mm_day"
+    ],
+    "sample_sha256": "34fe449ddb309b0579a87786f76049863833d82c26f183d18e943dc76f1e4c8c",
+    "csv_sha256": "4f86259b9e8aa8f22af9100f0f92232bef96039ed3b873a10833445029a3ff01",
+    "csv_bytes": 57677113,
+    "gzip_sha256": "17df4c6beae11bbe1da88c9dd3b9cf6c2746c5a596ad6c2d965443b910078506",
+    "gzip_bytes": 12695932
+  },
+  "source_files": {
+    "treino_tp.nc_sha256": "012bebbe0e38aefdf4f9e2432c3ca22f71d94ea1a1b5421da9d9e5048632cab0",
+    "teste_features.nc_sha256": "70bcb5c9bb9c011c8901660834b42dc57ff7e54a4f34161d489ec5e9f05c1f23"
+  }
+}

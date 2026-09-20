@@ -1,10 +1,13 @@
 import csv
+import gzip
+import hashlib
 import json
 import math
 from itertools import zip_longest
 from pathlib import Path
 
 SUBMISSION_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission.csv"
+SUBMISSION_GZIP_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission.csv.gz"
 OFFICIAL_IDS_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "sample_submission.csv"
 MODEL_MANIFEST_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "model_manifest.json"
 PARTIAL_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission-partial.csv"
@@ -18,6 +21,7 @@ EXAMPLE_CSV = """id,tp_mm_day
 
 def submission_status() -> dict:
     ready, expected_rows, validation_reasons = _validate_submission()
+    manifest = _load_manifest()
     partial_available, partial_rows, partial_months, partial_reasons = (
         _validate_partial_submission()
     )
@@ -36,6 +40,11 @@ def submission_status() -> dict:
             "IDs, meses, coordenadas e ordem devem ser preservados do arquivo oficial de teste"
         ),
         "temporal_contract": "Para prever M+1, usar somente dados disponíveis até M.",
+        "model_id": manifest.get("model_id"),
+        "model_name": manifest.get("model_name"),
+        "submission_kind": manifest.get("submission_kind"),
+        "validation": manifest.get("metrics"),
+        "official_score": manifest.get("official_score"),
         "example_available": True,
         "example_is_submittable": False,
         "partial_available": partial_available,
@@ -43,8 +52,12 @@ def submission_status() -> dict:
         "partial_rows": partial_rows,
         "partial_target_months": partial_months,
         "partial_is_complete": partial_is_complete,
-        "partial_notice": _partial_notice(
-            partial_available, partial_rows, expected_rows, partial_months, partial_reasons
+        "partial_notice": (
+            "O CSV completo já contém todos os IDs oficiais; não é necessário um parcial."
+            if ready
+            else _partial_notice(
+                partial_available, partial_rows, expected_rows, partial_months, partial_reasons
+            )
         ),
         "blocking_reasons": [] if ready else validation_reasons,
     }
@@ -124,6 +137,8 @@ def _validate_partial_submission() -> tuple[bool, int, list[str], list[str]]:
 
 def _validate_submission() -> tuple[bool, int | None, list[str]]:
     model_blockers = _model_blockers()
+    if not model_blockers and SUBMISSION_GZIP_PATH.is_file():
+        return _validate_packaged_submission()
     if not OFFICIAL_IDS_PATH.is_file():
         return False, None, [
             "o arquivo oficial de IDs do conjunto de teste ainda não foi disponibilizado",
@@ -194,10 +209,47 @@ def _validate_submission() -> tuple[bool, int | None, list[str]]:
     return True, expected_rows, []
 
 
-def _model_blockers() -> list[str]:
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _load_manifest() -> dict:
     try:
-        manifest = json.loads(MODEL_MANIFEST_PATH.read_text(encoding="utf-8"))
+        return json.loads(MODEL_MANIFEST_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _validate_packaged_submission() -> tuple[bool, int | None, list[str]]:
+    manifest = _load_manifest()
+    validation = manifest.get("submission_validation", {})
+    rows = validation.get("rows")
+    expected_hash = validation.get("gzip_sha256")
+    expected_bytes = validation.get("gzip_bytes")
+    if not isinstance(rows, int) or rows <= 0:
+        return False, None, ["o manifesto não registra a quantidade validada de previsões"]
+    if not isinstance(expected_hash, str) or len(expected_hash) != 64:
+        return False, rows, ["o manifesto não registra o hash do CSV compactado"]
+    if isinstance(expected_bytes, int) and SUBMISSION_GZIP_PATH.stat().st_size != expected_bytes:
+        return False, rows, ["o tamanho do CSV compactado diverge do manifesto"]
+    if _sha256(SUBMISSION_GZIP_PATH) != expected_hash:
+        return False, rows, ["o hash do CSV compactado diverge do artefato validado"]
+    try:
+        with gzip.open(SUBMISSION_GZIP_PATH, mode="rt", encoding="utf-8", newline="") as source:
+            if next(csv.reader(source), []) != ["id", "tp_mm_day"]:
+                return False, rows, ["o CSV compactado não tem as colunas id,tp_mm_day"]
+    except (OSError, EOFError, csv.Error):
+        return False, rows, ["o artefato de submissão compactado está corrompido"]
+    return True, rows, []
+
+
+def _model_blockers() -> list[str]:
+    manifest = _load_manifest()
+    if not manifest:
         return ["não há manifesto auditável de um modelo aprovado para submissão"]
     blockers = []
     if manifest.get("status") != "validated_for_submission":

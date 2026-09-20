@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from httpx import HTTPError
 
 from app.config import get_settings
@@ -14,14 +14,14 @@ from app.services.research_catalog import load_research_catalog
 from app.services.submission_delivery import (
     EXAMPLE_CSV,
     PARTIAL_PATH,
-    SUBMISSION_PATH,
+    SUBMISSION_GZIP_PATH,
     submission_status,
 )
 
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.3.2",
+    version="0.3.3",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -38,7 +38,7 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "environment": settings.app_env,
-        "api_version": "0.3.2",
+        "api_version": "0.3.3",
         "model_contract_version": "1.3",
     }
 
@@ -94,13 +94,23 @@ def download_submission_example() -> Response:
 
 
 @app.get("/v1/submission/download", tags=["submission"])
-def download_submission() -> FileResponse:
+def download_submission() -> StreamingResponse:
     if not submission_status()["ready"]:
         raise HTTPException(
             status_code=409,
             detail="A submissão validada ainda não foi gerada. Consulte /v1/submission/status.",
         )
-    return FileResponse(SUBMISSION_PATH, media_type="text/csv", filename="submission.csv")
+    def decompressed_csv():
+        import gzip
+
+        with gzip.open(SUBMISSION_GZIP_PATH, "rb") as source:
+            yield from iter(lambda: source.read(1024 * 1024), b"")
+
+    return StreamingResponse(
+        decompressed_csv(),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="submission.csv"'},
+    )
 
 
 @app.get("/v1/submission/partial.csv", tags=["submission"])

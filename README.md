@@ -51,7 +51,7 @@ na contingência permanecem `null`; ausência nunca é convertida em zero ou dad
 - consulta ao CPTEC/INPE, com disponibilidade informada no payload;
 - análises automáticas de água, agricultura, calor e saúde ambiental;
 - consulta mensal à NASA POWER;
-- manifesto auditável do PCA/EOF + LSTM, atualmente marcado para retreino;
+- baseline completo de climatologia mensal, auditado e validado temporalmente;
 - catálogo rastreável de PCA, PLS concorrente, PLS defasado e ConvLSTM;
 - download verificável do Kaggle e validação do CSV de submissão.
 
@@ -138,11 +138,12 @@ de março; e assim por diante. Para uma previsão de setembro de 2026, usa-se ag
 dados mensais estiverem completos e disponíveis. Um modelo pode usar meses anteriores
 adicionais se sua arquitetura os exigir, mas nunca dados posteriores à origem `M`.
 
-**Estado auditado:** esse é o contrato exigido, não uma afirmação de que o modelo atual
-já o cumpre. A branch científica consolidada mais recente foi encontrada usando campos
-atmosféricos do próprio mês-alvo no treino/validação. Até integração da correção,
-retreino e validação temporal reproduzível, não trate os resultados anteriores como
-previsão válida nem como métrica aprovada. A auditoria e o estado detalhado estão em
+**Estado auditado:** a branch científica consolidada mais recente foi encontrada usando
+campos atmosféricos do próprio mês-alvo no treino/validação e permanece somente como
+pesquisa. Para não promover esse resultado, o backend implementa de forma independente
+um baseline de climatologia mensal que usa apenas 1940–2022. Esse baseline cumpre o
+contrato temporal, gera todos os IDs oficiais e não copia código ou artefatos do WORCAP.
+A auditoria da origem e o estado detalhado estão em
 [`docs/WORCAP_BRANCH_AUDIT.md`](docs/WORCAP_BRANCH_AUDIT.md) e
 `GET /v1/model/manifest`.
 
@@ -179,7 +180,7 @@ O script executa `kagglehub.competition_download('previsao-climatica-de-precipit
 - `teste_features.nc`: `time` indica o mês-alvo; as variáveis atmosféricas dessa posição correspondem ao mês anterior, indicado em `time_origem`. Inclui `tp_alvo` inteiramente `NaN`, `tp_ultima_obs` (dezembro de 2022) e `lag_meses` de 1 a 24;
 - `sample_submission.csv`: lista completa dos IDs para os 24 meses, na ordem exigida. Os zeros em `tp_mm_day` são apenas preenchimento do modelo de submissão, não previsões nem valores observados.
 
-O alinhamento exigido é variáveis atmosféricas do mês `M` → precipitação de `M+1`. Na avaliação, use as variáveis já defasadas em `teste_features.nc`; não desloque `time` uma segunda vez. A latitude está em ordem crescente. A chuva observada dos 24 meses de teste não é distribuída. A branch consolidada auditada ainda precisa corrigir seu construtor de treino/validação para cumprir esse alinhamento.
+O alinhamento exigido é variáveis atmosféricas do mês `M` → precipitação de `M+1`. Na avaliação, use as variáveis já defasadas em `teste_features.nc`; não desloque `time` uma segunda vez. A latitude está em ordem crescente. A chuva observada dos 24 meses de teste não é distribuída. O baseline publicado não lê `tp_alvo` do teste e confirma automaticamente que ele permanece inteiramente `NaN`.
 
 ### Regras invariantes
 
@@ -196,12 +197,31 @@ python scripts/validate_submission.py data/sample_submission.csv submission.csv
 ```
 
 O produto nunca transforma o exemplo de três linhas em submissão. O download completo
-só responde quando existir um artefato validado com os IDs oficiais, previsões finitas e
-não negativas, ordem preservada e retreino compatível com M→M+1.
+responde com o baseline validado: 1.885.464 previsões finitas e não negativas, IDs e
+ordem oficiais preservados. O arquivo compactado é conferido no Render pelo SHA-256
+registrado no manifesto e entregue ao navegador como `submission.csv`.
+
+### Reproduzir o baseline completo
+
+Depois de obter os 13 arquivos oficiais pelo canal da competição:
+
+```bash
+pip install -e ".[science,dev]"
+python scripts/audit_readiness.py data
+python scripts/train_monthly_climatology.py data
+python scripts/validate_submission.py data/sample_submission.csv artifacts/submission.csv
+```
+
+O treino final calcula, para cada célula e mês do ano, a média histórica de 1940–2022.
+A validação é separada: ajusta em 1940–2018 e calcula o RMSE global em 2019–2022. O
+resultado reproduzido em 19/09/2026 foi **1,882056 mm/dia** em 3.770.928 observações.
+Essa é uma métrica interna de holdout, não uma pontuação do leaderboard. O relatório
+com período, hashes e tamanhos fica em `artifacts/submission_report.json`.
 
 ### Três níveis de download
 
-- **Completo oficial:** terá as 1.885.464 previsões e só será liberado após validação;
+- **Completo:** contém as 1.885.464 previsões do baseline validado para janeiro de 2023
+  a dezembro de 2024 e está disponível em `/v1/submission/download`;
 - **Parcial oficial:** é gerado com as previsões válidas que já existirem para IDs do
   `sample_submission.csv`, mantendo sua ordem. IDs sem previsão válida são omitidos,
   nunca preenchidos com zero ou com valores de outro período. Não pode ser enviado como
@@ -209,9 +229,10 @@ não negativas, ordem preservada e retreino compatível com M→M+1.
 - **Exemplo de formato:** contém apenas três linhas fictícias para visualizar
   `id,tp_mm_day` e também não pode ser enviado.
 
-O antigo recorte experimental de 2019 não é servido como CSV parcial oficial. Enquanto
-não houver previsões do modelo para os IDs oficiais, o botão de parcial permanece
-indisponível. O comando abaixo monta o parcial a partir de um CSV de previsões candidatas
+O antigo recorte experimental de 2019 não é servido como CSV parcial oficial. Como o
+baseline possui todos os IDs oficiais, o parcial permanece desnecessário e indisponível.
+O comando abaixo monta um parcial somente quando um futuro modelo tiver previsões válidas
+para parte dos IDs, a partir de um CSV de previsões candidatas
 produzido pelo modelo, filtrando previsões ausentes, NaN, infinitas ou negativas e
 rejeitando IDs desconhecidos ou fora de ordem:
 
@@ -247,24 +268,19 @@ Endpoints citados pela comunidade são testados antes de entrar no produto. Nest
 
 ## Estado da validação científica
 
-A auditoria mais recente identificou que a branch científica consolidada associa
-variáveis atmosféricas do mês-alvo à precipitação do mesmo mês durante treino e
-validação. O contrato esperado é usar apenas informação disponível até `T−1` para
-prever `T`; por isso, as métricas anteriores não demonstram desempenho válido e
-nenhum candidato está promovido para inferência operacional.
+O artefato publicado é o **baseline `monthly-climatology-v1`**, não uma promoção das
+métricas antigas. Ele usa somente precipitação de treino de 1940–2022, preserva os IDs
+do arquivo oficial e foi validado num bloco futuro completo de 2019–2022. A checagem
+também confirma grade `301 × 261`, 24 meses-alvo, `time_origem = T−1` e `tp_alvo` do
+teste inteiramente ausente.
 
-A correção de deslocamento observada em branches de pesquisa ainda precisa ser
-integrada à versão final, retreinada e validada temporalmente. O experimento ONI
-também permanece bloqueado: sua média móvel centrada pode incluir SST do mês
-previsto. Além disso, o instante de emissão deve considerar a disponibilidade real
-das médias mensais ERA5/ERA5T. O endpoint `/v1/model/manifest` publica esses
-bloqueios, e a API exige aprovação científica e prova automatizada do contrato
-temporal antes de liberar CSV completo ou parcial.
-
-Não foram encontrados pesos de inferência ou um CSV final auditável. ConvLSTM e
-demais candidatos são descritos segundo sua prontidão real no manifesto; nenhum
-deve ser apresentado como modelo treinado/aprovado sem artefato reproduzível e
-validação correspondente.
+PCA/LSTM, ConvLSTM, XGBoost e ONI continuam como candidatos de pesquisa. A branch mais
+recente do WORCAP não foi promovida porque sua auditoria encontrou atmosfera do
+mês-alvo; o ONI centrado também exige prova adicional de disponibilidade temporal.
+Assim, o CSV atual é tecnicamente válido e completo, mas representa a régua de
+climatologia — não há alegação de que supere essa própria régua nem de pontuação
+oficial. Um modelo mais forte só deve substituí-lo depois de repetir todas as mesmas
+salvaguardas e obter RMSE temporal inferior.
 
 ## Qualidade, segurança e commits
 

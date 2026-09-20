@@ -96,3 +96,23 @@ apenas ilustrativo e não pode ser submetido.
 
 Esta auditoria descreve pesquisa; não promove métricas, pesos ou previsões para
 produção. Código e artefatos de pesquisa não foram copiados para o produto.
+
+## Atualização posterior no Climazoide
+
+Em **19 de setembro de 2026, às 22:56:51 (BRT, UTC−03:00)**, após a obtenção dos
+13 arquivos oficiais pelo canal da competição, o backend validou dimensões,
+coordenadas, `time_origem`, ausência de `tp_alvo` no teste e a ordem dos IDs. Para
+não promover o pipeline crítico descrito acima, foi implementado um baseline
+independente de climatologia mensal:
+
+- ajuste final: precipitação oficial de 1940–2022;
+- validação temporal: ajuste em 1940–2018 e holdout em 2019–2022;
+- RMSE interno: 1,882056 mm/dia em 3.770.928 observações;
+- saída: 1.885.464 linhas para janeiro de 2023 a dezembro de 2024;
+- alvo real de 2023–2024: não acessado e não incluído;
+- integridade: IDs oficiais preservados, valores finitos e não negativos, hashes
+  registrados em `artifacts/submission_report.json`.
+
+Essa atualização cria uma submissão baseline reproduzível no repositório de destino.
+Ela não muda o veredito sobre as branches do WORCAP, não copia código GPL e não
+representa pontuação oficial nem um modelo que já supere a climatologia.

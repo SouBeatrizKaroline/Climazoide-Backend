@@ -4,6 +4,14 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-09-19
+
+- gera um baseline completo de climatologia mensal com 1.885.464 previsões, usando apenas 1940–2022;
+- valida temporalmente em 2019–2022, com RMSE interno de 1,882056 mm/dia;
+- preserva os IDs oficiais, rejeita valores inválidos e registra hashes dos dados e da saída;
+- publica o CSV compactado no backend e o entrega descompactado por streaming;
+- mantém os dados brutos oficiais fora do repositório e separa baseline de pontuação oficial.
+
 - atualiza a auditoria científica: branch consolidada não comprova alinhamento M→M+1, e bloqueia inferência/submissão sem aprovação temporal explícita;
 - acrescenta MET Norway como contingência gratuita, com cache conforme validade da resposta e metadados de período;
 - valida cada ID e sua ordem contra o arquivo oficial do conjunto de teste e exige manifesto de modelo validado antes de liberar o CSV completo;

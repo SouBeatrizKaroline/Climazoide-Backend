@@ -9,3 +9,5 @@ data
 artifacts/*
 !artifacts/model_manifest.json
 !artifacts/research_catalog.json
+!artifacts/submission.csv.gz
+!artifacts/submission_report.json

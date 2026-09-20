@@ -1,3 +1,7 @@
+import hashlib
+import json
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -9,7 +13,7 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.3.2"
+    assert response.json()["api_version"] == "0.3.3"
     assert response.json()["model_contract_version"] == "1.3"
 
 
@@ -26,31 +30,37 @@ def test_catalog_separates_required_and_extra_sources() -> None:
     assert any(item["region"] == "national" for item in catalog)
 
 
-def test_manifest_requires_retraining_and_has_no_active_metrics() -> None:
+def test_manifest_exposes_validated_baseline_without_claiming_official_score() -> None:
     response = client.get("/v1/model/manifest")
     assert response.status_code == 200
     payload = response.json()
-    assert payload["status"] == "requires_retraining"
-    assert "retreino obrigatório" in payload["evaluation_scope"]
-    assert payload["metrics"] is None
-    assert payload["artifacts"]["submission_available"] is False
-    assert payload["execution"]["notebook_execution_ready"] is True
-    assert payload["execution"]["cloud_artifact_export_optional"] is True
-    assert payload["execution"]["entrypoint"] == "documentado no README"
-    assert len(payload["candidate_models"]) == 6
+    assert payload["status"] == "validated_for_submission"
+    assert "pontuação pública e privada ainda não disponível" in payload["evaluation_scope"]
+    assert payload["metrics"]["name"] == "RMSE"
+    assert payload["metrics"]["scope"] == "validação temporal interna; não é pontuação oficial"
+    assert payload["official_score"] is None
+    assert payload["artifacts"]["submission_available"] is True
+    assert payload["execution"]["raw_official_data_published"] is False
+    assert payload["execution"]["entrypoint"] == (
+        "python scripts/train_monthly_climatology.py data"
+    )
+    assert len(payload["candidate_models"]) == 5
     assert any(
-        item["id"] == "convlstm" and item["status"] == "not_implemented"
+        item["id"] == "monthly-climatology-v1"
+        and item["status"] == "validated_baseline"
         for item in payload["candidate_models"]
     )
     assert any(item["ref"] == "vermelho" for item in payload["reviewed_sources"])
     assert any(
-        item["id"] == "temporal_contract" and item["status"] == "pending"
+        item["id"] == "temporal_contract" and item["status"] == "passed"
         for item in payload["readiness"]
     )
-    assert not any(
-        item["status"] == "passed" for item in payload["readiness"]
-        if item["id"] in {"retraining", "submission", "official_score"}
-    )
+    assert next(item for item in payload["readiness"] if item["id"] == "submission")[
+        "status"
+    ] == "passed"
+    assert next(item for item in payload["readiness"] if item["id"] == "official_score")[
+        "status"
+    ] == "pending"
 
 
 def test_live_locations_are_real_coordinates() -> None:
@@ -79,17 +89,37 @@ def test_research_catalog_maps_every_remote_branch_without_promoting_metrics() -
     )
 
 
-def test_submission_download_is_blocked_until_a_validated_artifact_exists() -> None:
+def test_complete_submission_is_available_as_a_validated_baseline() -> None:
     status = client.get("/v1/submission/status")
     assert status.status_code == 200
-    assert status.json()["ready"] is False
+    assert status.json()["ready"] is True
     assert status.json()["example_is_submittable"] is False
     assert status.json()["partial_available"] is False
     assert status.json()["partial_is_complete"] is False
     assert status.json()["partial_rows"] == 0
-    assert "arquivo oficial de IDs" in status.json()["partial_notice"]
-    assert status.json()["expected_rows"] is None
-    assert client.get("/v1/submission/download").status_code == 409
+    assert "todos os IDs oficiais" in status.json()["partial_notice"]
+    assert status.json()["expected_rows"] == 1_885_464
+    assert status.json()["submission_kind"] == "validated_baseline"
+    assert status.json()["official_score"] is None
+
+
+def test_complete_submission_stream_matches_validated_csv_hash() -> None:
+    manifest = json.loads(
+        (Path("artifacts") / "model_manifest.json").read_text(encoding="utf-8")
+    )
+    expected = manifest["submission_validation"]
+    digest = hashlib.sha256()
+    size = 0
+
+    with client.stream("GET", "/v1/submission/download") as response:
+        assert response.status_code == 200
+        assert response.headers["content-disposition"] == 'attachment; filename="submission.csv"'
+        for chunk in response.iter_bytes():
+            digest.update(chunk)
+            size += len(chunk)
+
+    assert size == expected["csv_bytes"]
+    assert digest.hexdigest() == expected["csv_sha256"]
 
 
 def test_submission_manifest_without_temporal_audit_cannot_be_promoted(
@@ -120,6 +150,9 @@ def test_submission_requires_the_official_test_ids_and_matching_order(
     manifest = tmp_path / "model_manifest.json"
     monkeypatch.setattr(submission_delivery, "OFFICIAL_IDS_PATH", official)
     monkeypatch.setattr(submission_delivery, "SUBMISSION_PATH", prediction)
+    monkeypatch.setattr(
+        submission_delivery, "SUBMISSION_GZIP_PATH", tmp_path / "submission.csv.gz"
+    )
     monkeypatch.setattr(submission_delivery, "MODEL_MANIFEST_PATH", manifest)
     manifest.write_text(
         '{"status":"validated_for_submission",'
