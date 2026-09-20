@@ -120,7 +120,9 @@ Detalhes e atribuições: [`docs/API_SOURCES.md`](docs/API_SOURCES.md).
 
 ## Dataset oficial do Kaggle
 
-São **13 arquivos**, aproximadamente **2,06 GB**, grade ERA5 de `0,25°`, `301 × 261` e **78.561 pontos por mês**. O treino cobre 1940–2022. O estado atmosférico de `M` alimenta a estimativa de precipitação de `M+1`. A avaliação cobre 2023–2024.
+São **13 arquivos**, aproximadamente **2,06 GB**, grade ERA5 regular de `0,25°`, `301 × 261` e **78.561 pontos por mês**, entre `60°S–15°N` e `90°O–25°O`. O treino cobre janeiro de 1940 a dezembro de 2022. A avaliação contém 24 meses, de janeiro de 2023 a dezembro de 2024: 2023 compõe o leaderboard público e 2024 define a classificação final.
+
+> **Resolução da grade:** a especificação formal e as dimensões/coordenadas dos arquivos NetCDF indicam `0,25°`. Uma legenda resumida de visualização que mencione `0,5°` é inconsistente com essa grade e não deve ser usada para reconstruir a malha. Sempre valide as coordenadas e a ordem diretamente nos arquivos oficiais.
 
 ### Regra temporal obrigatória
 
@@ -139,21 +141,24 @@ python scripts/download_competition.py
 
 O script executa `kagglehub.competition_download('previsao-climatica-de-precipitacao-sobre-a-america-do-sul')` e confirma os 13 nomes esperados. A tentativa sem autenticação termina de forma explícita; os NetCDF não são versionados.
 
-### Arquivos
+### Arquivos e alinhamento temporal
 
-- `treino_tp.nc`: precipitação observada em mm/dia;
-- `treino_tp_alvo.nc`: precipitação de M+1;
-- nove `treino_*.nc`: temperatura, nuvens, pressão, umidades, geopotencial e vento em 850 hPa;
-- `teste_features.nc`: meses-alvo, `time_origem`, `tp_ultima_obs` e `lag_meses`;
-- `sample_submission.csv`: IDs oficiais em ordem obrigatória.
+- `treino_tp.nc`: precipitação mensal observada em mm/dia, com dimensão `(time, lat, lon)`;
+- `treino_tp_alvo.nc`: `tp_alvo` já deslocado para a precipitação do mês seguinte; o último alvo é `NaN` porque aponta para fora do período de treino;
+- nove `treino_*.nc`: estado atmosférico do mês de observação — temperatura a 2 m, cobertura de nuvens, pressão à superfície, umidade específica, umidade relativa, temperatura em 850 hPa, geopotencial em 850 hPa e componentes zonal/meridional do vento em 850 hPa;
+- `teste_features.nc`: `time` indica o mês-alvo; as variáveis atmosféricas dessa posição correspondem ao mês anterior, indicado em `time_origem`. Inclui `tp_alvo` inteiramente `NaN`, `tp_ultima_obs` (dezembro de 2022) e `lag_meses` de 1 a 24;
+- `sample_submission.csv`: lista completa dos IDs para os 24 meses, na ordem exigida. Os zeros em `tp_mm_day` são apenas preenchimento do modelo de submissão, não previsões nem valores observados.
+
+Para cada amostra de treino, alinhe as variáveis atmosféricas do mês `M` ao alvo de precipitação `M+1`. Na avaliação, use as variáveis já defasadas em `teste_features.nc`; não desloque `time` uma segunda vez. A latitude está em ordem crescente. A chuva observada dos 24 meses de teste não é distribuída.
 
 ### Regras invariantes
 
 - não reconstruir o ID;
-- manter `id,tp_mm_day` e **1.885.464 linhas**;
+- manter `id,tp_mm_day`, os IDs do `sample_submission.csv` sem reconstrução e sua ordem exata: **1.885.464 previsões** (24 × 78.561);
 - rejeitar NaN, infinito e precipitação negativa;
 - avaliar com RMSE global;
 - tratar `tp_alvo` do teste como desconhecido;
+- não usar os zeros do arquivo de exemplo como previsões;
 - respeitar a licença **Subject to Competition Rules**.
 
 ```bash
