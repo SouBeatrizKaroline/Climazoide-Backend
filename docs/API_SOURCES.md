@@ -11,12 +11,21 @@ testes de modelos e experimentos científicos. Código experimental e métricas 
 não promovidas permanecem nele e aparecem no produto somente como estado de pesquisa.
 
 Os pontos operacionais do painel não substituem a grade científica ERA5 de 301 × 261.
-Dados atuais e previsão de sete dias também não são apresentados como a previsão mensal
-M→M+1 da competição.
+No contrato mensal, prever setembro significa usar no máximo dados de agosto.
 
-No contrato mensal, prever setembro significa usar no máximo dados de agosto. As APIs
-operacionais podem mostrar condições atuais ao usuário, mas esses valores não entram
-retroativamente na entrada do modelo científico para o mesmo mês.
+## Declaração de uso atual
+
+| Grupo | Fontes | Papel | Entra no modelo/CSV? |
+| --- | --- | --- | --- |
+| oficial | 13 arquivos distribuídos | treino, teste e IDs | **sim** |
+| meteorologia recente | Open-Meteo, MET Norway e CPTEC | painel de curto prazo | não |
+| ambiente e clima | CAMS, NOAA CPC e NASA POWER | contexto e comparação | não |
+| astronomia | USNO | efemérides | não |
+| referências futuras | ERA5/CDS, INMET, PClima e Embrapa | pesquisa documentada | não |
+
+O baseline e o `xgboost-anomaly-v1` foram produzidos somente com arquivos oficiais. As
+fontes adicionais deixam a solução mais completa, mas não treinam, calibram, corrigem
+ou preenchem a submissão. Dados atuais também nunca são aplicados retroativamente.
 
 ## Exigido para a competição
 
@@ -68,10 +77,12 @@ retroativamente na entrada do modelo científico para o mesmo mês.
 
 ### ECMWF / Copernicus CDS · ERA5
 
-- **Uso sugerido:** reprodução do contexto ERA5 e enriquecimento controlado.
+- **Uso possível:** reprodução ou pesquisa futura, sob auditoria temporal.
 - **Acesso:** cadastro, aceite manual dos termos do dataset e cliente `cdsapi`.
 - **Documentação:** https://cds.climate.copernicus.eu/how-to-api
-- **Cuidado:** registrar dataset, versão, variáveis, níveis, grade e transformação para mm/dia.
+- **Cuidado:** a precipitação real de 2023–2024 é o alvo proibido e não pode ser
+  consultada, mesmo sendo pública. Registrar dataset, versão, disponibilidade histórica,
+  variáveis, níveis, grade e transformação para mm/dia.
 
 ### NASA POWER
 
@@ -108,4 +119,8 @@ retroativamente na entrada do modelo científico para o mesmo mês.
 
 - **Embrapa AgroAPI:** APIs de cadastro agrícola/solo podem ser contexto complementar para decisões agropecuárias, mas não substituem observações, previsão meteorológica, ERA5 nem os IDs oficiais do arquivo de submissão. APIs freemium não são tratadas como gratuitas permanentes; nenhuma foi integrada por não acrescentar dado necessário ao objetivo científico atual.
 - **PClima/INPE:** disponibiliza projeções climáticas por modelos e cenários, com credenciais; não é fonte de tempo atual ou previsão operacional de sete dias. Não é usado para preencher lacunas do painel nem para gerar o CSV M→M+1.
-- **CSV completo/parcial:** o completo publicado contém as 1.885.464 previsões do baseline de climatologia para os IDs oficiais na ordem exata, conferido por hash no backend. O parcial contém somente previsões válidas disponíveis para um subconjunto ordenado desses mesmos IDs; não usa o recorte experimental histórico, não completa ausências com zeros e não é aceito como entrega completa. Nenhum artefato é liberado sem manifesto de modelo, geração reproduzível e validação científica/temporal aprovada.
+- **CSV completo/parcial:** o completo principal contém as 1.885.464 previsões do
+  baseline na ordem oficial; o candidato XGBoost completo é publicado separadamente.
+  O parcial só contém previsões válidas para um subconjunto ordenado dos mesmos IDs,
+  sem preencher ausências. Nenhum artefato é liberado sem manifesto, geração
+  reproduzível e validação científica/temporal aprovada.

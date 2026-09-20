@@ -113,6 +113,13 @@ independente de climatologia mensal:
 - integridade: IDs oficiais preservados, valores finitos e não negativos, hashes
   registrados em `artifacts/submission_report.json`.
 
-Essa atualização cria uma submissão baseline reproduzível no repositório de destino.
-Ela não muda o veredito sobre as branches do WORCAP, não copia código GPL e não
-representa pontuação oficial nem um modelo que já supere a climatologia.
+Em **20 de setembro de 2026**, o repositório de destino também implementou,
+independentemente, o `xgboost-anomaly-v1`. Ele usa atmosfera de `T−1`, precipitação
+congelada na origem e nenhum dado externo. Em 3.770.928 previsões de 2019–2022,
+obteve RMSE interno 1,838655 contra 1,882056 da climatologia no mesmo recorte. O CSV
+candidato preserva os 1.885.464 IDs oficiais, mas permanece separado até receber
+pontuação oficial.
+
+Essas atualizações não mudam o veredito sobre as branches do WORCAP e não copiam
+código GPL. O baseline registra pontuação pública 1,85077; o score oficial do novo
+candidato ainda está pendente.

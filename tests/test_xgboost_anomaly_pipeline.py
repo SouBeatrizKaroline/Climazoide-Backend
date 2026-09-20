@@ -42,3 +42,21 @@ def test_climatology_cutoff_excludes_future_values() -> None:
     climatology = MODULE._monthly_climatology(values, times, end_index=11)
 
     np.testing.assert_array_equal(climatology[:, 0, 0], np.ones(12))
+
+
+def test_future_test_rows_cannot_change_an_earlier_prediction_input() -> None:
+    rows = np.arange(24 * 3, dtype=np.float32).reshape(24, 3)
+    january_input = MODULE._test_row(rows, 0).copy()
+    rows[1:] = -999_999
+
+    np.testing.assert_array_equal(MODULE._test_row(rows, 0), january_input)
+
+
+def test_test_origin_must_be_exactly_previous_month() -> None:
+    targets = np.array(["2023-01", "2023-02"], dtype="datetime64[M]")
+    valid_origins = np.array(["2022-12", "2023-01"], dtype="datetime64[M]")
+    MODULE._validate_test_time_contract(targets, valid_origins)
+
+    invalid_origins = np.array(["2022-12", "2023-02"], dtype="datetime64[M]")
+    with np.testing.assert_raises_regex(ValueError, "T−1"):
+        MODULE._validate_test_time_contract(targets, invalid_origins)

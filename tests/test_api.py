@@ -13,7 +13,7 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.6.0"
+    assert response.json()["api_version"] == "0.6.1"
     assert response.json()["model_contract_version"] == "1.5"
 
 
@@ -28,6 +28,12 @@ def test_catalog_separates_required_and_extra_sources() -> None:
     catalog = response.json()
     assert any(item["requirement"] == "required" for item in catalog)
     assert any(item["region"] == "national" for item in catalog)
+    assert sum(item["enters_monthly_submission"] for item in catalog) == 1
+    assert all(
+        item["use_scope"] == "monthly_model"
+        for item in catalog
+        if item["enters_monthly_submission"]
+    )
 
 
 def test_manifest_separates_internal_rmse_from_public_baseline_score() -> None:
@@ -41,6 +47,8 @@ def test_manifest_separates_internal_rmse_from_public_baseline_score() -> None:
     assert payload["official_score"] == 1.85077
     assert len(payload["official_dataset"]["atmospheric_features"]) == 9
     assert payload["official_dataset"]["submission_rows"] == 1_885_464
+    assert payload["data_use_policy"]["external_data_in_submission"] == []
+    assert "alvo proibido" in payload["data_use_policy"]["public_target_policy"]
     assert payload["artifacts"]["submission_available"] is True
     assert payload["execution"]["raw_official_data_published"] is False
     assert payload["execution"]["entrypoint"] == (

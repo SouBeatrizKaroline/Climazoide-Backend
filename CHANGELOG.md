@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-09-20
+
+- consolida a regra oficial T−1, alvo público proibido e risco de overfitting ao leaderboard;
+- declara por fonte se o dado entra ou não na submissão mensal;
+- adiciona teste de invariância para impedir que linhas futuras alterem previsão anterior;
+- reorganiza README e protocolo científico sem duplicar explicações.
+
 ## [0.6.0] - 2026-09-20
 
 - implementa de forma independente o XGBoost de anomalias com nove variáveis oficiais em T−1;

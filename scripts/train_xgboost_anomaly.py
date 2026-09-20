@@ -100,6 +100,16 @@ def _atmospheric_feature_index(target: np.ndarray) -> np.ndarray:
     return target - 1
 
 
+def _test_row(values: np.ndarray, target_index: int) -> np.ndarray:
+    """Lê somente a linha oficial associada ao alvo, sem consultar linhas futuras."""
+    return values[target_index]
+
+
+def _validate_test_time_contract(targets: np.ndarray, origins: np.ndarray) -> None:
+    if not np.array_equal(origins + np.timedelta64(1, "M"), targets):
+        raise ValueError("time_origem não corresponde a T−1.")
+
+
 def _base_features(
     count: int,
     target: np.ndarray,
@@ -271,8 +281,7 @@ def _test_features(
             raise ValueError("tp_alvo do teste contém valores; possível acesso ao alvo.")
         targets = test.time.values.astype("datetime64[M]")
         origins = test.time_origem.values.astype("datetime64[M]")
-        if not np.array_equal(origins + np.timedelta64(1, "M"), targets):
-            raise ValueError("time_origem não corresponde a T−1.")
+        _validate_test_time_contract(targets, origins)
         latitudes = train.lat.values.astype(np.float32)
         longitudes = train.lon.values.astype(np.float32)
         tp_climatology = _monthly_climatology(tp, times, climatology_end)
@@ -289,7 +298,7 @@ def _test_features(
                 stop = start + GRID_POINTS
                 origin_month = int(origin_date.astype(int) % 12)
                 matrix[start:stop, column] = (
-                    test[name].isel(time=target_index).values - feature_climatology[origin_month]
+                    _test_row(test[name].values, target_index) - feature_climatology[origin_month]
                 ).reshape(-1)
             del train_values, feature_climatology
         for target_index, target_date in enumerate(targets):
@@ -298,7 +307,7 @@ def _test_features(
             target_month = int(target_date.astype(int) % 12)
             origin_month = int(origins[target_index].astype(int) % 12)
             baseline = tp_climatology[target_month]
-            tp_origin = test.tp_ultima_obs.isel(time=target_index).values.astype(np.float32)
+            tp_origin = _test_row(test.tp_ultima_obs.values, target_index).astype(np.float32)
             matrix[start:stop, len(FEATURES)] = tp_origin.reshape(-1)
             matrix[start:stop, len(FEATURES) + 1] = (
                 tp_origin - tp_climatology[origin_month]
@@ -411,6 +420,14 @@ def run(
         "official_score": None,
         "submission_export_requested": export_submission,
         "target_period_read": False,
+        "external_data_used": False,
+        "official_inputs": [
+            "treino_tp.nc",
+            *TRAIN_FILES.values(),
+            "teste_features.nc",
+            "sample_submission.csv",
+        ],
+        "test_row_policy": "a previsão do alvo T lê somente a linha de T e sua origem T−1",
         "source_repository_modified": False,
     }
     (artifacts_dir / "xgboost-anomaly-report.json").write_text(

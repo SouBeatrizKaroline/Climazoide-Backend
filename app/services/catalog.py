@@ -9,6 +9,8 @@ CATALOG = [
         requirement="extra",
         access="API pública sem chave para uso não comercial, com atribuição.",
         documentation_url="https://open-meteo.com/en/docs",
+        use_scope="operational_context",
+        enters_monthly_submission=False,
         enabled=True,
     ),
     CatalogItem(
@@ -19,6 +21,8 @@ CATALOG = [
         requirement="extra",
         access="Disponibilizado pelo endpoint Air Quality do Open-Meteo, com atribuição.",
         documentation_url="https://open-meteo.com/en/docs/air-quality-api",
+        use_scope="operational_context",
+        enters_monthly_submission=False,
         enabled=True,
     ),
     CatalogItem(
@@ -29,6 +33,8 @@ CATALOG = [
         requirement="required",
         access="Requer conta, aceite das regras e credencial individual.",
         documentation_url="https://github.com/SouBeatrizKaroline/Climazoide-Backend#dados-utilizados",
+        use_scope="monthly_model",
+        enters_monthly_submission=True,
     ),
     CatalogItem(
         id="era5-cds",
@@ -38,6 +44,8 @@ CATALOG = [
         requirement="extra",
         access="Requer cadastro, aceite dos termos do dataset e CDS API.",
         documentation_url="https://cds.climate.copernicus.eu/how-to-api",
+        use_scope="research_reference",
+        enters_monthly_submission=False,
     ),
     CatalogItem(
         id="nasa-power",
@@ -47,6 +55,8 @@ CATALOG = [
         requirement="extra",
         access="API pública; respeitar limites e resolução de origem.",
         documentation_url="https://power.larc.nasa.gov/docs/services/api/temporal/monthly/",
+        use_scope="operational_context",
+        enters_monthly_submission=False,
         enabled=True,
     ),
     CatalogItem(
@@ -57,6 +67,8 @@ CATALOG = [
         requirement="extra",
         access="Arquivo público; validar periodicidade e versão antes de usar.",
         documentation_url="https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt",
+        use_scope="operational_context",
+        enters_monthly_submission=False,
         enabled=True,
     ),
     CatalogItem(
@@ -67,6 +79,8 @@ CATALOG = [
         requirement="extra",
         access="API pública sem chave.",
         documentation_url="https://aa.usno.navy.mil/data/api",
+        use_scope="operational_context",
+        enters_monthly_submission=False,
         enabled=True,
     ),
     CatalogItem(
@@ -77,6 +91,8 @@ CATALOG = [
         requirement="extra",
         access="Acesso à API deve ser solicitado ao INMET pelo canal oficial.",
         documentation_url="https://portal.inmet.gov.br/fale-conosco",
+        use_scope="research_reference",
+        enters_monthly_submission=False,
     ),
     CatalogItem(
         id="inpe-cptec",
@@ -86,6 +102,8 @@ CATALOG = [
         requirement="extra",
         access="Serviço XML público; a disponibilidade é reportada em cada consulta.",
         documentation_url="https://servicos.cptec.inpe.br/XML/",
+        use_scope="operational_context",
+        enters_monthly_submission=False,
         enabled=True,
     ),
 ]

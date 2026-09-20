@@ -72,6 +72,8 @@ class CatalogItem(BaseModel):
     requirement: Literal["required", "extra"]
     access: str
     documentation_url: str
+    use_scope: Literal["monthly_model", "operational_context", "research_reference"]
+    enters_monthly_submission: bool
     enabled: bool = False
 
 

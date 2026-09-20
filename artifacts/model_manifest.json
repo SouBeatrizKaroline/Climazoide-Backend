@@ -15,7 +15,7 @@
   "scientific_audit": {
     "status": "passed",
     "rule": "Para prever T, usar somente dados cuja origem seja anterior ou igual a T−1.",
-    "summary": "O baseline usa somente precipitação histórica de 1940–2022 e calcula a climatologia espacial do mesmo mês do ano. Nenhum alvo de 2023–2024 é lido.",
+    "summary": "Baseline e candidato foram validados com corte temporal explícito. Nenhum alvo de 2023–2024 é lido; o candidato usa atmosfera estritamente de T−1.",
     "source_audit_commit": "54ab930",
     "source_repository_read_only": true
   },
@@ -23,7 +23,7 @@
     "passed": true,
     "target": "T",
     "latest_allowed_information": "T−1",
-    "implementation": "climatologia ajustada somente no treino oficial encerrado em 2022-12",
+    "implementation": "climatologia ajustada no passado; candidato com atmosfera T−1 e precipitação congelada na origem",
     "test_target_is_all_nan": true,
     "test_origin_alignment_checked": true
   },
@@ -64,7 +64,23 @@
       {"id": "v_850", "label": "Vento meridional (v)", "level": "850 hPa", "temporal_role": "observação de T−1"}
     ],
     "test_contract": "Em cada linha, time é o alvo T e time_origem identifica T−1; tp_alvo permanece NaN.",
-    "baseline_usage": "O baseline publicado usa somente a climatologia histórica de precipitação; as nove variáveis permanecem disponíveis para modelos candidatos futuros."
+    "baseline_usage": "O baseline usa somente climatologia histórica; o XGBoost validado usa as nove variáveis oficiais em T−1."
+  },
+  "data_use_policy": {
+    "monthly_submission_inputs": "somente os 13 arquivos oficiais distribuídos para treino, teste e IDs",
+    "external_data_in_submission": [],
+    "operational_context_only": [
+      "Open-Meteo",
+      "MET Norway",
+      "CAMS/Copernicus",
+      "CPTEC/INPE",
+      "NASA POWER",
+      "NOAA CPC ONI",
+      "US Naval Observatory"
+    ],
+    "separation_rule": "fontes operacionais enriquecem o produto, mas não treinam, calibram nem alteram o CSV mensal",
+    "public_target_policy": "precipitação ERA5 observada de 2023-2024 é tratada como alvo proibido, mesmo sendo pública",
+    "leaderboard_policy": "a pontuação pública orienta comparação geral; não autoriza consulta ao alvo nem ajuste por valores reais e não substitui validação temporal independente"
   },
   "reviewed_sources": [
     {
