@@ -132,6 +132,28 @@ setembro não podem entrar no modelo que prevê setembro, pois isso caracteriza 
 temporal. O pipeline científico deve preservar `time_origem = M` e `time_alvo = M+1` em
 treino, validação, teste e geração do CSV de submissão.
 
+O encadeamento é mensal e móvel: janeiro → previsão de fevereiro; fevereiro → previsão
+de março; e assim por diante. Para uma previsão de setembro de 2026, usa-se agosto de
+2026 completo; setembro só poderá servir de origem para prever outubro depois que seus
+dados mensais estiverem completos e disponíveis. Um modelo pode usar meses anteriores
+adicionais se sua arquitetura os exigir, mas nunca dados posteriores à origem `M`.
+
+Esse princípio vale sempre que o produto gerar uma previsão mensal atual. Não muda,
+porém, o arquivo de avaliação oficial: ele pede somente os alvos de janeiro de 2023 a
+dezembro de 2024, com os IDs já fornecidos. Previsões para 2025 ou 2026 são uma execução
+operacional separada. Os 13 arquivos distribuídos não contêm entradas de 2026; será
+necessário obter os campos ERA5 mensais correspondentes na mesma grade e validar uma
+execução atualizada antes de afirmar que há previsão contínua em produção.
+
+O ERA5 preliminar (ERA5T) costuma ter atraso de cerca de cinco dias; os campos mensais
+normalmente ficam disponíveis por volta do dia 6 do mês seguinte e podem ser substituídos
+pela versão final cerca de 2–3 meses depois. A origem e a versão usadas devem acompanhar
+cada previsão ([disponibilidade oficial do ERA5](https://confluence.ecmwf.int/pages/viewpage.action?pageId=669811810)).
+
+Previsões diárias ou semanais são produtos diferentes: exigem outros alvos e validação.
+A regra mensal não transforma automaticamente o modelo M→M+1 em previsão diária ou
+semanal.
+
 Após autenticar a conta Kaggle e aceitar as regras:
 
 ```bash
