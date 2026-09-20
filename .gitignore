@@ -15,6 +15,9 @@ artifacts/*
 !artifacts/submission.csv.gz
 !artifacts/submission_report.json
 !artifacts/decision_support_catalog.json
+!artifacts/submission-xgboost-anomaly-v1.csv.gz
+!artifacts/xgboost-anomaly-report.json
+!artifacts/xgboost-anomaly-v1.joblib
 *.nc
 *.csv
 !artifacts/climazoide-partial.csv

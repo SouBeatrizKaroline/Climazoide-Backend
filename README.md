@@ -58,7 +58,7 @@ um zero ou uma falsa precisão.
 - análises automáticas de água, agricultura, calor e saúde ambiental;
 - leitura cruzada da previsão curta: chuva acumulada, concentração, dias quentes e correlação chuva–temperatura;
 - consulta mensal à NASA POWER;
-- baseline completo de climatologia mensal, auditado e validado temporalmente;
+- baseline completo de climatologia mensal e candidato XGBoost de anomalias, ambos auditados temporalmente;
 - catálogo rastreável de PCA, PLS concorrente, PLS defasado e ConvLSTM;
 - download verificável do Kaggle e validação do CSV de submissão.
 - apoio à decisão por setor, com cenário mensal, comparação histórica, próximos passos e limites explícitos.
@@ -105,6 +105,7 @@ uvicorn app.main:app --reload
 | GET | `/v1/submission/example.csv` | exemplo pequeno, explicitamente não enviável |
 | GET | `/v1/submission/partial.csv` | previsões válidas já disponíveis para IDs oficiais, se houver |
 | GET | `/v1/submission/download` | CSV completo somente quando validado e publicado |
+| GET | `/v1/submission/candidate/download` | candidato completo validado internamente, separado do envio principal |
 | GET | `/v1/decision-support/options` | setores, localidades e meses disponíveis |
 | GET | `/v1/decision-support/scenario` | cenário e orientações por local, mês e setor |
 
@@ -253,9 +254,34 @@ python scripts/validate_submission.py data/sample_submission.csv submission.csv
 ```
 
 O produto nunca transforma o exemplo de três linhas em submissão. O download completo
-responde com o baseline validado: 1.885.464 previsões finitas e não negativas, IDs e
+principal responde com o baseline validado: 1.885.464 previsões finitas e não negativas, IDs e
 ordem oficiais preservados. O arquivo compactado é conferido no Render pelo SHA-256
 registrado no manifesto e entregue ao navegador como `submission.csv`.
+
+### Candidato XGBoost de anomalias
+
+O pipeline independente `scripts/train_xgboost_anomaly.py` usa as nove variáveis
+atmosféricas oficiais de **T−1**, precipitação congelada na origem, climatologia, posição,
+sazonalidade e horizonte. Ele prevê a anomalia em relação à climatologia e nunca lê
+`tp_alvo` de 2023–2024. O código foi escrito neste repositório MIT; nenhum código GPL do
+WORCAP foi copiado.
+
+Em 20/09/2026, o candidato foi ajustado somente até 2018-12 e avaliado em dois blocos
+operacionais de 24 meses, cobrindo 2019–2022. Em **3.770.928 observações**, obteve
+**RMSE 1,838655**, contra **1,882056** da climatologia no mesmo recorte. O CSV candidato
+preserva os 1.885.464 IDs oficiais, sua ordem e valores finitos não negativos. Ele fica
+separado em `/v1/submission/candidate/download` até receber pontuação oficial; portanto,
+não substitui silenciosamente o arquivo já enviado.
+
+```bash
+python scripts/train_xgboost_anomaly.py data --samples 500000 --estimators 500
+python scripts/validate_submission.py \
+  data/sample_submission.csv artifacts/submission-xgboost-anomaly-v1.csv
+```
+
+Modelo, relatório e CSV compactado possuem hashes rastreáveis em `artifacts/`. A
+pontuação pública conhecida do baseline submetido é **1,85077**; a pontuação oficial do
+novo candidato ainda está pendente.
 
 ### Reproduzir o baseline completo
 
@@ -278,6 +304,9 @@ com período, hashes e tamanhos fica em `artifacts/submission_report.json`.
 
 - **Completo:** contém as 1.885.464 previsões do baseline validado para janeiro de 2023
   a dezembro de 2024 e está disponível em `/v1/submission/download`;
+- **Candidato completo:** contém os mesmos IDs e período, com o XGBoost que venceu a
+  validação interna, em `/v1/submission/candidate/download`; permanece identificado como
+  candidato até ser avaliado oficialmente;
 - **Parcial oficial:** é gerado com as previsões válidas que já existirem para IDs do
   `sample_submission.csv`, mantendo sua ordem. IDs sem previsão válida são omitidos,
   nunca preenchidos com zero ou com valores de outro período. Não pode ser enviado como
@@ -324,19 +353,21 @@ Endpoints citados pela comunidade são testados antes de entrar no produto. Nest
 
 ## Estado da validação científica
 
-O artefato publicado é o **baseline `monthly-climatology-v1`**, não uma promoção das
+O artefato principal publicado é o **baseline `monthly-climatology-v1`**, não uma promoção das
 métricas antigas. Ele usa somente precipitação de treino de 1940–2022, preserva os IDs
 do arquivo oficial e foi validado num bloco futuro completo de 2019–2022. A checagem
 também confirma grade `301 × 261`, 24 meses-alvo, `time_origem = T−1` e `tp_alvo` do
 teste inteiramente ausente.
 
-PCA/LSTM, ConvLSTM, XGBoost e ONI continuam como candidatos de pesquisa. A branch mais
+O **`xgboost-anomaly-v1`** é o primeiro candidato novo aprovado na validação interna:
+respeita T−1 e superou a climatologia histórica. Ainda assim, sua pontuação oficial é
+desconhecida e ele permanece separado do baseline. PCA/LSTM, ConvLSTM, XGBoost v3 e ONI
+continuam como candidatos de pesquisa. A branch mais
 recente do WORCAP não foi promovida porque sua auditoria encontrou atmosfera do
 mês-alvo; o ONI centrado também exige prova adicional de disponibilidade temporal.
 Assim, o CSV atual é tecnicamente válido e completo, mas representa a régua de
-climatologia — não há alegação de que supere essa própria régua nem de pontuação
-oficial. Um modelo mais forte só deve substituí-lo depois de repetir todas as mesmas
-salvaguardas e obter RMSE temporal inferior.
+climatologia. Um modelo mais forte só substitui o arquivo principal depois de repetir
+as salvaguardas, obter RMSE temporal inferior e receber avaliação oficial identificável.
 
 ## Qualidade, segurança e commits
 

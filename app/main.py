@@ -14,6 +14,7 @@ from app.services.model_manifest import load_model_manifest
 from app.services.nasa_power import fetch_monthly
 from app.services.research_catalog import load_research_catalog
 from app.services.submission_delivery import (
+    CANDIDATE_GZIP_PATH,
     EXAMPLE_CSV,
     PARTIAL_PATH,
     SUBMISSION_GZIP_PATH,
@@ -23,7 +24,7 @@ from app.services.submission_delivery import (
 settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
-    version="0.5.0",
+    version="0.6.0",
     description="Camada de integração e entrega de dados do Climazoide.",
 )
 app.add_middleware(
@@ -40,8 +41,8 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "environment": settings.app_env,
-        "api_version": "0.5.0",
-        "model_contract_version": "1.4",
+        "api_version": "0.6.0",
+        "model_contract_version": "1.5",
     }
 
 
@@ -144,6 +145,30 @@ def download_research_partial() -> FileResponse:
         PARTIAL_PATH,
         media_type="text/csv",
         filename="submission-partial.csv",
+    )
+
+
+@app.get("/v1/submission/candidate/download", tags=["submission"])
+def download_validated_candidate() -> StreamingResponse:
+    candidate = submission_status()["validated_candidate"]
+    if not candidate["ready"]:
+        raise HTTPException(
+            status_code=409,
+            detail="O candidato ainda não possui artefato completo validado.",
+        )
+
+    def decompressed_csv():
+        import gzip
+
+        with gzip.open(CANDIDATE_GZIP_PATH, "rb") as source:
+            yield from iter(lambda: source.read(1024 * 1024), b"")
+
+    return StreamingResponse(
+        decompressed_csv(),
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": ('attachment; filename="submission-xgboost-anomaly-v1.csv"')
+        },
     )
 
 

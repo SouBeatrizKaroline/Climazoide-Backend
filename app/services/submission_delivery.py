@@ -11,6 +11,12 @@ SUBMISSION_GZIP_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "subm
 OFFICIAL_IDS_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "sample_submission.csv"
 MODEL_MANIFEST_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "model_manifest.json"
 PARTIAL_PATH = Path(__file__).resolve().parents[2] / "artifacts" / "submission-partial.csv"
+CANDIDATE_GZIP_PATH = (
+    Path(__file__).resolve().parents[2] / "artifacts" / "submission-xgboost-anomaly-v1.csv.gz"
+)
+CANDIDATE_REPORT_PATH = (
+    Path(__file__).resolve().parents[2] / "artifacts" / "xgboost-anomaly-report.json"
+)
 
 EXAMPLE_CSV = """id,tp_mm_day
 2025_01_-30.00_-53.00,3.812
@@ -60,7 +66,51 @@ def submission_status() -> dict:
             )
         ),
         "blocking_reasons": [] if ready else validation_reasons,
+        "validated_candidate": _candidate_status(),
     }
+
+
+def _candidate_status() -> dict:
+    result = {
+        "ready": False,
+        "model_id": "xgboost-anomaly-v1",
+        "filename": None,
+        "validation": None,
+        "official_score": None,
+        "notice": "O candidato ainda não possui artefato validado.",
+    }
+    try:
+        report = json.loads(CANDIDATE_REPORT_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return result
+    result["validation"] = report.get("validation")
+    result["official_score"] = report.get("official_score")
+    submission = report.get("submission") or {}
+    if report.get("status") != "validated_candidate":
+        result["notice"] = "O modelo candidato não venceu a validação temporal interna."
+        return result
+    if submission.get("rows") != 1_885_464:
+        result["notice"] = "O artefato candidato não contém todos os IDs oficiais."
+        return result
+    expected_hash = submission.get("gzip_sha256")
+    if (
+        not CANDIDATE_GZIP_PATH.is_file()
+        or not isinstance(expected_hash, str)
+        or _sha256(CANDIDATE_GZIP_PATH) != expected_hash
+    ):
+        result["notice"] = "O hash do candidato diverge do relatório de validação."
+        return result
+    result.update(
+        {
+            "ready": True,
+            "filename": "submission-xgboost-anomaly-v1.csv",
+            "notice": (
+                "Candidato completo validado internamente; pontuação oficial ainda pendente. "
+                "O baseline oficial continua disponível separadamente."
+            ),
+        }
+    )
+    return result
 
 
 def _partial_notice(
@@ -140,12 +190,16 @@ def _validate_submission() -> tuple[bool, int | None, list[str]]:
     if not model_blockers and SUBMISSION_GZIP_PATH.is_file():
         return _validate_packaged_submission()
     if not OFFICIAL_IDS_PATH.is_file():
-        return False, None, [
-            "o arquivo oficial de IDs do conjunto de teste ainda não foi disponibilizado",
-            "o CSV deve conter somente os IDs e meses pedidos, na ordem oficial",
-            "a validação de cobertura e valores ainda não foi concluída",
-            *model_blockers,
-        ]
+        return (
+            False,
+            None,
+            [
+                "o arquivo oficial de IDs do conjunto de teste ainda não foi disponibilizado",
+                "o CSV deve conter somente os IDs e meses pedidos, na ordem oficial",
+                "a validação de cobertura e valores ainda não foi concluída",
+                *model_blockers,
+            ],
+        )
     if not SUBMISSION_PATH.is_file():
         try:
             with OFFICIAL_IDS_PATH.open(newline="", encoding="utf-8-sig") as source:
@@ -153,15 +207,21 @@ def _validate_submission() -> tuple[bool, int | None, list[str]]:
                 header = next(reader, [])
                 expected_rows = sum(1 for _ in reader)
             if header != ["id", "tp_mm_day"]:
-                return False, expected_rows, [
-                    "o arquivo oficial de teste não tem as colunas esperadas"
-                ]
+                return (
+                    False,
+                    expected_rows,
+                    ["o arquivo oficial de teste não tem as colunas esperadas"],
+                )
         except (OSError, csv.Error):
             return False, None, ["não foi possível ler o arquivo oficial de IDs do teste"]
-        return False, expected_rows, [
-            "o CSV de previsões para os IDs oficiais ainda não foi gerado",
-            *model_blockers,
-        ]
+        return (
+            False,
+            expected_rows,
+            [
+                "o CSV de previsões para os IDs oficiais ainda não foi gerado",
+                *model_blockers,
+            ],
+        )
 
     try:
         with (

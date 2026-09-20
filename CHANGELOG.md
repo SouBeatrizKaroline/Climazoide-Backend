@@ -4,6 +4,14 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-20
+
+- implementa de forma independente o XGBoost de anomalias com nove variáveis oficiais em T−1;
+- valida o candidato em 3.770.928 previsões de 2019–2022, sem consultar o alvo de 2023–2024;
+- reduz o RMSE interno de 1,882056 para 1,838655 e preserva o baseline oficial até haver pontuação pública;
+- publica separadamente o candidato completo, seu modelo reproduzível, relatório, hashes e testes de corte temporal;
+- registra a pontuação pública 1,85077 do baseline já enviado.
+
 ## [0.5.0] - 2026-09-20
 
 - cria a camada `Climazoide Decisão` para agricultura, agronegócio, áreas de risco, hidroenergia, turismo e gestão da água;

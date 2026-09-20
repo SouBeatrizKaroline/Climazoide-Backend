@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-09-20T11:26:45+00:00",
+  "model_id": "xgboost-anomaly-v1",
+  "status": "validated_candidate",
+  "temporal_contract": "atmosfera T−1 + tp congelada na origem → precipitação T",
+  "training_period": "1940-01/2018-12",
+  "training_samples": 500000,
+  "seed": 42,
+  "features": [
+    "t2_anomaly",
+    "cloud_cover_anomaly",
+    "surface_pressure_anomaly",
+    "shum_850_anomaly",
+    "rel_hum_850_anomaly",
+    "temperature_850_anomaly",
+    "geopotential_850_anomaly",
+    "u_850_anomaly",
+    "v_850_anomaly",
+    "tp_origin",
+    "tp_origin_anomaly",
+    "target_climatology",
+    "latitude",
+    "longitude",
+    "target_month_sin",
+    "target_month_cos",
+    "lag_normalized"
+  ],
+  "validation": {
+    "period": "2019-01/2022-12 em dois blocos operacionais de 24 meses",
+    "observations": 3770928,
+    "spatial_stride": 1,
+    "candidate_rmse": 1.8386547414831438,
+    "climatology_rmse": 1.8820555175832832
+  },
+  "submission": {
+    "rows": 1885464,
+    "columns": [
+      "id",
+      "tp_mm_day"
+    ],
+    "csv_sha256": "698a1f4a548cbc3c7cb9d1891ba64b7a3beedef6281c8853ea00ef3ba13b73db",
+    "gzip_sha256": "1d6780ca8b70722f6c866b75b1d0b7a872fb5bfa228a6b5f80d8d3b5fb4dea9b"
+  },
+  "official_score": null,
+  "submission_export_requested": true,
+  "target_period_read": false,
+  "source_repository_modified": false
+}

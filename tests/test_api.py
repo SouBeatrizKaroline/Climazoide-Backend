@@ -13,8 +13,8 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.5.0"
-    assert response.json()["model_contract_version"] == "1.4"
+    assert response.json()["api_version"] == "0.6.0"
+    assert response.json()["model_contract_version"] == "1.5"
 
 
 def test_dashboard_does_not_serve_simulated_predictions() -> None:
@@ -30,15 +30,15 @@ def test_catalog_separates_required_and_extra_sources() -> None:
     assert any(item["region"] == "national" for item in catalog)
 
 
-def test_manifest_exposes_validated_baseline_without_claiming_official_score() -> None:
+def test_manifest_separates_internal_rmse_from_public_baseline_score() -> None:
     response = client.get("/v1/model/manifest")
     assert response.status_code == 200
     payload = response.json()
     assert payload["status"] == "validated_for_submission"
-    assert "pontuação pública e privada ainda não disponível" in payload["evaluation_scope"]
+    assert "pontuação pública registrada" in payload["evaluation_scope"]
     assert payload["metrics"]["name"] == "RMSE"
     assert payload["metrics"]["scope"] == "validação temporal interna; não é pontuação oficial"
-    assert payload["official_score"] is None
+    assert payload["official_score"] == 1.85077
     assert len(payload["official_dataset"]["atmospheric_features"]) == 9
     assert payload["official_dataset"]["submission_rows"] == 1_885_464
     assert payload["artifacts"]["submission_available"] is True
@@ -46,10 +46,9 @@ def test_manifest_exposes_validated_baseline_without_claiming_official_score() -
     assert payload["execution"]["entrypoint"] == (
         "python scripts/train_monthly_climatology.py data"
     )
-    assert len(payload["candidate_models"]) == 5
+    assert len(payload["candidate_models"]) == 6
     assert any(
-        item["id"] == "monthly-climatology-v1"
-        and item["status"] == "validated_baseline"
+        item["id"] == "monthly-climatology-v1" and item["status"] == "validated_baseline"
         for item in payload["candidate_models"]
     )
     assert any(item["ref"] == "vermelho" for item in payload["reviewed_sources"])
@@ -57,12 +56,14 @@ def test_manifest_exposes_validated_baseline_without_claiming_official_score() -
         item["id"] == "temporal_contract" and item["status"] == "passed"
         for item in payload["readiness"]
     )
-    assert next(item for item in payload["readiness"] if item["id"] == "submission")[
-        "status"
-    ] == "passed"
-    assert next(item for item in payload["readiness"] if item["id"] == "official_score")[
-        "status"
-    ] == "pending"
+    assert (
+        next(item for item in payload["readiness"] if item["id"] == "submission")["status"]
+        == "passed"
+    )
+    assert (
+        next(item for item in payload["readiness"] if item["id"] == "official_score")["status"]
+        == "passed"
+    )
 
 
 def test_live_locations_are_real_coordinates() -> None:
@@ -102,13 +103,22 @@ def test_complete_submission_is_available_as_a_validated_baseline() -> None:
     assert "todos os IDs oficiais" in status.json()["partial_notice"]
     assert status.json()["expected_rows"] == 1_885_464
     assert status.json()["submission_kind"] == "validated_baseline"
-    assert status.json()["official_score"] is None
+    assert status.json()["official_score"] == 1.85077
+    assert status.json()["validated_candidate"]["ready"] is True
+    assert status.json()["validated_candidate"]["official_score"] is None
+
+
+def test_validated_candidate_is_downloadable_without_replacing_baseline() -> None:
+    with client.stream("GET", "/v1/submission/candidate/download") as response:
+        assert response.status_code == 200
+        assert response.headers["content-disposition"] == (
+            'attachment; filename="submission-xgboost-anomaly-v1.csv"'
+        )
+        assert next(response.iter_lines()) == "id,tp_mm_day"
 
 
 def test_complete_submission_stream_matches_validated_csv_hash() -> None:
-    manifest = json.loads(
-        (Path("artifacts") / "model_manifest.json").read_text(encoding="utf-8")
-    )
+    manifest = json.loads((Path("artifacts") / "model_manifest.json").read_text(encoding="utf-8"))
     expected = manifest["submission_validation"]
     digest = hashlib.sha256()
     size = 0
@@ -152,9 +162,7 @@ def test_submission_requires_the_official_test_ids_and_matching_order(
     manifest = tmp_path / "model_manifest.json"
     monkeypatch.setattr(submission_delivery, "OFFICIAL_IDS_PATH", official)
     monkeypatch.setattr(submission_delivery, "SUBMISSION_PATH", prediction)
-    monkeypatch.setattr(
-        submission_delivery, "SUBMISSION_GZIP_PATH", tmp_path / "submission.csv.gz"
-    )
+    monkeypatch.setattr(submission_delivery, "SUBMISSION_GZIP_PATH", tmp_path / "submission.csv.gz")
     monkeypatch.setattr(submission_delivery, "MODEL_MANIFEST_PATH", manifest)
     manifest.write_text(
         '{"status":"validated_for_submission",'
@@ -164,15 +172,11 @@ def test_submission_requires_the_official_test_ids_and_matching_order(
         '"submission_validation":{"passed":true}}'
     )
     official.write_text("id,tp_mm_day\n2026_09_-30.00_-53.00,\n2026_09_-30.00_-52.75,\n")
-    prediction.write_text(
-        "id,tp_mm_day\n2026_09_-30.00_-53.00,1.25\n2026_09_-30.00_-52.75,0\n"
-    )
+    prediction.write_text("id,tp_mm_day\n2026_09_-30.00_-53.00,1.25\n2026_09_-30.00_-52.75,0\n")
 
     assert submission_delivery._validate_submission() == (True, 2, [])
 
-    prediction.write_text(
-        "id,tp_mm_day\n2026_09_-30.00_-52.75,1.25\n2026_09_-30.00_-53.00,0\n"
-    )
+    prediction.write_text("id,tp_mm_day\n2026_09_-30.00_-52.75,1.25\n2026_09_-30.00_-53.00,0\n")
     ready, rows, reasons = submission_delivery._validate_submission()
     assert ready is False
     assert rows == 2
@@ -211,13 +215,9 @@ def test_partial_submission_contains_only_valid_official_ids_in_original_order(
         '"submission_validation":{"passed":true}}'
     )
     official.write_text(
-        "id,tp_mm_day\n2023_01_-60.00_-90.00,0\n"
-        "2023_01_-60.00_-89.75,0\n2023_02_-60.00_-90.00,0\n"
+        "id,tp_mm_day\n2023_01_-60.00_-90.00,0\n2023_01_-60.00_-89.75,0\n2023_02_-60.00_-90.00,0\n"
     )
-    partial.write_text(
-        "id,tp_mm_day\n2023_01_-60.00_-90.00,1.2\n"
-        "2023_02_-60.00_-90.00,2.3\n"
-    )
+    partial.write_text("id,tp_mm_day\n2023_01_-60.00_-90.00,1.2\n2023_02_-60.00_-90.00,2.3\n")
 
     assert submission_delivery._validate_partial_submission() == (
         True,

@@ -1,17 +1,17 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "model_id": "monthly-climatology-v1",
   "model_name": "Climatologia mensal espacial",
   "status": "validated_for_submission",
   "submission_kind": "validated_baseline",
-  "official_score": null,
+  "official_score": 1.85077,
   "source_repository": "https://github.com/SouBeatrizKaroline/Climazoide-Backend",
   "source_branch": "main",
   "source_artifact_commit": "generated-by-scripts/train_monthly_climatology.py",
   "training_period": "1940-01/2022-12",
   "validation_period": "2019-01/2022-12",
   "target_period": "2023-01/2024-12",
-  "evaluation_scope": "baseline completo validado fora da avaliação oficial; pontuação pública e privada ainda não disponível",
+  "evaluation_scope": "baseline completo validado; pontuação pública registrada no envio oficial e pontuação privada ainda indisponível",
   "scientific_audit": {
     "status": "passed",
     "rule": "Para prever T, usar somente dados cuja origem seja anterior ou igual a T−1.",
@@ -90,6 +90,12 @@
       "purpose": "baseline completo, reproduzível e sem vazamento para os 24 meses oficiais"
     },
     {
+      "id": "xgboost-anomaly-v1",
+      "label": "XGBoost de anomalias",
+      "status": "validated_candidate",
+      "purpose": "candidato independente validado em 3.770.928 previsões históricas; aguarda pontuação oficial antes de substituir o baseline"
+    },
+    {
       "id": "pca-lstm",
       "label": "PCA/EOF + LSTM",
       "status": "research_only",
@@ -121,14 +127,17 @@
     {"id": "official_dataset", "label": "13 arquivos oficiais verificados localmente", "status": "passed"},
     {"id": "retraining", "label": "Baseline ajustado e validado", "status": "passed"},
     {"id": "submission", "label": "CSV com 1.885.464 linhas", "status": "passed"},
-    {"id": "official_score", "label": "Pontuação oficial", "status": "pending"}
+    {"id": "official_score", "label": "Pontuação pública do baseline", "status": "passed"}
   ],
   "artifacts": {
     "generator": "scripts/train_monthly_climatology.py",
     "submission": "artifacts/submission.csv.gz",
     "report": "artifacts/submission_report.json",
     "inference_artifact_available": true,
-    "submission_available": true
+    "submission_available": true,
+    "validated_candidate_submission": "artifacts/submission-xgboost-anomaly-v1.csv.gz",
+    "validated_candidate_model": "artifacts/xgboost-anomaly-v1.joblib",
+    "validated_candidate_report": "artifacts/xgboost-anomaly-report.json"
   },
   "submission_validation": {
     "passed": true,
@@ -145,11 +154,12 @@
   "execution": {
     "entrypoint": "python scripts/train_monthly_climatology.py data",
     "optional_dependency": "pip install -e .[science]",
-    "raw_official_data_published": false
+    "raw_official_data_published": false,
+    "candidate_entrypoint": "python scripts/train_xgboost_anomaly.py data --samples 500000 --estimators 500"
   },
   "limitations": [
-    "Este é um baseline de climatologia mensal; ele não usa as nove variáveis atmosféricas e não representa o modelo mais competitivo possível.",
-    "O RMSE informado é de validação temporal interna em 2019–2022, não é pontuação pública ou privada da competição.",
+    "O arquivo oficial publicado permanece o baseline de climatologia mensal até o candidato XGBoost receber pontuação oficial.",
+    "O XGBoost de anomalias obteve RMSE interno de 1,838655 contra 1,882056 do baseline, mas esse valor não é pontuação pública ou privada da competição.",
     "Nenhum alvo real de 2023–2024 foi usado ou incluído no repositório.",
     "Os arquivos oficiais brutos não são publicados; devem ser obtidos pelo canal oficial e conforme as regras da competição.",
     "Os experimentos do repositório WORCAP foram apenas auditados; código GPL, pesos e artefatos não foram copiados para este projeto MIT."
