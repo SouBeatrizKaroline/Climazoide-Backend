@@ -68,9 +68,9 @@ O catálogo completo, commits e resumo de contribuição está em
   de organização e documentação de `vermelho`.
 - `feature/melhorar-pls-lstm-daiane@c58d1cb` corrigiu o ensemble PCA/PLS, adicionou
   bagging ao XGBoost e implementou o treino ConvLSTM com `feature_idx = alvo_idx − 1`.
-  O ensemble XGBoost + LSTM registra RMSE interno `1,871368`, mas não supera o XGBoost
-  independente já auditado no Climazoide; o ConvLSTM possui histórico de treino, porém
-  não versiona `metrics.json` nem submissão final.
+  O ensemble XGBoost + LSTM registra RMSE interno `1,871368` em protocolo diferente e
+  não diretamente comparável ao XGBoost do Climazoide; o ConvLSTM possui histórico de
+  treino, porém não versiona `metrics.json` nem submissão final.
 - `feature/xgboost-v3-daiane` não deve ser descrita como validada “sem vazamento”:
   seu construtor de exemplos no snapshot usa atmosfera do mês-alvo.
 - O blend sem ONI é a linha de pesquisa temporalmente aceitável. O blend final com ONI
