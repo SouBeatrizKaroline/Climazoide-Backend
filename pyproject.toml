@@ -1,6 +1,6 @@
 [project]
 name = "climazoide-api"
-version = "0.6.3"
+version = "0.6.4"
 description = "API de integração climática do projeto Climazoide"
 readme = "README.md"
 license = { text = "MIT" }

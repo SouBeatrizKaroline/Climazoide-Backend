@@ -13,7 +13,7 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.6.3"
+    assert response.json()["api_version"] == "0.6.4"
     assert response.json()["model_contract_version"] == "1.5"
 
 
@@ -60,7 +60,7 @@ def test_manifest_separates_internal_rmse_from_public_baseline_score() -> None:
         for item in payload["candidate_models"]
     )
     assert any(
-        item["id"] == "pls-lagged-lstm" and "1,840456" in item["purpose"]
+        item["id"] == "pls-lagged-lstm" and "1,780512" in item["purpose"]
         for item in payload["candidate_models"]
     )
     assert any(item["ref"] == "vermelho" for item in payload["reviewed_sources"])
@@ -96,7 +96,7 @@ def test_research_catalog_maps_every_remote_branch_without_promoting_metrics() -
     assert payload["promotion_policy"]["production_metrics"] is False
     assert payload["technical_audit"]["status"] == "needs_adjustments"
     assert payload["technical_audit"]["latest_branch_temporal_alignment"] == (
-        "compliant_without_oni"
+        "mixed_safe_without_oni_blocked_with_centered_oni"
     )
     assert any(
         branch["name"] == "vermelho"
@@ -106,7 +106,7 @@ def test_research_catalog_maps_every_remote_branch_without_promoting_metrics() -
     assert payload["latest_branch"] == "vermelho"
     assert next(
         branch for branch in payload["branches"] if branch["name"] == "vermelho"
-    )["commit"] == "8c7fdb5"
+    )["commit"] == "6101abb"
 
 
 def test_complete_submission_is_available_as_a_validated_baseline() -> None:

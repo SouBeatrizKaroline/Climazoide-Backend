@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-09-22
+
+- reaudita as oito branches do WORCAP em modo somente leitura até `vermelho@6101abb`;
+- registra CV walk-forward de cinco cortes e o melhor blend sem ONI como pesquisa;
+- bloqueia explicitamente o blend final com ONI centrado por risco de informação de `T`;
+- atualiza XGBoost e ConvLSTM experimentais sem copiar código GPL, pesos ou binários.
+
 ## [0.6.3] - 2026-09-20
 
 - registra a submissão oficial do XGBoost com score público `1,81358`;

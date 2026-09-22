@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.1",
-  "audited_at": "2026-09-20T19:24:50-03:00",
+  "schema_version": "1.2",
+  "audited_at": "2026-09-22T18:24:09-03:00",
   "source_repository": "https://github.com/mazeeqe/WORCAP-2026",
   "source_repository_modified": false,
   "default_branch": "main",
@@ -8,21 +8,21 @@
   "technical_audit": {
     "status": "needs_adjustments",
     "forecast_rule": "features disponíveis até T−1 -> precipitação de T",
-    "latest_branch_temporal_alignment": "compliant_without_oni",
+    "latest_branch_temporal_alignment": "mixed_safe_without_oni_blocked_with_centered_oni",
     "oni_experiment_temporal_alignment": "not_compliant",
     "evaluation_target_access_found_in_tracked_code": false,
     "binary_dataset_forensic_check": "not_performed_files_unavailable",
     "final_submission_audited": false,
-    "summary": "A atualização mais recente corrige o alinhamento atmosférico para T−1 e registra PLS defasado + LSTM sem ONI com RMSE interno 1,840456. A variante com ONI não foi aprovada: piorou para 1,865132 e o índice trimestral centrado pode incorporar o mês T. A métrica agrega horizontes com pesos diferentes do teste oficial; nenhum resultado foi promovido.",
+    "summary": "A atualização de 22/09 acrescenta validação walk-forward em cinco cortes históricos, modelos de anomalia e encolhimento à climatologia. O melhor blend sem ONI registrado no relatório alcança RMSE-CV LOFO 1,780512, mas continua pesquisa porque não há CSV final versionado nem score oficial. O blend indicado como final inclui ONI trimestral centrado em T−1, que pode incorporar SST de T; por isso permanece bloqueado e nenhum resultado da origem foi promovido.",
     "source_repository_modified": false
   },
   "branches": [
     {
       "name": "main",
-      "commit": "228b15c",
-      "updated_at": "2026-09-20T11:41:17-03:00",
-      "status": "integrated_temporal_fix",
-      "work": ["integração da correção T−1", "cache e sweep PCA/PLS", "resultado com pós-processamento ENSO ainda não aprovado"]
+      "commit": "2813ee6",
+      "updated_at": "2026-09-22T13:22:20-03:00",
+      "status": "integrated_temporal_cv",
+      "work": ["integração da correção T−1", "validação walk-forward em cinco cortes", "modelagem de anomalias e encolhimento à climatologia", "blend com ONI permanece não aprovado"]
     },
     {
       "name": "Beatriz",
@@ -33,10 +33,10 @@
     },
     {
       "name": "vermelho",
-      "commit": "8c7fdb5",
-      "updated_at": "2026-09-20T16:35:20-03:00",
+      "commit": "6101abb",
+      "updated_at": "2026-09-22T14:02:41-03:00",
       "status": "latest_research",
-      "work": ["alinhamento atmosférico T−1", "PLS defasado + LSTM sem ONI com RMSE interno 1,840456", "redução de dimensionalidade revisada", "sweep com melhor configuração lr=0,0005, hidden=128 e dropout=0,1", "walk-forward ENSO implementado mas sem resultado concluído", "variante ONI rejeitada por desempenho e risco temporal"]
+      "work": ["alinhamento atmosférico T−1", "CV walk-forward com cinco cortes históricos", "melhor blend sem ONI no relatório com RMSE-CV LOFO 1,780512", "blend indicado como final usa ONI centrado e permanece bloqueado", "notebook e legenda das configurações atualizados", "nenhum CSV final versionado para auditoria"]
     },
     {
       "name": "feature/eda-outliers-daiane",
@@ -68,15 +68,15 @@
     },
     {
       "name": "feature/melhorar-pls-lstm-daiane",
-      "commit": "54ab930",
-      "updated_at": "2026-09-17T20:41:36-03:00",
-      "status": "historical_consolidation",
-      "work": ["consolidação de EDA", "XGBoost v3", "experimento ONI", "snapshot histórico com desalinhamento temporal; métricas não aprovadas"]
+      "commit": "c58d1cb",
+      "updated_at": "2026-09-22T13:11:55-03:00",
+      "status": "parallel_research",
+      "work": ["consolidação de EDA", "XGBoost com bagging e correção do ensemble PCA/PLS", "ensemble XGBoost + LSTM com RMSE interno 1,871368", "pipeline ConvLSTM implementado com contrato T−1, mas sem metrics.json ou submissão final versionados", "experimento ONI continua não promovido"]
     }
   ],
   "promotion_policy": {
     "production_metrics": false,
-    "reason": "A execução sem ONI respeita o alinhamento atmosférico T−1, mas sua validação agregada não reproduz exatamente o peso dos 24 meses oficiais e ainda não possui score oficial. ONI e pós-processamento ENSO permanecem bloqueados por disponibilidade temporal e validação incompleta.",
+    "reason": "A pesquisa sem ONI respeita o alinhamento atmosférico T−1 e agora possui CV walk-forward, mas não há CSV final versionado nem score oficial. O blend indicado como final inclui ONI centrado com disponibilidade incompatível com o corte T−1. Código GPL, pesos e binários permanecem fora do produto.",
     "binary_artifacts_copied": false
   }
 }

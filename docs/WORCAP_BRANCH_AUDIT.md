@@ -1,32 +1,33 @@
 # Auditoria técnica da pesquisa WORCAP-2026
 
-Auditoria atualizada em **20 de setembro de 2026, às 19:24:50 (BRT, UTC−03:00)**.
+Auditoria atualizada em **22 de setembro de 2026, às 18:24:09 (BRT, UTC−03:00)**.
 O repositório de pesquisa foi consultado somente para leitura. A lista remota
-confirmada contém oito branches. A nova leitura incluiu `main@228b15c` e
-`vermelho@8c7fdb5`, publicados em 20/09/2026. Nenhum push, commit ou alteração foi
-feito na origem. As regras temporais fornecidas pela equipe foram tratadas como
-requisito da auditoria.
+confirmada contém oito branches. A nova leitura incluiu `main@2813ee6`,
+`vermelho@6101abb` e `feature/melhorar-pls-lstm-daiane@c58d1cb`, publicados em
+22/09/2026. O checkout local da origem permaneceu em `main@fac2fa7`, limpo e 25
+commits atrás das referências remotas; nenhum push, commit, checkout ou alteração de
+arquivo foi feito na origem. As regras temporais fornecidas pela equipe foram tratadas
+como requisito da auditoria.
 
 ## Resultado
 
-**Precisa de ajustes: a atualização mais recente corrige o principal deslocamento
-atmosférico, mas ainda não constitui uma release promovível.** Para prever o mês `T`,
-o contrato é usar apenas
-informação originada e publicada até o instante de emissão definido no mês `T−1`.
-O pipeline sem ONI em `vermelho@8c7fdb5` usa atmosfera em `alvo_idx − 1` e foi
-retreinado. A `main@228b15c` também incorporou a correção anterior. Ainda assim,
-ONI e o pós-processamento ENSO não passam na auditoria temporal, e a métrica agregada
-do LSTM não pondera os 24 horizontes como o conjunto oficial. Por isso, nenhum novo
-artefato substitui o baseline ou o candidato independente do Climazoide.
+**Precisa de ajustes: a atualização introduz uma validação temporal mais forte, mas o
+artefato apontado como final ainda não é promovível.** Para prever o mês `T`, o contrato
+é usar apenas informação originada e publicada até o instante de emissão definido no
+mês `T−1`. A `main@2813ee6` incorporou cinco cortes walk-forward, modelos de anomalia
+e encolhimento em direção à climatologia. O melhor blend **sem ONI** registrado no
+relatório alcança RMSE-CV LOFO `1,780512`; porém não há CSV final versionado nem score
+oficial. O blend indicado como final usa ONI trimestral centrado e permanece bloqueado.
+Nenhum artefato da origem substitui o baseline ou o XGBoost independente do Climazoide.
 
 ## Achados temporais
 
 | Componente | Evidência | Decisão |
 | --- | --- | --- |
-| Treino/validação em `vermelho@8c7fdb5` | `src/data.py` seleciona atmosfera em `feature_idx = alvo_idx − 1` e `TP[alvo_idx]` como alvo | **Alinhamento básico conforme:** atmosfera de `T−1` para prever `T` |
-| `main@228b15c` | Integra a correção T−1 e resultados anteriores com correção ENSO | Correção básica integrada; saída com ENSO continua não aprovada |
+| Treino/validação em `vermelho@6101abb` | `src/data.py` seleciona atmosfera em `feature_idx = alvo_idx − 1` e `TP[alvo_idx]` como alvo | **Alinhamento básico conforme:** atmosfera de `T−1` para prever `T` |
+| `main@2813ee6` | Integra correção T−1, CV walk-forward de cinco cortes, anomalias e shrinkage | Avanço metodológico pertinente; os resultados continuam pesquisa |
 | Features do teste | O contrato informado associa cada alvo `T` a `time_origem = T−1` | Não foi encontrada dependência automática da linha posterior para prever a anterior; faltam assertions de origem no carregador |
-| ONI | Índice centrado em três meses é atribuído ao mês central; a nova variante lê o ONI de `T−1` | **Bloqueado:** o valor centrado em `T−1` pode incluir SST observada em `T`; a execução também piorou o RMSE interno |
+| ONI no blend final | `final_blend.py` usa ONI associado a `T−1`, mas `src/oni.py` declara temporadas trimestrais centradas | **Bloqueado:** o ONI centrado em `T−1` incorpora o mês `T`; a melhora de CV não remove essa violação |
 | Scaler/PCA/PLS/climatologia | Ajustes examinados usam dados até `2018-12` | Não foi identificado ajuste sobre 2023/2024; no retreino final, reajustar somente dentro de cada fold temporal |
 | EDA do teste | Estatísticas agregadas consultam múltiplas linhas do teste, mas não foram vistas alimentando inferência | Risco de análise transdutiva/manual; isolar do pipeline de decisão e documentar |
 
@@ -45,17 +46,14 @@ código não indicou chamadas à CDS API para recuperar o alvo. Isso **não cert
 arquivos binários ausentes: nenhum NetCDF/CSV oficial foi submetido a inspeção
 forense independente, e não se deve baixar o alvo real para esta verificação.
 
-A fórmula do RMSE observada é correta para uma grade completa e pesos iguais. A nova
-execução sem ONI registrou RMSE interno `1,840456` e MAE `1,112441`; com ONI,
-RMSE `1,865132` e MAE `1,134670`. Esses valores são informativos, mas a agregação
-contém quantidades diferentes de exemplos por horizonte (47 para lag 1 até 24 para
-lag 24), enquanto o teste oficial tem exatamente uma grade por cada um dos 24 meses.
-A comparação não deve ser tratada como score esperado da competição.
-A validação é cronológica; o embaralhamento do DataLoader ocorre somente entre
-amostras já atribuídas ao treino. Separar e reportar explicitamente horizonte de
-um mês (`lag=1`) e executar avaliação walk-forward após corrigir o pipeline.
-Também foram observadas métricas divergentes em arquivos de resultado sem hash de
-código/execução que permita explicar a diferença.
+A fórmula do RMSE observada é correta para uma grade completa. O relatório novo usa
+cinco dobras cronológicas, com cortes de treino em 1969, 1979, 1989, 2009 e 2018, e
+avalia o encolhimento leave-one-fold-out. O melhor modelo individual sem ONI registra
+`1,781878`; o melhor blend sem ONI presente no relatório registra `1,780512`. O arquivo
+separado que aponta `1,778058` como melhor combinação inclui ONI e, portanto, não passa
+no corte temporal. Esses valores não são pontuação pública ou privada e não devem ser
+tratados como score esperado. A origem não versiona o CSV final gerado, impedindo
+validar IDs, hashes e a associação exata entre previsão e linha oficial.
 
 ## Estado das branches
 
@@ -63,21 +61,20 @@ O catálogo completo, commits e resumo de contribuição está em
 [`artifacts/research_catalog.json`](../artifacts/research_catalog.json) e na rota
 `GET /v1/research/branches`. Pontos que afetam prontidão:
 
-- `vermelho@8c7fdb5` é a atualização remota mais recente: reduz os tetos de
-  componentes, executa novo sweep e promove internamente `lr=5e-4`, `hidden_size=128`
-  e `dropout=0,1`; isso permanece pesquisa, não produção.
-- `main@228b15c` incorporou a correção temporal anterior, mas não a execução mais
-  recente de 20/09 e ainda mantém resultado associado à correção ENSO.
-- `feature/melhorar-pls-lstm-daiane@54ab930` passou a ser um snapshot histórico;
-  seu desalinhamento atmosférico não representa o estado mais recente.
+- `vermelho@6101abb` é a referência remota mais recente. Os commits posteriores ao
+  merge de `main` reorganizam o repositório e documentam no notebook o blend enviado;
+  o commit final acrescenta uma legenda reproduzível para as configurações da CV.
+- `main@2813ee6` incorporou a CV walk-forward e o blend, mas não os commits posteriores
+  de organização e documentação de `vermelho`.
+- `feature/melhorar-pls-lstm-daiane@c58d1cb` corrigiu o ensemble PCA/PLS, adicionou
+  bagging ao XGBoost e implementou o treino ConvLSTM com `feature_idx = alvo_idx − 1`.
+  O ensemble XGBoost + LSTM registra RMSE interno `1,871368`, mas não supera o XGBoost
+  independente já auditado no Climazoide; o ConvLSTM possui histórico de treino, porém
+  não versiona `metrics.json` nem submissão final.
 - `feature/xgboost-v3-daiane` não deve ser descrita como validada “sem vazamento”:
   seu construtor de exemplos no snapshot usa atmosfera do mês-alvo.
-- O novo script de walk-forward para a correção ENSO está versionado, mas o próprio
-  histórico do commit declara que ele ainda não foi executado até a conclusão; não
-  há relatório final que autorize a correção.
-- ConvLSTM não está integrado como pipeline treinado e reproduzível na branch
-  consolidada. Não deve ser mostrado como modelo pronto para treinamento sem essa
-  comprovação.
+- O blend sem ONI é a linha de pesquisa temporalmente aceitável. O blend final com ONI
+  centrado não é aceito, ainda que sua CV seja numericamente melhor.
 
 ## Submissão e prontidão
 
@@ -95,9 +92,9 @@ apenas ilustrativo e não pode ser submetido.
 ## Próximas condições para promoção
 
 1. Manter a correção já implementada de `atmosfera T−1 → alvo TP T`.
-2. Avaliar os 24 horizontes com o mesmo peso e a mesma geometria do teste oficial.
-3. Remover ONI centrado ou reconstruí-lo com vintage estritamente disponível no corte.
-4. Concluir e revisar o walk-forward antes de considerar pós-processamento ENSO.
+2. Preservar a CV walk-forward e reportar separadamente modelos sem ONI.
+3. Remover ONI centrado do blend final ou reconstruí-lo com vintage estritamente disponível no corte.
+4. Validar os 24 meses na mesma geometria e no mesmo peso do teste oficial.
 5. Publicar artefato de inferência reproduzível e executar testes de invariância
    temporal, alinhamento de origem e integridade dos IDs.
 6. Gerar CSV a partir dos IDs oficiais e validar cobertura, ordem, unicidade,

@@ -15,8 +15,8 @@
   "scientific_audit": {
     "status": "passed",
     "rule": "Para prever T, usar somente dados cuja origem seja anterior ou igual a T−1.",
-    "summary": "Baseline e candidato foram validados com corte temporal explícito. A nova pesquisa PLS defasado + LSTM também corrige a atmosfera para T−1, mas continua separada da submissão até reproduzir a avaliação oficial; nenhuma variante com ONI foi promovida.",
-    "source_audit_commit": "8c7fdb5",
+    "summary": "Baseline e XGBoost do Climazoide foram validados com corte temporal explícito. A pesquisa atualizada acrescenta CV walk-forward e blends sem ONI, mas continua separada da submissão; o blend final da origem usa ONI centrado e não foi promovido.",
+    "source_audit_commit": "6101abb",
     "source_repository_read_only": true
   },
   "temporal_contract_check": {
@@ -85,24 +85,24 @@
   "reviewed_sources": [
     {
       "ref": "feature/melhorar-pls-lstm-daiane",
-      "commit": "54ab930",
-      "decision": "não promovido",
+      "commit": "c58d1cb",
+      "decision": "pesquisa paralela revisada, não promovida",
       "promoted": false,
-      "reason": "o pipeline consolidado usa atmosfera do mês-alvo e não atende ao corte T−1"
+      "reason": "corrige ensemble PCA/PLS, adiciona bagging ao XGBoost e implementa ConvLSTM com T−1; faltam métricas finais do ConvLSTM, artefato reproduzível e avaliação oficial"
     },
     {
       "ref": "vermelho",
-      "commit": "8c7fdb5",
+      "commit": "6101abb",
       "decision": "pesquisa temporalmente corrigida, sem cópia de código ou artefatos",
       "promoted": false,
-      "reason": "o PLS defasado sem ONI obteve RMSE interno 1,840456, mas a agregação dos horizontes não reproduz exatamente o teste oficial e não há score oficial; ONI e pós-processamento ENSO não foram aprovados"
+      "reason": "a CV walk-forward registra RMSE LOFO 1,780512 para o melhor blend sem ONI; não há CSV final versionado nem score oficial, e o blend indicado como final inclui ONI centrado temporalmente bloqueado"
     },
     {
       "ref": "main",
-      "commit": "228b15c",
+      "commit": "2813ee6",
       "decision": "integração científica revisada, não promovida",
       "promoted": false,
-      "reason": "integrou a correção atmosférica T−1, mas ainda referencia pós-processamento ENSO sem comprovação temporal suficiente"
+      "reason": "integrou a correção T−1 e a CV de cinco cortes; resultados permanecem pesquisa e qualquer variante com ONI centrado continua bloqueada"
     }
   ],
   "candidate_models": [
@@ -128,25 +128,25 @@
       "id": "pls-lagged-lstm",
       "label": "PLS defasado + LSTM",
       "status": "research_only",
-      "purpose": "nova execução usa atmosfera T−1 e obteve RMSE interno 1,840456; permanece em pesquisa porque a validação agregada não equivale ao teste oficial e não há score oficial"
+      "purpose": "pesquisa atualizada usa atmosfera T−1 e CV walk-forward; o melhor blend sem ONI registra RMSE-CV LOFO 1,780512, sem CSV final versionado ou score oficial"
     },
     {
       "id": "convlstm",
       "label": "ConvLSTM",
-      "status": "not_implemented",
-      "purpose": "arquitetura candidata ainda sem artefato final reproduzível"
+      "status": "research_only",
+      "purpose": "pipeline T−1 implementado e treino iniciado na pesquisa; sem metrics.json, submissão final ou artefato reproduzível versionados"
     },
     {
       "id": "xgboost-v3",
       "label": "XGBoost v3",
       "status": "research_only",
-      "purpose": "candidato de pesquisa não promovido após auditoria do alinhamento temporal"
+      "purpose": "pesquisa com bagging e ensemble corrigido; RMSE interno 1,871368 no ensemble XGBoost + LSTM, sem promoção ou score oficial"
     },
     {
       "id": "xgboost-oni",
       "label": "Modelos + ONI",
       "status": "research_only",
-      "purpose": "não promovido: no novo PLS + LSTM, ONI piorou o RMSE interno de 1,840456 para 1,865132 e o índice centrado ainda exige comprovação de disponibilidade temporal"
+      "purpose": "não promovido: o blend final da origem usa ONI trimestral centrado em T−1, que pode incorporar SST do mês T e viola o corte de disponibilidade"
     }
   ],
   "readiness": [
@@ -189,8 +189,8 @@
   "limitations": [
     "O baseline de climatologia permanece disponível como referência; o XGBoost é o melhor envio auditado do Climazoide após obter score público 1,81358.",
     "O XGBoost de anomalias obteve RMSE interno de 1,838655 contra 1,882056 do baseline e score público 1,81358 contra 1,85077 do baseline; o score privado continua indisponível.",
-    "O PLS defasado + LSTM atualizado no repositório de pesquisa obteve RMSE interno 1,840456 sem ONI; é uma evidência de pesquisa, não uma comparação oficial diretamente equivalente.",
-    "A variante PLS + LSTM com ONI registrou RMSE interno 1,865132 e não foi promovida; o ONI trimestral centrado também permanece bloqueado pela auditoria temporal.",
+    "A pesquisa atualizada registra RMSE-CV LOFO 1,780512 para o melhor blend sem ONI em cinco cortes históricos; é evidência de pesquisa, sem CSV final versionado ou score oficial.",
+    "O blend indicado como final na origem inclui ONI trimestral centrado em T−1; como esse valor pode incorporar SST de T, permanece bloqueado pela auditoria temporal.",
     "Nenhum alvo real de 2023–2024 foi usado ou incluído no repositório.",
     "Os arquivos oficiais brutos não são publicados; devem ser obtidos pelo canal oficial e conforme as regras da competição.",
     "Os experimentos do repositório WORCAP foram apenas auditados; código GPL, pesos e artefatos não foram copiados para este projeto MIT."

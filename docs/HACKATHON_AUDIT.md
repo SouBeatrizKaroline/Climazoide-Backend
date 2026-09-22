@@ -1,6 +1,6 @@
 # Protocolo de conformidade científica
 
-Atualizado em 20/09/2026. Este documento consolida a regra temporal comunicada pela
+Atualizado em 22/09/2026. Este documento consolida a regra temporal comunicada pela
 organização, a auditoria da pesquisa original e as salvaguardas implementadas no
 Climazoide. O relatório detalhado das branches permanece em
 [`WORCAP_BRANCH_AUDIT.md`](WORCAP_BRANCH_AUDIT.md).
@@ -44,16 +44,19 @@ pontuação pública é registrada separadamente e nunca substitui essa validaç
 
 ## 4. Estado da pesquisa auditada
 
-A atualização remota de 20/09/2026 foi novamente examinada somente para leitura. O
-novo PLS defasado + LSTM sem ONI corrige a atmosfera para `T−1` e registra RMSE interno
-`1,840456`. Ele não foi promovido porque a métrica agrega horizontes em proporções
-diferentes do conjunto oficial e ainda não possui score oficial. A variante com ONI
-piorou para `1,865132`; além disso, o índice trimestral centrado em `T−1` pode incorporar
-SST de `T`. O walk-forward ENSO foi adicionado, mas ainda não possui execução concluída.
+A atualização remota de 22/09/2026 foi novamente examinada somente para leitura. A
+pesquisa agora inclui CV walk-forward em cinco cortes históricos, modelos de anomalia
+e encolhimento em direção à climatologia. O melhor blend sem ONI presente no relatório
+registra RMSE-CV LOFO `1,780512`, mas não foi promovido porque não há CSV final
+versionado nem score oficial. O blend apontado como final inclui ONI trimestral centrado
+em `T−1`, que pode incorporar SST de `T`; por isso continua bloqueado mesmo apresentando
+RMSE-CV LOFO `1,778058`.
 
 Não foi encontrada evidência versionada de consulta direta ao alvo. Os novos resultados
-mudam o diagnóstico do alinhamento básico de crítico para **precisa de ajustes**, sem
-autorizar pesos, correções ENSO ou submissões da origem.
+mantêm o diagnóstico em **precisa de ajustes**, sem autorizar pesos, ONI centrado ou
+submissões da origem. A branch consolidada também adicionou bagging ao XGBoost e um
+pipeline ConvLSTM temporalmente alinhado; ambos permanecem pesquisa sem artefato final
+independente auditado.
 
 O código GPL da origem não foi copiado para os repositórios MIT do Climazoide.
 

@@ -92,11 +92,12 @@ geopotencial em 850 hPa, além dos ventos `u` e `v` em 850 hPa.
 | --- | --- | ---: | ---: |
 | `monthly-climatology-v1` | baseline enviado | 1,882056 | 1,85077 |
 | `xgboost-anomaly-v1` | melhor envio auditado | **1,838655** | **1,81358** |
-| PLS defasado + LSTM (pesquisa) | alinhamento T−1 revisado | 1,840456* | pendente |
+| blend PLS defasado + LSTM (pesquisa) | CV walk-forward sem ONI | 1,780512* | pendente |
 
-\* Métrica da origem auditada: agrega horizontes com pesos diferentes do teste oficial,
-portanto não é diretamente equivalente às duas validações do Climazoide nem a um score
-da competição. A versão com ONI obteve 1,865132 e não foi promovida.
+\* RMSE-CV LOFO em cinco cortes históricos, extraído do relatório da origem auditada em
+22/09/2026. Não é score oficial e não foi promovido porque não há CSV final versionado.
+O blend apontado como final na origem inclui ONI trimestral centrado em `T−1`, que pode
+incorporar o mês `T`, e por isso permanece bloqueado.
 
 ### Baseline
 
@@ -212,7 +213,7 @@ pytest
 - nenhuma credencial fica no código;
 - CORS é controlado por `ALLOWED_ORIGINS`;
 - `Dockerfile` e `render.yaml` publicam a API no Render;
-- `/health` deve retornar `api_version=0.6.3` e `model_contract_version=1.5`.
+- `/health` deve retornar `api_version=0.6.4` e `model_contract_version=1.5`.
 
 Consulte também [governança](GOVERNANCE.md), [segurança](SECURITY.md),
 [contribuição](CONTRIBUTING.md), [changelog](CHANGELOG.md) e
