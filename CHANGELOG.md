@@ -4,6 +4,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-09-20
+
+- registra a submissão oficial do XGBoost com score público `1,81358`;
+- confirma melhora sobre o baseline `1,85077` sem confundir score público e privado;
+- atualiza API, manifesto, documentação e aviso de download com o resultado oficial;
+- mantém baseline e XGBoost separados para assegurar rastreabilidade.
+
 ## [0.6.2] - 2026-09-20
 
 - atualiza a auditoria somente leitura para `main@228b15c` e `vermelho@8c7fdb5`;

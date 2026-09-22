@@ -116,7 +116,7 @@
       "id": "xgboost-anomaly-v1",
       "label": "XGBoost de anomalias",
       "status": "validated_candidate",
-      "purpose": "candidato independente validado em 3.770.928 previsões históricas; aguarda pontuação oficial antes de substituir o baseline"
+      "purpose": "melhor envio auditado do Climazoide: score público 1,81358, contra 1,85077 do baseline; validação temporal em 3.770.928 previsões históricas"
     },
     {
       "id": "pca-lstm",
@@ -187,8 +187,8 @@
     "candidate_entrypoint": "python scripts/train_xgboost_anomaly.py data --samples 500000 --estimators 500"
   },
   "limitations": [
-    "O arquivo oficial publicado permanece o baseline de climatologia mensal até o candidato XGBoost receber pontuação oficial.",
-    "O XGBoost de anomalias obteve RMSE interno de 1,838655 contra 1,882056 do baseline, mas esse valor não é pontuação pública ou privada da competição.",
+    "O baseline de climatologia permanece disponível como referência; o XGBoost é o melhor envio auditado do Climazoide após obter score público 1,81358.",
+    "O XGBoost de anomalias obteve RMSE interno de 1,838655 contra 1,882056 do baseline e score público 1,81358 contra 1,85077 do baseline; o score privado continua indisponível.",
     "O PLS defasado + LSTM atualizado no repositório de pesquisa obteve RMSE interno 1,840456 sem ONI; é uma evidência de pesquisa, não uma comparação oficial diretamente equivalente.",
     "A variante PLS + LSTM com ONI registrou RMSE interno 1,865132 e não foi promovida; o ONI trimestral centrado também permanece bloqueado pela auditoria temporal.",
     "Nenhum alvo real de 2023–2024 foi usado ou incluído no repositório.",

@@ -91,7 +91,7 @@ geopotencial em 850 hPa, além dos ventos `u` e `v` em 850 hPa.
 | Modelo | Estado | Validação 2019–2022 | Pontuação pública |
 | --- | --- | ---: | ---: |
 | `monthly-climatology-v1` | baseline enviado | 1,882056 | 1,85077 |
-| `xgboost-anomaly-v1` | candidato validado | **1,838655** | pendente |
+| `xgboost-anomaly-v1` | melhor envio auditado | **1,838655** | **1,81358** |
 | PLS defasado + LSTM (pesquisa) | alinhamento T−1 revisado | 1,840456* | pendente |
 
 \* Métrica da origem auditada: agrega horizontes com pesos diferentes do teste oficial,
@@ -121,13 +121,14 @@ auditada não foi copiado.
 | Arquivo | Rota | Estado |
 | --- | --- | --- |
 | baseline completo | `/v1/submission/download` | enviado e pontuado |
-| candidato completo | `/v1/submission/candidate/download` | validado; score pendente |
+| XGBoost completo | `/v1/submission/candidate/download` | validado e enviado; score 1,81358 |
 | parcial | `/v1/submission/partial.csv` | somente se faltarem previsões válidas |
 | exemplo | `/v1/submission/example.csv` | três linhas; não enviável |
 
 Baseline e candidato têm exatamente `id,tp_mm_day`, 1.885.464 linhas, valores finitos
 e não negativos, IDs e ordem oficiais. Hashes ficam nos relatórios de `artifacts/`.
-O candidato permanece separado até receber avaliação oficial identificável.
+O XGBoost permanece separado do baseline para preservar a rastreabilidade, mas passou
+a ser o melhor envio auditado do Climazoide após superar o score público do baseline.
 
 ## Reprodução científica
 
@@ -211,7 +212,7 @@ pytest
 - nenhuma credencial fica no código;
 - CORS é controlado por `ALLOWED_ORIGINS`;
 - `Dockerfile` e `render.yaml` publicam a API no Render;
-- `/health` deve retornar `api_version=0.6.2` e `model_contract_version=1.5`.
+- `/health` deve retornar `api_version=0.6.3` e `model_contract_version=1.5`.
 
 Consulte também [governança](GOVERNANCE.md), [segurança](SECURITY.md),
 [contribuição](CONTRIBUTING.md), [changelog](CHANGELOG.md) e

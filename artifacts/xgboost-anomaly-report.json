@@ -41,7 +41,14 @@
     "csv_sha256": "698a1f4a548cbc3c7cb9d1891ba64b7a3beedef6281c8853ea00ef3ba13b73db",
     "gzip_sha256": "1d6780ca8b70722f6c866b75b1d0b7a872fb5bfa228a6b5f80d8d3b5fb4dea9b"
   },
-  "official_score": null,
+  "official_score": 1.81358,
+  "official_submission": {
+    "submitted_at": "2026-09-20",
+    "platform": "Kaggle",
+    "filename": "submission-xgboost-anomaly-v1.csv.gz",
+    "status": "complete",
+    "public_score": 1.81358
+  },
   "submission_export_requested": true,
   "target_period_read": false,
   "external_data_used": false,

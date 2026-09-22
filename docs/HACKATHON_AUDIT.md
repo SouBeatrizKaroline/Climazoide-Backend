@@ -77,7 +77,8 @@ O código GPL da origem não foi copiado para os repositórios MIT do Climazoide
 - RMSE interno: `1,838655`, contra `1,882056` da climatologia no mesmo recorte;
 - alvo 2023–2024: não lido;
 - dados externos: nenhum;
-- estado: candidato validado internamente, ainda sem pontuação oficial.
+- estado: candidato validado e enviado; score público `1,81358`, melhor que `1,85077`
+  do baseline. O score privado continua indisponível.
 
 ## 6. Separação das camadas do produto
 

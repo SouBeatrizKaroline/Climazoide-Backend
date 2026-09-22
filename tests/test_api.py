@@ -13,7 +13,7 @@ def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
-    assert response.json()["api_version"] == "0.6.2"
+    assert response.json()["api_version"] == "0.6.3"
     assert response.json()["model_contract_version"] == "1.5"
 
 
@@ -122,7 +122,8 @@ def test_complete_submission_is_available_as_a_validated_baseline() -> None:
     assert status.json()["submission_kind"] == "validated_baseline"
     assert status.json()["official_score"] == 1.85077
     assert status.json()["validated_candidate"]["ready"] is True
-    assert status.json()["validated_candidate"]["official_score"] is None
+    assert status.json()["validated_candidate"]["official_score"] == 1.81358
+    assert "melhor que 1,85077" in status.json()["validated_candidate"]["notice"]
 
 
 def test_validated_candidate_is_downloadable_without_replacing_baseline() -> None:

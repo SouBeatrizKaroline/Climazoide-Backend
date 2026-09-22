@@ -105,8 +105,11 @@ def _candidate_status() -> dict:
             "ready": True,
             "filename": "submission-xgboost-anomaly-v1.csv",
             "notice": (
-                "Candidato completo validado internamente; pontuação oficial ainda pendente. "
-                "O baseline oficial continua disponível separadamente."
+                "Candidato completo validado e enviado; pontuação pública 1,81358, "
+                "melhor que 1,85077 do baseline. O baseline continua disponível separadamente."
+                if report.get("official_score") is not None
+                else "Candidato completo validado internamente; pontuação oficial ainda "
+                "pendente. O baseline oficial continua disponível separadamente."
             ),
         }
     )

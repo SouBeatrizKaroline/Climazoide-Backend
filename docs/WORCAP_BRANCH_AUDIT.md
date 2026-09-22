@@ -126,10 +126,10 @@ Em **20 de setembro de 2026**, o repositório de destino também implementou,
 independentemente, o `xgboost-anomaly-v1`. Ele usa atmosfera de `T−1`, precipitação
 congelada na origem e nenhum dado externo. Em 3.770.928 previsões de 2019–2022,
 obteve RMSE interno 1,838655 contra 1,882056 da climatologia no mesmo recorte. O CSV
-candidato preserva os 1.885.464 IDs oficiais, mas permanece separado até receber
-pontuação oficial.
+candidato preserva os 1.885.464 IDs oficiais e obteve score público 1,81358 no envio
+de 20/09/2026.
 
 A nova leitura do WORCAP melhora o veredito do alinhamento atmosférico básico, mas não
 promove nenhum artefato da origem. Código GPL, pesos e binários continuam fora do
-Climazoide. O baseline registra pontuação pública 1,85077; o score oficial do candidato
-independente ainda está pendente.
+Climazoide. O baseline registra pontuação pública 1,85077; o candidato independente
+XGBoost registra 1,81358. A pontuação privada continua indisponível.
